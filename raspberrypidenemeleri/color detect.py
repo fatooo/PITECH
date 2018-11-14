@@ -12,8 +12,8 @@ while(1):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     # define range of blue color in HSV
-    lower_blue = np.array([0,20,130])
-    upper_blue = np.array([50,80,170])
+    lower_blue = np.array([40,0,00])
+    upper_blue = np.array([90,200,200])
 
     # Threshold the HSV image to get only blue colors
     mask = cv2.inRange(hsv, lower_blue, upper_blue)
