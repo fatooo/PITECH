@@ -235,7 +235,7 @@ float bahadir[64]={0.00,	0.54,	0.91,	0.99,	0.76,	0.29,	-0.27,	-0.75,	-0.99,	-0.9
         buffer = NULL;
 
         length = frames->size();
-        data = &(*bahadir)[0];
+        data = &(*frames)[0];
 		
         offset = 0;
 
