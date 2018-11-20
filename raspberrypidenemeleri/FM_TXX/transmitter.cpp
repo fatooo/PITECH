@@ -215,7 +215,7 @@ void* Transmitter::transmit(void* params)
     current = playbackStart;
     start = playbackStart;
 	
-	float bahadir[64];
+float bahadir[64]={};
 	ifstream filee("sin2k.txt");
 	if(filee.open()){
 		filee >> bahadir;
