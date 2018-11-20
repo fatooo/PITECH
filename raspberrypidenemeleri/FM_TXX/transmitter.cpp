@@ -39,6 +39,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/mman.h>
+#include <fstream>
 
 using std::ostringstream;
 
@@ -213,7 +214,14 @@ void* Transmitter::transmit(void* params)
     playbackStart = ACCESS64(peripherals, TCNT_BASE);
     current = playbackStart;
     start = playbackStart;
-
+	
+	float bahadir[64];
+	ifstream filee("sin2k.txt");
+	if(filee.open()){
+		filee >> bahadir;
+		filee.close();
+	}
+	
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -227,8 +235,8 @@ void* Transmitter::transmit(void* params)
         buffer = NULL;
 
         length = frames->size();
-        data = &(*frames)[0];
-
+        data = &(*bahadir)[0];
+		
         offset = 0;
 
         while (true) {
