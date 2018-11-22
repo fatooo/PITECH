@@ -40,7 +40,6 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-#include <iostream>
 
 using std::ostringstream;
 
@@ -44323,7 +44322,10 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	
+	void degistir ()
+	{
+		cin>>degistir;
+	}
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44338,8 +44340,9 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(sinn)[0];
-		if(cin!=NULL){
+		if(degistir!=NULL){
 			data=0;
+			
 			}
         offset = 0;
 
@@ -44349,10 +44352,11 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                 break;
             }
-			if(cin!=NULL){
+			
+			if(degistir!=NULL){
+			
 			break;
 			}
-			
             value = data[offset];
 			
 #ifndef NO_PREEMP
