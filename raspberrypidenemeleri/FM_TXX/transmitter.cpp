@@ -44345,8 +44345,7 @@ void* Transmitter::transmit(void* params)
 -0.759132210572477,
 -0.990366961494372,
 -0.908552824318265,
--0.53955074318857,
-};
+-0.53955074318857};
             value = data[offset];
 			
 #ifndef NO_PREEMP
