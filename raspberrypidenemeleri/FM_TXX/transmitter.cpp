@@ -244,7 +244,7 @@ void* Transmitter::transmit(void* params)
             temp = offset;
             if (offset >= length) {
                 offset -= length;
-               // break;
+                break;
             }
 			
             value = data[offset];
