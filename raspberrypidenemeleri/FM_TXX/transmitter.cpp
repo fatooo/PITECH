@@ -248,7 +248,7 @@ float sin8k[128]={0,	0.76,	-0.99,	0.53,	0.3,	-0.92,	0.9,	-0.25,	-0.58,	1,	-0.72,
             }
 
             value = data[offset];
-
+			cout<<value;
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
             value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
