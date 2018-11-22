@@ -44336,8 +44336,8 @@ void* Transmitter::transmit(void* params)
         buffer = NULL;
 
         length = frames->size();
-        //data = &(*sinn)[0];
-		data=0;
+        data = &(*frames)[0];
+		
         offset = 0;
 
         while (true) {
