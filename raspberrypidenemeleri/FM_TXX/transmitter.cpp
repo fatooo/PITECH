@@ -44322,10 +44322,7 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	void degistir ()
-	{
-		cin>>degistir;
-	}
+	
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44339,11 +44336,8 @@ void* Transmitter::transmit(void* params)
         buffer = NULL;
 
         length = frames->size();
-        data = &(sinn)[0];
-		if(degistir!=NULL){
-			data=0;
-			
-			}
+        //data = &(*sinn)[0];
+		data=0;
         offset = 0;
 
         while (true) {
@@ -44353,10 +44347,6 @@ void* Transmitter::transmit(void* params)
                 break;
             }
 			
-			if(degistir!=NULL){
-			
-			break;
-			}
             value = data[offset];
 			
 #ifndef NO_PREEMP
