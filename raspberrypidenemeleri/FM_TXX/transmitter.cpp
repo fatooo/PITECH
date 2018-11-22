@@ -224,6 +224,7 @@ void* Transmitter::transmit(void* params)
 	}*/
 	file = new WaveReader("sin2k.wav");
 	buffer = file->getFrames(bufferFrames, 0);
+	delete file;
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
