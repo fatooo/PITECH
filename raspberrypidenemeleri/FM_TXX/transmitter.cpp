@@ -222,9 +222,7 @@ void* Transmitter::transmit(void* params)
 		filee >> bahadir;
 		filee.close();
 	}*/
-	file = new WaveReader("sin2k.wav");
-	buffer = file->getFrames(bufferFrames, 0);
-	delete file;
+	
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -238,7 +236,7 @@ void* Transmitter::transmit(void* params)
         buffer = NULL;
 
         length = frames->size();
-        data = &(*frames)[0];
+        data = *frames[0];
 		
         offset = 0;
 
