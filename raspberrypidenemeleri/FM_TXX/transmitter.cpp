@@ -40,6 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
+#include <iostream>
 
 using std::ostringstream;
 
@@ -44337,7 +44338,9 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(sinn)[0];
-		
+		if(cin!=NULL){
+			data=0;
+			}
         offset = 0;
 
         while (true) {
@@ -44346,6 +44349,9 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                 break;
             }
+			if(cin!=NULL){
+			break;
+			}
 			
             value = data[offset];
 			
