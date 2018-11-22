@@ -246,7 +246,7 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                // break;
             }
-			double data={0,
+			double data[44100]={0,
 0.539550743186181,
 0.908552824316969,
 0.990366961494838,
