@@ -40,6 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
+#include <iostream>
 
 using std::ostringstream;
 
