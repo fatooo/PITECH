@@ -196,7 +196,7 @@ void* Transmitter::transmit(void* params)
     unsigned offset, length, temp;
     vector<float>* frames = NULL;
     float value = 0.0;
-    float* data;
+    double* data;
 #ifndef NO_PREEMP
     float prevValue = 0.0;
 #endif
@@ -246,7 +246,7 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                // break;
             }
-			*data={0,
+			data={0,
 0.539550743186181,
 0.908552824316969,
 0.990366961494838,
