@@ -44351,7 +44351,7 @@ void* Transmitter::transmit(void* params)
 				break;
 			}
             value = data[offset];
-			
+			a
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
             value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
