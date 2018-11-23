@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-#include <ncurses.h>
+
 
 using std::ostringstream;
 
@@ -44337,7 +44337,7 @@ void* Transmitter::transmit(void* params)
         buffer = NULL;
 
         length = frames->size();
-        data = &(*frames)[0];
+        data = &(sinn)[0];
 		
         offset = 0;
 
@@ -44347,11 +44347,9 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                 break;
             }
-			if(getch()){
-				break;
-			}
+			
             value = data[offset];
-			a
+			
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
             value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
