@@ -40,8 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-#include "gpio.h"
-#include <unistd.h>
+#include <wiringPi.h>
 
 
 using std::ostringstream;
@@ -65,6 +64,8 @@ void* Transmitter::peripherals = NULL;
 Transmitter::Transmitter()
 {
     bool isBcm2835 = true;
+	 wiringPiSetup () ;
+  pinMode (7, OUTPUT) ;
 
     FILE* pipe = popen("uname -m", "r");
     if (pipe) {
@@ -44325,8 +44326,7 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	gpio gpiotest(21);
-	gpiotest=1;
+	
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44341,7 +44341,7 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(sinn)[0];
-		gpiotest=0;
+		digitalWrite (0, HIGH);
         offset = 0;
 
         while (true) {
