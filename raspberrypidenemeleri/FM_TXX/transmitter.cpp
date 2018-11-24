@@ -40,6 +40,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
+#include "gpio.h"
+#include <unistd.h>
 
 
 using std::ostringstream;
@@ -44323,7 +44325,8 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	
+	gpio gpiotest(21);
+	gpiotest=1;
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44338,7 +44341,7 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(sinn)[0];
-		
+		gpiotest=0;
         offset = 0;
 
         while (true) {
