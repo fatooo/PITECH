@@ -32,7 +32,7 @@
 */
 
 #include "error_reporter.h"
-#include "gpio.h"
+
 
 ErrorReporter::ErrorReporter(string message) :
     errorMessage(message) 

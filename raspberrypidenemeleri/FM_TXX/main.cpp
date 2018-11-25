@@ -35,7 +35,7 @@
 #include "transmitter.h"
 #include <cstdlib>
 #include <csignal>
-#include "gpio.h"
+
 
 using namespace std;
 

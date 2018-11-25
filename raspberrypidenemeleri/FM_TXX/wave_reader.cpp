@@ -35,7 +35,7 @@
 #include "error_reporter.h"
 #include <sstream>
 #include <string.h>
-#include "gpio.h"
+
 
 using std::ostringstream;
 using std::exception;
