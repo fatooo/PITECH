@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1543146239 source:c:\users\user\documents\github\pitech\raspberrypidenemeleri\rpi-gpio-master\rpi-gpio-master\example.cpp
+	"gpio.h"
+	<unistd.h>
+
+1543146239 c:\users\user\documents\github\pitech\raspberrypidenemeleri\rpi-gpio-master\rpi-gpio-master\gpio.h
+	<iostream>
+	<unistd.h>
+	<errno.h>
+	<stdio.h>
+	<stdlib.h>
+	<fstream>
+	<string>
+	<sstream>
+
