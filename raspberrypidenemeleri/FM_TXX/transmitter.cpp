@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-#include <wiringPi.h>
+
 
 
 using std::ostringstream;
@@ -44341,7 +44341,7 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(sinn)[0];
-		digitalWrite (0, HIGH);
+		
         offset = 0;
 
         while (true) {
