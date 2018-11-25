@@ -64,9 +64,7 @@ void* Transmitter::peripherals = NULL;
 Transmitter::Transmitter()
 {
     bool isBcm2835 = true;
-	 wiringPiSetup () ;
-  pinMode (7, OUTPUT) ;
-
+	
     FILE* pipe = popen("uname -m", "r");
     if (pipe) {
         char buffer[64];
