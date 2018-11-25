@@ -44351,7 +44351,7 @@ void* Transmitter::transmit(void* params)
                 offset -= length;
                 break;
             }
-			gpiotest=0;
+			
             value = data[offset];
 			
 #ifndef NO_PREEMP
