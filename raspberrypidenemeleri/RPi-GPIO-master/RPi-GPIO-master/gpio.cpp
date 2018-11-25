@@ -10,7 +10,7 @@
 using namespace std;
 gpio::gpio()
 {
-    this->gpionum = 4; //GPIO4 is default
+    this->gpionum = 4;
     val_str = string("/sys/class/gpio/gpio");
     val_str+=static_cast<ostringstream*>( &(ostringstream() << gpionum) )->str();
     val_str+=string("/value");
@@ -70,19 +70,19 @@ int gpio::setdirection(bool direction)
     string setdir_str ="/sys/class/gpio/gpio";
     setdir_str+=static_cast<ostringstream*>( &(ostringstream() << gpionum) )->str();
     setdir_str+="/direction";
-    fstream setdirgpio(setdir_str.c_str()); // open direction file for gpio
-        if (setdirgpio < 0){
+    fstream setdir_gpio(setdir_str.c_str()); // open direction file for gpio
+        if (setdir_gpio < 0){
             cout << " OPERATION FAILED: Unable to set direction of GPIO"<< this->gpionum <<" ."<< endl;
             return -1;
         }
         if(direction)
         {
-            setdirgpio<<"in";
+            setdir_gpio<<"in";
         } else
         {
-            setdirgpio<<"out";
+            setdir_gpio<<"out";
         }
-        setdirgpio.close(); // close direction file
+        setdir_gpio.close(); // close direction file
         direct=direction;
         return 0;
 }
@@ -93,13 +93,13 @@ bool& gpio::setval(const bool& val)
     {
         throw "OPERATION FAILED: attempt to set the value of an input pin";
     }
-    fstream setvalgpio(val_str.c_str()); // open value file for gpio
-        if (setvalgpio < 0){
+    fstream setval_gpio(val_str.c_str()); // open value file for gpio
+        if (setval_gpio < 0){
             throw " OPERATION FAILED: Unable to set the value of GPIO";
         }
 
-        setvalgpio << val ;//write value to value file
-        setvalgpio.close();// close value file
+        setval_gpio << val ;//write value to value file
+        setval_gpio.close();// close value file
         curval=val;
         return curval;
 }
@@ -108,13 +108,13 @@ bool gpio::getval(){
     int val;
     if(direct==input)
     {
-        ifstream getvalgpio(val_str.c_str());// open value file for gpio
-        if (getvalgpio < 0){
+        ifstream getval_gpio(val_str.c_str());// open value file for gpio
+        if (getval_gpio < 0){
             cout << " OPERATION FAILED: Unable to get value of GPIO"<< this->gpionum <<" ."<< endl;
             return -1;
         }
-        getvalgpio >> val ;  //read gpio value
-        getvalgpio.close(); //close the value file
+        getval_gpio >> val ;  //read gpio value
+        getval_gpio.close(); //close the value file
     } else { //if this is an output pin, simply return the currently set output
         val = curval;
     }
