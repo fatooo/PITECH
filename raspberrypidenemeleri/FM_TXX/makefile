@@ -17,6 +17,9 @@ error_reporter.o: error_reporter.cpp error_reporter.h
 
 transmitter.o: transmitter.cpp transmitter.h
 	$(CPP) $(CFLAGS) -c transmitter.cpp
+	
+gpio.o: gpio.cpp gpio.h
+	$(CPP) $(CFLAGS) -c gpio.cpp
 
 main.o: main.cpp
 	$(CPP) $(CFLAGS) -c main.cpp
