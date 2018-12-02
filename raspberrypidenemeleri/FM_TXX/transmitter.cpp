@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-
+#include "gpio.h"
 
 
 
@@ -44326,8 +44326,8 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	/*gpio gpiotest(17);
-	gpiotest=1;*/
+	gpio gpiotest(17);
+	gpiotest=1;
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
