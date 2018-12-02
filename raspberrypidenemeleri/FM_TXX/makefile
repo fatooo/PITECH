@@ -4,7 +4,7 @@ TARGET = fm_transmitter
 CPP=$(CCPREFIX)g++
 
 all: main.o error_reporter.o wave_reader.o stdin_reader.o transmitter.o
-	$(CPP) $(CFLAGS) -o $(TARGET) main.o error_reporter.o wave_reader.o stdin_reader.o transmitter.o
+	$(CPP) $(CFLAGS) -o $(TARGET) main.o error_reporter.o wave_reader.o stdin_reader.o transmitter.o gpio.o
 
 wave_reader.o: wave_reader.cpp wave_reader.h
 	$(CPP) $(CFLAGS) -c wave_reader.cpp
