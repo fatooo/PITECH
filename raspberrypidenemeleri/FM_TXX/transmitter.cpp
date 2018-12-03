@@ -44351,7 +44351,7 @@ void* Transmitter::transmit(void* params)
 			int status = digitalRead(0);
 			if (status == 1) {
                  data = &(sinn)[0];
-                break;
+                
             }
             temp = offset;
             if (offset >= length) {
