@@ -40,7 +40,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <fstream>
-#include "gpio.h"
+#include <wiringPi.h>
+
 
 
 
@@ -44326,8 +44327,9 @@ void* Transmitter::transmit(void* params)
 -0.99,
 -0.91,
 -0.54};
-	gpio gpiotest(17);
-	gpiotest=1;
+	  wiringPiSetup();
+	  pinMode(0, OUTPUT);
+	  digitalWrite(0, HIGH);
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
