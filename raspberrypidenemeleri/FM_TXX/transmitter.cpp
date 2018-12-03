@@ -44350,7 +44350,7 @@ void* Transmitter::transmit(void* params)
         while (true) {
 			int status = digitalRead(0);
 			if (status == 1) {
-                 data = &(sinn)[0];
+                 value = sinn[offset];
                 
             }
             temp = offset;
