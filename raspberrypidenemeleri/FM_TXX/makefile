@@ -1,4 +1,4 @@
-CFLAGS += -Wall -fexceptions -pthread -lm -O3 -fpermissive -fno-strict-aliasing -lwiringpi
+CFLAGS += -Wall -fexceptions -pthread -lm -O3 -fpermissive -fno-strict-aliasing -l wiringpi
 TARGET = fm_transmitter
 
 
