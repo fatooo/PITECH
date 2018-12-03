@@ -44328,8 +44328,8 @@ void* Transmitter::transmit(void* params)
 -0.91,
 -0.54};
 	  wiringPiSetup();
-	  pinMode(0, OUTPUT);
-	  digitalWrite(0, HIGH);
+	  pinMode(0, INPUT);
+	  
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44348,6 +44348,11 @@ void* Transmitter::transmit(void* params)
         offset = 0;
 
         while (true) {
+			int status = digitalRead(0);
+			if (status == 1) {
+                 data = &(sinn)[0];
+                break;
+            }
             temp = offset;
             if (offset >= length) {
                 offset -= length;
