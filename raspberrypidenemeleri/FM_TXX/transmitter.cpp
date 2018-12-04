@@ -44330,7 +44330,9 @@ void* Transmitter::transmit(void* params)
 	  wiringPiSetup();
 	  pinMode(0, INPUT);
 	  int prestatus=1;
+	  int preileri=1 ;
 	  int status = digitalRead(0);
+	  int ileri = digitalRead(3);
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
             usleep(1);
@@ -44346,21 +44348,37 @@ void* Transmitter::transmit(void* params)
         length = frames->size();
         data = &(*frames)[0];
 		status = digitalRead(0);
-		if (status == 1) {
+		ileri = digitalRead(3) ;
+		if (status == 1 && ileri ==0) {
+            data = &(sinn)[0];
+                
+            }
+			
+			if (ileri== 1 && status ==0) {
             data = &(sinn)[0];
                 
             }
         offset = 0;
-
+		
         while (true) {
 			status = digitalRead(0);
-			
+			ileri = digitalRead(3) ;
 			if (status != prestatus) {
                  
 				 break;
                 
             }
-			prestatus=status;
+			if(status==prestatus)
+				prestatus=status;
+			
+			if (ileri != preileri) {
+                 
+				 break;
+                
+            }
+			if(ileri==preileri)
+				preileri=ileri;
+			
             temp = offset;
             if (offset >= length) {
                 offset -= length;
