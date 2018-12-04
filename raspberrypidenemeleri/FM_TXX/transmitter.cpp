@@ -44363,19 +44363,25 @@ void* Transmitter::transmit(void* params)
         while (true) {
 			status = digitalRead(0);
 			ileri = digitalRead(3) ;
-			if (status != prestatus) {
+			if(status != prestatus && ileri != preileri)
+				{
                  
 				 break;
                 
             }
+			//if (status != prestatus) {
+                 
+			//	 break;
+                
+           // }
 			if(status==prestatus)
 				prestatus=status;
 			
-			if (ileri != preileri) {
+		//	if (ileri != preileri) {
                  
-				 break;
+			//	 break;
                 
-            }
+          //  }
 			if(ileri==preileri)
 				preileri=ileri;
 			
