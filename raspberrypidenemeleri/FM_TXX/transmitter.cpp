@@ -44329,6 +44329,7 @@ void* Transmitter::transmit(void* params)
 -0.54};
 	  wiringPiSetup();
 	  pinMode(0, INPUT);
+	  int prestatus=1;
 	  int status = digitalRead(0);
     while (isTransmitting) {
         while ((buffer == NULL) && isTransmitting) {
@@ -44344,6 +44345,7 @@ void* Transmitter::transmit(void* params)
 
         length = frames->size();
         data = &(*frames)[0];
+		status = digitalRead(0);
 		if (status == 1) {
             data = &(sinn)[0];
                 
@@ -44352,10 +44354,13 @@ void* Transmitter::transmit(void* params)
 
         while (true) {
 			status = digitalRead(0);
-			if (status == 1) {
-                 break;
+			
+			if (status != prestatus) {
+                 
+				 break;
                 
             }
+			prestatus=status;
             temp = offset;
             if (offset >= length) {
                 offset -= length;
