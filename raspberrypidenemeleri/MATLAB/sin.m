@@ -1,8 +1,8 @@
 %64 sample
 clear
-sampling_rate=22050;
+sampling_rate=44100;
 frame_length=128;
-time=0:1/sampling_rate:frame_length/sampling_rate-1/sampling_rate;
+time=0:1/sampling_rate:1-1/sampling_rate;
 
 channel_frequencies=[32,64,125,250,500,1e3,2e3,4e3,8e3,16e3];
 
@@ -19,4 +19,8 @@ end
     ssss=sin(2*pi*2e3.*time_3);
     vvvv(:,1)=sin(2*pi*4e3.*time_3);
     signal=[ssss,vvvv];
+    
     audiowrite('sin2k-4k.wav',signal,44100);
+    
+    time=0:1/44100:1-1/44100;
+    
