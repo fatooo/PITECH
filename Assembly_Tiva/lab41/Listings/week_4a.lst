@@ -1,0 +1,69 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             main, CODE, READONLY
+    2 00000000                 THUMB
+    3 00000000                 ALIGN
+    4 00000000                 EXTERN           PULSE_INIT
+    5 00000000         ;EXPORT   __main
+    6 00000000         
+    7 00000000         __main
+    8 00000000 F7FF FFFE       BL               PULSE_INIT
+    9 00000004 BF30    loop    WFI
+   10 00000006 E7FD            B                loop
+   11 00000008                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\week_4a.d -o.\objects\week_4a.o -I.\RTE\_Target_1 -IC
+:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\
+CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
+26" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\week_4a.lst week_4a.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 7 in file week_4a.s
+   Uses
+      None
+Comment: __main unused
+loop 00000004
+
+Symbol: loop
+   Definitions
+      At line 9 in file week_4a.s
+   Uses
+      At line 10 in file week_4a.s
+Comment: loop used once
+main 00000000
+
+Symbol: main
+   Definitions
+      At line 1 in file week_4a.s
+   Uses
+      None
+Comment: main unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+PULSE_INIT 00000000
+
+Symbol: PULSE_INIT
+   Definitions
+      At line 4 in file week_4a.s
+   Uses
+      At line 8 in file week_4a.s
+Comment: PULSE_INIT used once
+1 symbol
+338 symbols in table

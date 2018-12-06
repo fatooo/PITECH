@@ -1,0 +1,13 @@
+--cpu=Cortex-M4.fp
+".\objects\outstr.o"
+".\objects\pulse.o"
+".\objects\pulse_input_2.o"
+".\objects\startup.o"
+".\objects\week_demo_2.o"
+".\objects\convrt.o"
+".\objects\week_4a.o"
+".\objects\uart.o"
+".\objects\ledingen.o"
+--ro-base 0x00000000 --entry 0x00000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list ".\Listings\lab4.map" -o .\Objects\lab4.axf
