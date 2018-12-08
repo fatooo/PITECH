@@ -264,7 +264,7 @@ void* Transmitter::transmit(void* params)
 				value = data[offset];
 			}
 
-            value = data[offset];
+            
 
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
