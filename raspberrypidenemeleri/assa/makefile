@@ -1,4 +1,4 @@
-CFLAGS += -Wall -fexceptions -pthread -lm -O3 -fpermissive -fno-strict-aliasing
+CFLAGS += -Wall -fexceptions -pthread -lm -O3 -fpermissive -fno-strict-aliasing -lwiringPi
 TARGET = fm_transmitter
 
 CPP=$(CCPREFIX)g++
