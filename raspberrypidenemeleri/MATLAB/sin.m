@@ -16,7 +16,7 @@ for i=1:10
 end
     time_2=0:1/44100:4-1/44100;
     time_3=0:1/44100:1-1/44100;
-    ssss=sin(2*pi*2e3.*time_3);
+    ssss=sin(2*pi*e3.*time_3);
     vvvv(:,1)=sin(2*pi*4e3.*time_3);
     signal=[ssss,vvvv];
     
