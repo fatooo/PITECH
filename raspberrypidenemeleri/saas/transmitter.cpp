@@ -232,7 +232,7 @@ void* Transmitter::transmit(void* params)
   
 	  wiringPiSetup();
 	  pinMode(0, INPUT);
-	  pinmode(3,INPUT);
+	  pinMode(3,INPUT);
 	  
 	  int ileri = digitalRead(0);
 	  int geri = digitalRead(3);
