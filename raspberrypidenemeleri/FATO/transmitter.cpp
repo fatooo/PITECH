@@ -44329,8 +44329,6 @@ void* Transmitter::transmit(void* params)
 -0.54};
 	  wiringPiSetup();
 	  pinMode(0, INPUT);
-	  int prestatus=1;
-	  int preileri=1 ;
 	  int status = digitalRead(0);
 	  int ileri = digitalRead(3);
 	  bool first_entry_flag = true;        //this becomes TRUE after the first entry into
@@ -44353,6 +44351,7 @@ void* Transmitter::transmit(void* params)
 
 		if ((status == 1 && ileri == 0)|| (ileri == 1 && status == 0)) {
             data = &(sinn)[0];
+            first_entry_flag = true;
             }
 
         offset = 0;
@@ -44364,18 +44363,15 @@ void* Transmitter::transmit(void* params)
 			if(((status == 1)||(ileri == 1)) && first_entry_flag)
 				{
                  first_entry_flag = false;
-				 break;
+				 //break;
                 }
-            if(offset == length)
+
+            if(offset >= length)
             {
                 first_entry_flag = true;
+                break;
             }
-			/*if(status==prestatus)
-				prestatus=status;
 
-			if(ileri==preileri)
-				preileri=ileri;
-            */
             temp = offset;
             if (offset >= length) {
                 offset -= length;
