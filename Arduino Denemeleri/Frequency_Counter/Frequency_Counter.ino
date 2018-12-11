@@ -5,6 +5,9 @@
 int Htime;              //integer for storing high time
 int Ltime;                //integer for storing low time
 float Ttime;            // integer for storing total time of a cycle
+float Ttime1;
+float Ttime2;
+float Ttime3;
 float frequency;        //storing frequency
 
 void setup()
@@ -23,13 +26,25 @@ void loop()
     Htime=pulseIn(41,HIGH);      //read high time
     Ltime=pulseIn(41,LOW);        //read low time
     
-    Ttime = Htime+Ltime;
+    Ttime1 = Htime+Ltime;
+
+    Htime=pulseIn(41,HIGH);      //read high time
+    Ltime=pulseIn(41,LOW);        //read low time
+    
+    Ttime2 = Htime+Ltime;
+
+    Htime=pulseIn(41,HIGH);      //read high time
+    Ltime=pulseIn(41,LOW);        //read low time
+    
+    Ttime3 = Htime+Ltime;
+
+    Ttime = (Ttime1 + Ttime2 + Ttime3)/3;
 
     frequency=1000000/Ttime;    //getting frequency with Ttime is in Micro seconds
 //    lcd.setCursor(0,1);
 //    lcd.print(frequency);
 //    lcd.print(" Hz");
-    if( frequency < 4100 || frequency > 3900)
+    if( frequency < 4100 && frequency > 3900)
     { digitalWrite(13,HIGH);
     }
     else{
@@ -37,5 +52,5 @@ void loop()
     }
     
     Serial.println(frequency);
-    delay(1000);
+    delay(500);
 }
