@@ -259,6 +259,10 @@ void* Transmitter::transmit(void* params)
             data = &(sin4k)[0];
             first_entry_flag = true;
             }
+			if (geri == 0 && ileri == 0) {
+            data = &(*frames)[0];
+            first_entry_flag = true;
+            }
 
 
 			if(((geri == 1)||(ileri == 1)) && first_entry_flag)
