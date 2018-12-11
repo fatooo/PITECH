@@ -14,6 +14,7 @@ void setup()
 {
     pinMode(41,INPUT); //square wave input from Schmitt Trigger
     pinMode(13,OUTPUT);
+    pinMode(53,OUTPUT);
     Serial.begin(9600);
     //lcd.begin(16, 2);
 }
@@ -49,6 +50,13 @@ void loop()
     }
     else{
       digitalWrite(13,LOW);
+    }
+
+    if( frequency < 2100 && frequency > 1900)
+    { digitalWrite(53,HIGH);
+    }
+    else{
+      digitalWrite(53,LOW);
     }
     
     Serial.println(frequency);

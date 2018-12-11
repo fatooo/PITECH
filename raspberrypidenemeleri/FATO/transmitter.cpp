@@ -279,15 +279,16 @@ void* Transmitter::transmit(void* params)
 
             if(offset >= length)
             {
+                offset -= length
                 first_entry_flag = true;
                 break;
             }
 
             temp = offset;
-            if (offset >= length) {
+            /*if (offset >= length) {
                 offset -= length;
                 break;
-            }
+            }*/
 
             value = data[offset];
 
