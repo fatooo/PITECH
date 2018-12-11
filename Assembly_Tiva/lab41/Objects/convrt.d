@@ -1,1 +1,1 @@
-.\objects\convrt.o: ..\447\projectlab\CONVRT.s
+.\objects\convrt.o: CONVRT.s

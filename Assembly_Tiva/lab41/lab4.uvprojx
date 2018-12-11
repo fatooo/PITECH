@@ -408,11 +408,6 @@
               <FilePath>.\week_demo_2.s</FilePath>
             </File>
             <File>
-              <FileName>CONVRT.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\447\projectlab\CONVRT.s</FilePath>
-            </File>
-            <File>
               <FileName>week_4a.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\week_4a.s</FilePath>
@@ -426,6 +421,11 @@
               <FileName>ledingen.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\ledingen.s</FilePath>
+            </File>
+            <File>
+              <FileName>CONVRT.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\CONVRT.s</FilePath>
             </File>
           </Files>
         </Group>

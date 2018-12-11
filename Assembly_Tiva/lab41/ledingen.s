@@ -32,15 +32,24 @@ ledingen			PROC									; initialization
 					LDR 		R0 , [R1]
 					ORR 		R0 , #0xFF
 					STR 		R0 , [R1] 
-					CMP 		R4, #0x40 ;
-					BGT     	sol
-sag					LDR	 		R1,=GPIO_PORTB_OUT	
+					LDR 		R7, =0xFF
+					CMP 		R4,R7 ; decimal 375  for 2k 500 4k 250
+					BLT     	sol
+				;	LDR 		R7, =0xCF1
+				;	CMP 		R4, R7;  üst sinir
+				;	BLT 		sag ; 2k icin sag
+					;BGT         nothing
+sag					LDR	 		R1,=GPIO_PORTB_OUT	 ;c6
 					LDR 		R0, =0xBF;
 					STR 	 	R0,[R1]	;
 					B   		finish 			
-sol					LDR	 		R1,=GPIO_PORTB_OUT	
+sol					LDR	 		R1,=GPIO_PORTB_OUT	  ;; 4k works for 500 us and sol sinyal vercek c7
 					LDR 		R0, =0x7F;
 					STR 	 	R0,[R1]	;
+					B 			finish
+nothing			;	LDR	 		R1,=GPIO_PORTB_OUT	  ;; 4k works for 500 us and sol sinyal vercek
+					;LDR 		R0, =0xFF;
+					;STR 	 	R0,[R1]	;
 finish				BX 			LR
 
 					ENDP

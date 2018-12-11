@@ -37,26 +37,26 @@ ARM Macro Assembler    Page 1
    13 00000000                 EXPORT           ledingen
    14 00000000         ledingen
                                PROC                         ; initialization 
-   15 00000000 4912            LDR              R1,=SYSCTL_RCGCGPIO
+   15 00000000 4913            LDR              R1,=SYSCTL_RCGCGPIO
    16 00000002 6808            LDR              R0 , [R1]
    17 00000004 F040 0006       ORR              R0 , R0,#0x06
    18 00000008 6008            STR              R0 , [R1]
    19 0000000A BF00            NOP
    20 0000000C BF00            NOP
    21 0000000E BF00            NOP
-   22 00000010 490F            LDR              R1 , =GPIO_PORTB_DIR
+   22 00000010 4910            LDR              R1 , =GPIO_PORTB_DIR
    23 00000012 6808            LDR              R0 , [R1]
    24 00000014 F020 00FF       BIC              R0 , #0xFF
    25 00000018 F040 00C0       ORR              R0 , #0xC0  ; B7 and  B6 are ou
                                                             tputs
    26 0000001C 6008            STR              R0 , [R1]
-   27 0000001E 490D            LDR              R1 , =GPIO_PORTB_AFSEL ;disable
+   27 0000001E 490E            LDR              R1 , =GPIO_PORTB_AFSEL ;disable
                                                              AFSEL as stated in
                                                              manual
    28 00000020 6808            LDR              R0 , [R1]
    29 00000022 F020 00FF       BIC              R0 , #0xFF
    30 00000026 6008            STR              R0 , [R1]
-   31 00000028 490B            LDR              R1 , =GPIO_PORTB_DEN ;digital o
+   31 00000028 490C            LDR              R1 , =GPIO_PORTB_DEN ;digital o
                                                             utputs will be cons
                                                             idered so enable Di
                                                             gital Enable regist
@@ -70,25 +70,35 @@ ARM Macro Assembler    Page 2
 
 
    34 00000030 6008            STR              R0 , [R1]
-   35 00000032         ; LDR   R1,=GPIO_PORTB_PUR         
-   36 00000032         ; MOV   R0,#0x0F     
-   37 00000032         ; STR   R0,[R1] 
-   38 00000032         
-   39 00000032 2C40            CMP              R4, #0x40   ;
-   40 00000034 DC04            BGT              sol
-   41 00000036 4909    sag     LDR              R1,=GPIO_PORTB_OUT
-   42 00000038 F04F 00BF       LDR              R0, =0xBF   ;
-   43 0000003C 6008            STR              R0,[R1]     ;
-   44 0000003E E003            B                finish
-   45 00000040         
-   46 00000040 4906    sol     LDR              R1,=GPIO_PORTB_OUT
-   47 00000042 F04F 007F       LDR              R0, =0x7F   ;
-   48 00000046 6008            STR              R0,[R1]     ;
-   49 00000048 4770    finish  BX               LR
-   50 0000004A         
-   51 0000004A                 ENDP
+   35 00000032 F04F 07FF       LDR              R7, =0xFF
+   36 00000036 42BC            CMP              R4,R7       ; decimal 375  for 
+                                                            2k 500 4k 250
+   37 00000038 DB04            BLT              sol
+   38 0000003A         ; LDR   R7, =0xCF1
+   39 0000003A         ; CMP   R4, R7;  üst sinir
+   40 0000003A         ; BLT   sag ; 2k icin sag
+   41 0000003A         ;BGT         nothing
+   42 0000003A 4909    sag     LDR              R1,=GPIO_PORTB_OUT ;c6
+   43 0000003C F04F 00BF       LDR              R0, =0xBF   ;
+   44 00000040 6008            STR              R0,[R1]     ;
+   45 00000042 E004            B                finish
+   46 00000044 4906    sol     LDR              R1,=GPIO_PORTB_OUT ;; 4k works 
+                                                            for 500 us and sol 
+                                                            sinyal vercek c7
+   47 00000046 F04F 007F       LDR              R0, =0x7F   ;
+   48 0000004A 6008            STR              R0,[R1]     ;
+   49 0000004C E7FF            B                finish
+   50 0000004E         nothing                              ; LDR    R1,=GPIO_P
+                                                            ORTB_OUT   ;; 4k wo
+                                                            rks for 500 us and 
+                                                            sol sinyal vercek
+   51 0000004E         ;LDR   R0, =0xFF;
+   52 0000004E         ;STR    R0,[R1] ;
+   53 0000004E 4770    finish  BX               LR
+   54 00000050         
+   55 00000050                 ENDP
                        
-              00 00 400FE608 
+              400FE608 
               40006400 
               40006420 
               4000651C 
@@ -105,14 +115,15 @@ M\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-finish 00000048
+finish 0000004E
 
 Symbol: finish
    Definitions
-      At line 49 in file ledingen.s
+      At line 53 in file ledingen.s
    Uses
-      At line 44 in file ledingen.s
-Comment: finish used once
+      At line 45 in file ledingen.s
+      At line 49 in file ledingen.s
+
 ledingen 00000000
 
 Symbol: ledingen
@@ -121,11 +132,19 @@ Symbol: ledingen
    Uses
       At line 13 in file ledingen.s
 Comment: ledingen used once
-sag 00000036
+nothing 0000004E
+
+Symbol: nothing
+   Definitions
+      At line 50 in file ledingen.s
+   Uses
+      None
+Comment: nothing unused
+sag 0000003A
 
 Symbol: sag
    Definitions
-      At line 41 in file ledingen.s
+      At line 42 in file ledingen.s
    Uses
       None
 Comment: sag unused
@@ -137,15 +156,15 @@ Symbol: sdata
    Uses
       None
 Comment: sdata unused
-sol 00000040
+sol 00000044
 
 Symbol: sol
    Definitions
       At line 46 in file ledingen.s
    Uses
-      At line 40 in file ledingen.s
+      At line 37 in file ledingen.s
 Comment: sol used once
-5 symbols
+6 symbols
 
 
 
@@ -198,7 +217,7 @@ Symbol: GPIO_PORTB_OUT
    Definitions
       At line 2 in file ledingen.s
    Uses
-      At line 41 in file ledingen.s
+      At line 42 in file ledingen.s
       At line 46 in file ledingen.s
 
 GPIO_PORTB_PUR 40006510
@@ -247,4 +266,4 @@ Symbol: DELAY100
       None
 Comment: DELAY100 unused
 1 symbol
-351 symbols in table
+352 symbols in table

@@ -82,7 +82,7 @@ PULSE_INPUT_INIT	PROC
 					STR 		R0, [R1] 
 					
 					LDR 		R1, =TIMER1_TAILR 		; write the reset value
-					LDR			R0,=0xFFFF				; 0xFFFFF
+					LDR			R0,=0xFFFF					; 0xFFFFF
 					STR			R0, [R1]
 					
 					LDR			R1, =TIMER1_CTL

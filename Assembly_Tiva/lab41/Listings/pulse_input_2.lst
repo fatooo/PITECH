@@ -146,18 +146,18 @@ ARM Macro Assembler    Page 3
    83 00000078         
    84 00000078 490F            LDR              R1, =TIMER1_TAILR ; write the r
                                                             eset value
-   85 0000007A F64F 70FF       LDR              R0,=0xFFFF  ; 0xFFFFF
-   86 0000007E 6008            STR              R0, [R1]
-   87 00000080         
-   88 00000080 4909            LDR              R1, =TIMER1_CTL
-   89 00000082 6808            LDR              R0, [R1]
-   90 00000084 F040 0001       ORR              R0, #1      ;ENABLE TIMER 1A
-   91 00000088 6008            STR              R0, [R1]
-   92 0000008A         
-   93 0000008A                 ENDP
-   94 0000008A 4770            BX               LR
-   95 0000008C         
-   96 0000008C                 ALIGN
+   85 0000007A 4810            LDR              R0,=0xFFFFF ; 0xFFFFF
+   86 0000007C 6008            STR              R0, [R1]
+   87 0000007E         
+   88 0000007E 490A            LDR              R1, =TIMER1_CTL
+   89 00000080 6808            LDR              R0, [R1]
+   90 00000082 F040 0001       ORR              R0, #1      ;ENABLE TIMER 1A
+   91 00000086 6008            STR              R0, [R1]
+   92 00000088         
+   93 00000088                 ENDP
+   94 00000088 4770            BX               LR
+   95 0000008A         
+   96 0000008A 00 00           ALIGN
    97 0000008C                 END
               400FE608 
               40005400 
@@ -171,6 +171,7 @@ ARM Macro Assembler    Page 3
               40031004 
               40031038 
               40031028 
+              000FFFFF 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\pulse_input_2.d -o.\objects\pulse_input_2.o -I.\RTE\_
 Target_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\
