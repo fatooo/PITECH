@@ -244,20 +244,22 @@ void* Transmitter::transmit(void* params)
 		geri = digitalRead(0);
 		ileri = digitalRead(3) ;
 
-		if (geri == 1 && ileri == 0) {
-            data = &(sin2k)[0];
-            first_entry_flag = true;
-            }
-		if (geri == 0 && ileri == 1) {
-            data = &(sin4k)[0];
-            first_entry_flag = true;
-            }
-
+		
         offset = 0;
 
         while (true) {
 			geri = digitalRead(0);
 			ileri = digitalRead(3) ;
+			
+			if (geri == 1 && ileri == 0) {
+            data = &(sin2k)[0];
+            first_entry_flag = true;
+            }
+			if (geri == 0 && ileri == 1) {
+            data = &(sin4k)[0];
+            first_entry_flag = true;
+            }
+
 
 			if(((geri == 1)||(ileri == 1)) && first_entry_flag)
 				{
@@ -265,10 +267,10 @@ void* Transmitter::transmit(void* params)
 				 //break;
                 }
 
-            if(offset >= length/2)
+            if(offset >= length)
             {
                 first_entry_flag = true;
-				offset -= length/2;
+				offset = 0;
                 break;
             }
 
