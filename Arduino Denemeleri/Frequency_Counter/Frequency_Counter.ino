@@ -60,5 +60,5 @@ void loop()
     }
     
     Serial.println(frequency);
-    delay(500);
+    delay(100);
 }
