@@ -239,7 +239,7 @@ void* Transmitter::transmit(void* params)
         frameOffset = (current - playbackStart) * (sampleRate) / 1000000;
         buffer = NULL;
 
-        length = frames->size();
+        length = (frames->size())/2;
         data = &(*frames)[0];
 		geri = digitalRead(0);
 		ileri = digitalRead(3) ;
