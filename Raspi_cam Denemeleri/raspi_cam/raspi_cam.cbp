@@ -31,20 +31,17 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../raspicam-0.1.6/src/raspicam.cpp" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam.h" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_cv.cpp" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_cv.h" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_still.cpp" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_still.h" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_still_cv.cpp" />
-		<Unit filename="../raspicam-0.1.6/src/raspicam_still_cv.h" />
-		<Unit filename="../raspicam-0.1.6/src/raspicamtypes.h" />
-		<Unit filename="../raspicam-0.1.6/src/scaler.h" />
-		<Unit filename="../raspicam-0.1.6/utils/raspicam_cv_still_test.cpp" />
-		<Unit filename="../raspicam-0.1.6/utils/raspicam_cv_test.cpp" />
-		<Unit filename="../raspicam-0.1.6/utils/raspicam_still_test.cpp" />
-		<Unit filename="../raspicam-0.1.6/utils/raspicam_test.cpp" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam.cpp" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_cv.cpp" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_cv.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_still.cpp" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_still.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_still_cv.cpp" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicam_still_cv.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/raspicamtypes.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/src/scaler.h" />
+		<Unit filename="../../../../../Desktop/raspicam-0.1.6/utils/raspicam_still_test.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
