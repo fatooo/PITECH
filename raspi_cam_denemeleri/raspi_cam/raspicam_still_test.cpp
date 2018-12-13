@@ -79,7 +79,7 @@ int main ( int argc, char *argv[] ) {
         return -1;
     }
 
-    cout << size(*data);
+    cout << *data;
 
     int height_pix = 480;
     int width_pix = 640;
