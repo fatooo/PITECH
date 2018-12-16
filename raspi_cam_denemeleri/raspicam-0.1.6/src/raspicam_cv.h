@@ -85,7 +85,7 @@ namespace raspicam {
         //Sets a property in the VideoCapture.
 
 
-	 Implemented properties:
+	 /*Implemented properties:
 	 CV_CAP_PROP_FRAME_WIDTH,CV_CAP_PROP_FRAME_HEIGHT,
 	 CV_CAP_PROP_FORMAT: CV_8UC1 or CV_8UC3
 	 CV_CAP_PROP_BRIGHTNESS: [0,100]
@@ -95,7 +95,7 @@ namespace raspicam {
 	 CV_CAP_PROP_EXPOSURE: -1 auto. [1,100] shutter speed from 0 to 33ms
      CV_CAP_PROP_WHITE_BALANCE_RED_V : [1,100] -1 auto whitebalance
      CV_CAP_PROP_WHITE_BALANCE_BLUE_U : [1,100] -1 auto whitebalance
-     CV_CAP_PROP_FPS
+     CV_CAP_PROP_FPS*/
 
 
         bool set ( int propId, double value );
