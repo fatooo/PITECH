@@ -82,7 +82,7 @@ namespace raspicam {
 
         double get ( int propId );
 
-        *Sets a property in the VideoCapture.
+        //Sets a property in the VideoCapture.
 
 
 	 Implemented properties:
