@@ -47,21 +47,21 @@ void loop()
 //    lcd.print(frequency);
 //    lcd.print(" Hz");
 
-    if( frequency < 6100 && frequency > 5900) //kırmızı
+    if( frequency < 6500 && frequency > 5500) //kırmızı
     { digitalWrite(53,HIGH);
     }
     else{
       digitalWrite(53,LOW);
     }
     
-    if( frequency < 4100 && frequency > 3900) //sarı
+    if( frequency < 4500 && frequency > 3500) //sarı
     { digitalWrite(51,HIGH);
     }
     else{
       digitalWrite(51,LOW);
     }
 
-    if( frequency < 2100 && frequency > 1900) //yeşil
+    if( frequency < 2500 && frequency > 1500) //yeşil
     { digitalWrite(49,HIGH);
     }
     else{
