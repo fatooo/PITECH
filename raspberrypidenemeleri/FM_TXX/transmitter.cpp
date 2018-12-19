@@ -294,7 +294,7 @@ void* Transmitter::transmit(void* params)
 
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
-            //value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
+            value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
 #endif
 
             ACCESS(peripherals, CLK0DIV_BASE) = (0x5A << 24) | ((clockDivisor) - (int)(round(value * 16.0)));
