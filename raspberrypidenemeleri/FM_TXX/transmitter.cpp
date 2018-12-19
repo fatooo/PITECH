@@ -291,14 +291,18 @@ void* Transmitter::transmit(void* params)
            
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             value = 1*data[offset];
 =======
             value = 1.5*data[offset];
 >>>>>>> parent of fe50bc0... Update transmitter.cpp
+=======
+            value = data[offset];
+>>>>>>> parent of 8336e7c... Update transmitter.cpp
 
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
-            //value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
+            value = (value < -1.0) ? -1.0 : ((value > 1.0) ? 1.0 : value);
 #endif
 
             ACCESS(peripherals, CLK0DIV_BASE) = (0x5A << 24) | ((clockDivisor) - (int)(round(value * 16.0)));
