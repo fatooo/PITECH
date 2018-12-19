@@ -290,7 +290,11 @@ void* Transmitter::transmit(void* params)
             temp = offset;
            
 
+<<<<<<< HEAD
             value = 1*data[offset];
+=======
+            value = 1.5*data[offset];
+>>>>>>> parent of fe50bc0... Update transmitter.cpp
 
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
