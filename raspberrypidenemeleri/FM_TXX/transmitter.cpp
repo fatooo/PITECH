@@ -209,7 +209,7 @@ void* Transmitter::transmit(void* params)
     unsigned sampleRate = *(unsigned*)(params);
 
 #ifndef NO_PREEMP
-    float preemp = 0.75 - 250000.0 / (float)(sampleRate * 75);
+    float preemp = 1 - 250000.0 / (float)(sampleRate * 75);
 #endif
 
     ACCESS(peripherals, GPIO_BASE) = (ACCESS(peripherals, GPIO_BASE) & 0xFFFF8FFF) | (0x01 << 14);
@@ -290,7 +290,7 @@ void* Transmitter::transmit(void* params)
             temp = offset;
            
 
-            value = 3*data[offset];
+            value = 1*data[offset];
 
 #ifndef NO_PREEMP
             value = value + (value - prevValue) * preemp;
