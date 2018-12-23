@@ -13,8 +13,9 @@ float frequency;        //storing frequency
 void setup()
 {
     pinMode(41,INPUT); //square wave input from Schmitt Trigger
-    pinMode(13,OUTPUT);
-    pinMode(53,OUTPUT);
+    pinMode(23,OUTPUT); // 2kHz
+    pinMode(25,OUTPUT); // 4kHz
+    pinMode(27,OUTPUT); // 6kHz
     Serial.begin(9600);
     //lcd.begin(16, 2);
 }
@@ -45,20 +46,28 @@ void loop()
 //    lcd.setCursor(0,1);
 //    lcd.print(frequency);
 //    lcd.print(" Hz");
-    if( frequency < 4100 && frequency > 3900)
-    { digitalWrite(13,HIGH);
+
+    if( frequency < 6500 && frequency > 5500) //kırmızı
+    { digitalWrite(23,HIGH);
     }
     else{
-      digitalWrite(13,LOW);
+      digitalWrite(23,LOW);
+    }
+    
+    if( frequency < 4500 && frequency > 3500) //sarı
+    { digitalWrite(25,HIGH);
+    }
+    else{
+      digitalWrite(25,LOW);
     }
 
-    if( frequency < 2100 && frequency > 1900)
-    { digitalWrite(53,HIGH);
+    if( frequency < 2500 && frequency > 1500) //yeşil
+    { digitalWrite(27,HIGH);
     }
     else{
-      digitalWrite(53,LOW);
+      digitalWrite(27,LOW);
     }
     
     Serial.println(frequency);
-    delay(500);
+    delay(100);
 }
