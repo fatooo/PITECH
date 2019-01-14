@@ -1,0 +1,154 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 20000400 
+                       Field_Address
+                               EQU              0x20000400
+    7 00000000         
+    8 00000000         ;*******************************************************
+                       ********
+    9 00000000         ; Directives - This Data Section is part of the code
+   10 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   11 00000000         ;*******************************************************
+                       ******** 
+   12 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   13 00000000                 AREA             sdata, DATA, READONLY
+   14 00000000                 THUMB
+   15 00000000         
+   16 00000000         ;*******************************************************
+                       ********
+   17 00000000         ; Program section           
+   18 00000000         ;*******************************************************
+                       ********
+   19 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   20 00000000                 AREA             main, READONLY, CODE, ALIGN=2
+   21 00000000                 THUMB
+   22 00000000                 EXTERN           EMP_FIELD
+   23 00000000                 EXTERN           SPI_CONFIG
+   24 00000000                 EXPORT           __main      ; Make available
+   25 00000000         
+   26 00000000         ;*******************************************************
+                       ********
+   27 00000000         ; Main Function
+   28 00000000         ;*******************************************************
+                       ******** 
+   29 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   30 00000000         __main  PROC
+   31 00000000         
+   32 00000000 4D02            LDR              R5,=Field_Address
+   33 00000002 F7FF FFFE       BL               EMP_FIELD
+   34 00000006 F7FF FFFE       BL               SPI_CONFIG
+   35 0000000A         
+   36 0000000A         
+   37 0000000A         
+   38 0000000A         
+   39 0000000A         ;*******************************************************
+                       ********
+   40 0000000A         ; End of the program  section
+   41 0000000A         ;*******************************************************
+                       ********
+   42 0000000A         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+   43 0000000A                 ENDP
+   44 0000000A 00 00           ALIGN
+   45 0000000C                 END
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+              20000400 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -ID:\Work
+\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\Includ
+e --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --predef
+ine="TM4C123GH6PM SETA 1" --list=.\listings\main.lst Main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 13 in file Main.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 30 in file Main.s
+   Uses
+      At line 24 in file Main.s
+Comment: __main used once
+main 00000000
+
+Symbol: main
+   Definitions
+      At line 20 in file Main.s
+   Uses
+      None
+Comment: main unused
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+Field_Address 20000400
+
+Symbol: Field_Address
+   Definitions
+      At line 6 in file Main.s
+   Uses
+      At line 32 in file Main.s
+Comment: Field_Address used once
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+EMP_FIELD 00000000
+
+Symbol: EMP_FIELD
+   Definitions
+      At line 22 in file Main.s
+   Uses
+      At line 33 in file Main.s
+Comment: EMP_FIELD used once
+SPI_CONFIG 00000000
+
+Symbol: SPI_CONFIG
+   Definitions
+      At line 23 in file Main.s
+   Uses
+      At line 34 in file Main.s
+Comment: SPI_CONFIG used once
+2 symbols
+342 symbols in table
