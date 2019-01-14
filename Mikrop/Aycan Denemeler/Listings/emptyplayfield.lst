@@ -30,7 +30,7 @@ ARM Macro Assembler    Page 1
    18 00000000         ;*******************************************************
                        ********
    19 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   20 00000000                 AREA             main, CODE, READONLY
+   20 00000000                 AREA             routines,READONLY,CODE
    21 00000000                 THUMB
    22 00000000                 ALIGN
    23 00000000                 EXPORT           EMP_FIELD
@@ -247,13 +247,13 @@ Symbol: loop7
    Uses
       At line 92 in file EmptyPlayfield.s
 Comment: loop7 used once
-main 00000000
+routines 00000000
 
-Symbol: main
+Symbol: routines
    Definitions
       At line 20 in file EmptyPlayfield.s
    Uses
       None
-Comment: main unused
+Comment: routines unused
 10 symbols
 345 symbols in table

@@ -8,6 +8,7 @@ GPIO_PORTA_DIR  	EQU			0x40004400 		;Direction reg
 GPIO_PORTA_AFSEL	EQU			0x40004420 		;Alternate function
 GPIO_PORTA_PCTL		EQU			0x4000452C		;Port Control
 GPIO_PORTA_DEN	    EQU			0x4000451C		;Digital enable
+GPIO_PORTA_AMSEL	EQU			0x40004528		;Analog Enable
 	
 SYSCTL_RCGCSSI		EQU			0x400FE61C		;Enable SSI
 SSI0_CR0			EQU			0x40008000		;SSI Control 0
@@ -25,7 +26,7 @@ SSI0_CPSR			EQU			0x40008010		;Clock Prescale
 ; Program section					      
 ;***************************************************************
 ;LABEL		DIRECTIVE	VALUE					COMMENT
-			AREA		main, CODE, READONLY
+			AREA		routines,READONLY,CODE
 			THUMB
 			ALIGN
 			EXPORT		SPI_CONFIG
@@ -56,6 +57,11 @@ GPIO_INIT	LDR 		R1,=SYSCTL_RCGCGPIO		; Initalize Clock
 			ORR 		R0,R0,#0x3C 
 			STR			R0,[R1]
 			
+			LDR			R1,=GPIO_PORTA_AMSEL	;Disable analog Function
+			LDR			R0,[R1]
+			BIC			R0,R0,#0x3C
+			STR			R0,[R1]
+			
 			LDR 		R1,=GPIO_PORTA_AFSEL	;Enable Alternate Functions
 			LDR 		R0,[R1]
 			ORR 		R0,R0,#0x3C 
@@ -83,9 +89,20 @@ SPI_INIT	LDR 		R1,=SYSCTL_RCGCSSI		; Initalize Clock
 			BIC 		R0,R0,#0x02 
 			STR			R0,[R1]
 	
+			LDR 		R1,=SSI0_CPSR			;Enable Clock Prescale
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x04 
+			STR			R0,[R1]
 	
-	
-	
+			LDR 		R1,=SSI0_CR0			;Control 0
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x07
+			STR			R0,[R1]
+			
+			LDR 		R1,=SSI0_CR1			;Enable SSI interface
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x02 
+			STR			R0,[R1]
 	
 			BX			LR
 ;***************************************************************

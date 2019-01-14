@@ -15,61 +15,137 @@ ARM Macro Assembler    Page 1
                        Field_Address
                                EQU              0x20000400
     7 00000000         
-    8 00000000         ;*******************************************************
+    8 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    9 00000000 40005004 
+                       OUT_PORTB_Reset
+                               EQU              0x40005004  ;00000001
+   10 00000000 40008008 
+                       SSI0_DR EQU              0x40008008
+   11 00000000 4000800C 
+                       SSI0_SR EQU              0x4000800C
+   12 00000000         ;*******************************************************
                        ********
-    9 00000000         ; Directives - This Data Section is part of the code
-   10 00000000         ; It is in the read only section  so values cannot be ch
+   13 00000000         ; Directives - This Data Section is part of the code
+   14 00000000         ; It is in the read only section  so values cannot be ch
                        anged.
-   11 00000000         ;*******************************************************
+   15 00000000         ;*******************************************************
                        ******** 
-   12 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   13 00000000                 AREA             sdata, DATA, READONLY
-   14 00000000                 THUMB
-   15 00000000         
-   16 00000000         ;*******************************************************
+   16 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   17 00000000                 AREA             sdata, DATA, READONLY
+   18 00000000                 THUMB
+   19 00000000         
+   20 00000000         ;*******************************************************
                        ********
-   17 00000000         ; Program section           
-   18 00000000         ;*******************************************************
+   21 00000000         ; Program section           
+   22 00000000         ;*******************************************************
                        ********
-   19 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   20 00000000                 AREA             main, READONLY, CODE, ALIGN=2
-   21 00000000                 THUMB
-   22 00000000                 EXTERN           EMP_FIELD
-   23 00000000                 EXTERN           SPI_CONFIG
-   24 00000000                 EXPORT           __main      ; Make available
-   25 00000000         
-   26 00000000         ;*******************************************************
+   23 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   24 00000000                 AREA             main, READONLY, CODE, ALIGN=2
+   25 00000000                 THUMB
+   26 00000000                 EXTERN           EMP_FIELD
+   27 00000000                 EXTERN           SPI_CONFIG
+   28 00000000                 EXTERN           SCREEN_INIT
+   29 00000000                 EXPORT           __main      ; Make available
+   30 00000000         
+   31 00000000         ;*******************************************************
                        ********
-   27 00000000         ; Main Function
-   28 00000000         ;*******************************************************
+   32 00000000         ; Main Function
+   33 00000000         ;*******************************************************
                        ******** 
-   29 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   30 00000000         __main  PROC
-   31 00000000         
-   32 00000000 4D02            LDR              R5,=Field_Address
-   33 00000002 F7FF FFFE       BL               EMP_FIELD
-   34 00000006 F7FF FFFE       BL               SPI_CONFIG
-   35 0000000A         
-   36 0000000A         
-   37 0000000A         
-   38 0000000A         
-   39 0000000A         ;*******************************************************
-                       ********
-   40 0000000A         ; End of the program  section
-   41 0000000A         ;*******************************************************
-                       ********
-   42 0000000A         ;LABEL      DIRECTIVE       VALUE                       
-                           COMMENT
-   43 0000000A                 ENDP
-   44 0000000A 00 00           ALIGN
-   45 0000000C                 END
+   34 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   35 00000000         __main  PROC
+   36 00000000         
+   37 00000000 4D12            LDR              R5,=Field_Address
+   38 00000002 F7FF FFFE       BL               EMP_FIELD
+   39 00000006 F7FF FFFE       BL               SPI_CONFIG
+   40 0000000A F7FF FFFE       BL               SCREEN_INIT
+   41 0000000E         
+   42 0000000E         ;check  LDR   R5,=SSI0_SR
 
 
 
 ARM Macro Assembler    Page 2 
 
 
+   43 0000000E         ;   LDR   R0,[R5]
+   44 0000000E         ;   ANDS    R0,R0,#0x02 
+   45 0000000E         ;   BEQ    check
+   46 0000000E         
+   47 0000000E 4D10            LDR              R5,=OUT_PORTB_DC
+   48 00000010 F04F 0100       MOV              R1,#0x00
+   49 00000014 6029            STR              R1,[R5]
+   50 00000016         
+   51 00000016         
+   52 00000016 4D0F            LDR              R5,=SSI0_DR
+   53 00000018 F04F 0121       MOV              R1,#0x21
+   54 0000001C 6029            STR              R1,[R5]
+   55 0000001E         
+   56 0000001E 4D0D            LDR              R5,=SSI0_DR
+   57 00000020 F04F 0190       MOV              R1,#0x90
+   58 00000024 6029            STR              R1,[R5]
+   59 00000026         
+   60 00000026 4D0B            LDR              R5,=SSI0_DR
+   61 00000028 F04F 0120       MOV              R1,#0x20
+   62 0000002C 6029            STR              R1,[R5]
+   63 0000002E         
+   64 0000002E 4D09            LDR              R5,=SSI0_DR
+   65 00000030 F04F 010C       MOV              R1,#0x0C
+   66 00000034 6029            STR              R1,[R5]
+   67 00000036         
+   68 00000036         ;busy  LDR   R5,=SSI0_SR
+   69 00000036         ;   LDR   R0,[R5]
+   70 00000036         ;   ANDS    R0,R0,#0x10
+   71 00000036         ;   BEQ    busy
+   72 00000036         
+   73 00000036         
+   74 00000036         
+   75 00000036         
+   76 00000036 4D06            LDR              R5,=OUT_PORTB_DC
+   77 00000038 F04F 0102       MOV              R1,#0x02
+   78 0000003C 6029            STR              R1,[R5]
+   79 0000003E         
+   80 0000003E F04F 0201 
+                       loop    MOV              R2,#1
+   81 00000042         
+   82 00000042         ;check2  LDR   R5,=SSI0_SR
+   83 00000042         ;   LDR   R0,[R5]
+   84 00000042         ;   ANDS    R0,R0,#0x02 
+   85 00000042         ;   BEQ    check2
+   86 00000042         
+   87 00000042         
+   88 00000042 4D04            LDR              R5,=SSI0_DR
+   89 00000044 F04F 01FF       MOV              R1,#0xFF
+   90 00000048 6029            STR              R1,[R5]
+   91 0000004A         
+   92 0000004A         ;busy2  LDR   R5,=SSI0_SR
+   93 0000004A         ;   LDR   R0,[R5]
+   94 0000004A         ;   ANDS    R0,R0,#0x10
+   95 0000004A         ;   BEQ    busy2
+   96 0000004A         
+   97 0000004A         ;   SUBS  R2,R2,#1
+   98 0000004A         ;   BNE   loop
+   99 0000004A         
+  100 0000004A         ;*******************************************************
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                       ********
+  101 0000004A         ; End of the program  section
+  102 0000004A         ;*******************************************************
+                       ********
+  103 0000004A         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+  104 0000004A                 ENDP
+  105 0000004A 00 00           ALIGN
+  106 0000004C                 END
               20000400 
+              40005008 
+              40008008 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -ID:\Work
 \ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\Includ
@@ -85,7 +161,7 @@ sdata 00000000
 
 Symbol: sdata
    Definitions
-      At line 13 in file Main.s
+      At line 17 in file Main.s
    Uses
       None
 Comment: sdata unused
@@ -100,19 +176,27 @@ __main 00000000
 
 Symbol: __main
    Definitions
-      At line 30 in file Main.s
+      At line 35 in file Main.s
    Uses
-      At line 24 in file Main.s
+      At line 29 in file Main.s
 Comment: __main used once
+loop 0000003E
+
+Symbol: loop
+   Definitions
+      At line 80 in file Main.s
+   Uses
+      None
+Comment: loop unused
 main 00000000
 
 Symbol: main
    Definitions
-      At line 20 in file Main.s
+      At line 24 in file Main.s
    Uses
       None
 Comment: main unused
-2 symbols
+3 symbols
 
 
 
@@ -125,9 +209,46 @@ Symbol: Field_Address
    Definitions
       At line 6 in file Main.s
    Uses
-      At line 32 in file Main.s
+      At line 37 in file Main.s
 Comment: Field_Address used once
-1 symbol
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 8 in file Main.s
+   Uses
+      At line 47 in file Main.s
+      At line 76 in file Main.s
+
+OUT_PORTB_Reset 40005004
+
+Symbol: OUT_PORTB_Reset
+   Definitions
+      At line 9 in file Main.s
+   Uses
+      None
+Comment: OUT_PORTB_Reset unused
+SSI0_DR 40008008
+
+Symbol: SSI0_DR
+   Definitions
+      At line 10 in file Main.s
+   Uses
+      At line 52 in file Main.s
+      At line 56 in file Main.s
+      At line 60 in file Main.s
+      At line 64 in file Main.s
+      At line 88 in file Main.s
+
+SSI0_SR 4000800C
+
+Symbol: SSI0_SR
+   Definitions
+      At line 11 in file Main.s
+   Uses
+      None
+Comment: SSI0_SR unused
+5 symbols
 
 
 
@@ -138,17 +259,25 @@ EMP_FIELD 00000000
 
 Symbol: EMP_FIELD
    Definitions
-      At line 22 in file Main.s
+      At line 26 in file Main.s
    Uses
-      At line 33 in file Main.s
+      At line 38 in file Main.s
 Comment: EMP_FIELD used once
+SCREEN_INIT 00000000
+
+Symbol: SCREEN_INIT
+   Definitions
+      At line 28 in file Main.s
+   Uses
+      At line 40 in file Main.s
+Comment: SCREEN_INIT used once
 SPI_CONFIG 00000000
 
 Symbol: SPI_CONFIG
    Definitions
-      At line 23 in file Main.s
+      At line 27 in file Main.s
    Uses
-      At line 34 in file Main.s
+      At line 39 in file Main.s
 Comment: SPI_CONFIG used once
-2 symbols
-342 symbols in table
+3 symbols
+348 symbols in table

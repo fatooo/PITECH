@@ -4,6 +4,11 @@
 ;***************************************************************
 ;SYMBOL				DIRECTIVE	VALUE			COMMENT
 
+SYSCTL_RCGCGPIO		EQU			0x400FE608 		;Enable GPIO
+GPIO_PORTB_DIR  	EQU			0x40005400 		;Direction reg
+GPIO_PORTB_AFSEL	EQU			0x40005420 		;Alternate function
+GPIO_PORTB_DEN	    EQU			0x4000551C		;Digital enable
+OUT_PORTB			EQU			0x4000500C		;00000011
 
 ;***************************************************************
 ; Directives - This Data Section is part of the code
@@ -17,85 +22,61 @@
 ; Program section					      
 ;***************************************************************
 ;LABEL		DIRECTIVE	VALUE					COMMENT
-			AREA 		routines,READONLY,CODE
+			AREA		routines,READONLY,CODE
 			THUMB
 			ALIGN
-			EXPORT		EMP_FIELD
+			EXTERN		DELAY_100ms
+			EXPORT		SCREEN_INIT
 
 ;***************************************************************
 ;	Main Function
+;	PB0 is RESET
+;	PB1 is D/C
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
-EMP_FIELD	PROC
-			PUSH		{R0-R4}
+SCREEN_INIT	PROC
 	
+			PUSH		{LR}
+	
+GPIO_INIT	LDR 		R1,=SYSCTL_RCGCGPIO		; Initalize Clock
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x02 
+			STR			R0,[R1]
+			NOP 
+			NOP
+			NOP			
+			NOP 								;let GPIO clock stabilize 	
+	
+			LDR 		R1,=GPIO_PORTB_DIR		;Set Direction of Pins
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x03				;PB0,PB1 are output
+			STR			R0,[R1]
+			
+			LDR 		R1,=GPIO_PORTB_DEN		;Digitally enable ports
+			LDR 		R0,[R1]
+			ORR 		R0,R0,#0x03 
+			STR			R0,[R1]
+			
+			LDR 		R1,=GPIO_PORTB_AFSEL	;Disable Alternate Functions
+			LDR 		R0,[R1]
+			BIC 		R0,R0,#0x03 
+			STR			R0,[R1]
+			
+			
+SCREEN		LDR 		R1,= OUT_PORTB
 			MOV			R0,#0x00
-			MOV			R1,#0x05
-			
-loop1		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop1			
-			
-			MOV			R0,#0x80
-			MOV			R1,#0x42
-			
-loop2		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop2		
-			
-			
-			MOV			R2,#0x4
-grand_loop	
-			MOV			R0,#0x00
-			MOV			R1,#0x12
-			
-loop3		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop3	
-			
-			MOV			R0,#0xFF
-			STRB		R0,[R5],#1
-			
-			MOV			R0,#0x00
-			MOV			R1,#0x40
-			
-loop4		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop4				
-			
-			MOV			R0,#0xFF
-			STRB		R0,[R5],#1
-			
-			SUBS		R2,R2,#1
-			BNE			grand_loop	
+			STR			R0,[R1]
+			NOP
+			NOP
+			NOP
+			NOP
+			NOP
+;			BL			DELAY_100ms
+			MOV			R0,#0x01
+			STR			R0,[R1]
 	
 	
-			MOV			R0,#0x00
-			MOV			R1,#0x12
-			
-loop5		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop5	
-			
-			MOV			R0,#0x80
-			MOV			R1,#0x42
-			
-loop6		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop6		
-			
-			MOV			R0,#0x00
-			MOV			R1,#0x0D
-			
-loop7		STRB		R0,[R5],#1
-			SUBS		R1,R1,#1
-			BNE			loop7	
-			
-			
-			
-
-
-			POP			{R0-R4}
+			POP			{LR}
 			BX			LR
 ;***************************************************************
 ; End of the program  section
@@ -103,4 +84,4 @@ loop7		STRB		R0,[R5],#1
 ;LABEL      DIRECTIVE       VALUE                           COMMENT
 			ENDP
 			ALIGN
-			END
+			END	
