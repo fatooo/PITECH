@@ -422,6 +422,11 @@
               <FileType>2</FileType>
               <FilePath>.\SysTick_Timer.s</FilePath>
             </File>
+            <File>
+              <FileName>Data_write.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Data_write.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
