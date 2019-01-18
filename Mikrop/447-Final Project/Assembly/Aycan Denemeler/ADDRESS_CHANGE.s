@@ -22,6 +22,7 @@ SSI0_SR				EQU			0x4000800C
 			AREA		routines,READONLY,CODE
 			THUMB
 			ALIGN
+			EXTERN		DELAY_1ms
 			EXTERN		DELAY_100ms
 			EXPORT		ADDRESS_CHANGE
 
@@ -38,12 +39,9 @@ ADDRESS_CHANGE	PROC
 			
 			LDR			R5,=OUT_PORTB_DC
 			MOV			R1,#0x00
-			STR			R1,[R5]
+			STR			R1,[R5]			
 			
-			AND			R1,R4,#0xFF			;X coordinate
-			AND			R2,R4,#0xFF00		;Y coordinates
-			LSR			R2,R2,#8			;shift 1 byte Right
-			
+			BL			DELAY_100ms
 			
 			
 control		LDR			R5,=SSI0_SR
@@ -52,13 +50,20 @@ control		LDR			R5,=SSI0_SR
 			CMP			R0,#0x02
 			BNE			control
 			
+			AND			R2,R4,#0xFF00		;Y coordinates
+			LSR			R2,R2,#8			;shift 1 byte Right
+			ADD			R2,R2,#0x40			
+			LDR			R5,=SSI0_DR
+			STR			R2,[R5]				;send Y coordinate
 			
+			BL			DELAY_100ms
+			
+			AND			R1,R4,#0xFF			;X coordinate
+			ADD			R1,R1,#0x80
 			LDR			R5,=SSI0_DR				
 			STR			R1,[R5]				;Send X coordinate
-			NOP
-			NOP
-			NOP
-			STR			R2,[R5]				;send Y coordinate
+			
+			BL			DELAY_100ms
 			
 			POP			{LR}
 			BX			LR

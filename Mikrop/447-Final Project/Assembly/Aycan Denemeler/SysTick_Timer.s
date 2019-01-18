@@ -9,6 +9,7 @@ GPIO_PORTB_OUT 		EQU 0x4000503C				; B7 to B4
 				THUMB
 				EXPORT INIT_SYSTICK
 				EXTERN DATA_WRITE
+				EXTERN ADDRESS_CHANGE
 INIT_SYSTICK PROC
 
 		LDR R1 , =NVIC_ST_CTRL
@@ -33,7 +34,9 @@ INIT_SYSTICK PROC
 		EXPORT My_SYSTICK
 	
 My_SYSTICK PROC   
-
+			
+			PUSH  	{LR}
+			
 			MOV R11, #1 ;FLAG FOR SECOND DIGIT
 			CMP R9, #0 ; r9 keeps the value from 20 to 0
 			BNE cont ; if r9 is 0 clear the screen 
@@ -44,6 +47,9 @@ cont		SUB R9, #1 ; substract r9
 			UDIV R8,R9 , r10 ; r8 keeps the first data which is either 0 1 2
 			MUL r7, r8, r10;
 			SUB R7 , r9 ,r7 ; R7 keeps the second value
+			
+			LDR	R4,=0x0110
+			BL	ADDRESS_CHANGE
 			
 			CMP R8 , #2 ; 
 			BEQ write2 
@@ -213,6 +219,7 @@ writebosluk
 			BEQ write9
 			
 FINISH			
+			POP {LR}
 			BX LR 
 			ENDP
 			END

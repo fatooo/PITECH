@@ -22,7 +22,7 @@ SSI0_SR				EQU			0x4000800C
 			AREA		routines,READONLY,CODE
 			THUMB
 			ALIGN
-			EXTERN		DELAY_100ms
+			EXTERN		DELAY_1ms
 			EXPORT		DATA_WRITE
 
 ;***************************************************************
@@ -44,6 +44,8 @@ control		LDR			R5,=SSI0_SR
 			
 			LDR			R5,=SSI0_DR				
 			STR			R4,[R5]
+			
+			BL			DELAY_1ms
 	
 			POP			{LR}
 			BX			LR

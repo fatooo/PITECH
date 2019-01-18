@@ -418,14 +418,24 @@
               <FilePath>.\IREM_CO.s</FilePath>
             </File>
             <File>
-              <FileName>SysTick_Timer.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\SysTick_Timer.s</FilePath>
-            </File>
-            <File>
               <FileName>Data_write.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\Data_write.s</FilePath>
+            </File>
+            <File>
+              <FileName>ADDRESS_CHANGE.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\ADDRESS_CHANGE.s</FilePath>
+            </File>
+            <File>
+              <FileName>DELAY_1ms.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\DELAY_1ms.s</FilePath>
+            </File>
+            <File>
+              <FileName>SysTick_Timer.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\SysTick_Timer.s</FilePath>
             </File>
           </Files>
         </Group>

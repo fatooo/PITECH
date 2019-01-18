@@ -27,7 +27,12 @@ SSI0_SR				EQU			0x4000800C
 			EXTERN		SPI_CONFIG
 			EXTERN		SCREEN_INIT
 			EXTERN		DELAY_100ms
+			EXTERN		DELAY_1ms
 			EXTERN		IREM_CO
+			EXTERN		DATA_WRITE
+			EXTERN		INIT_SYSTICK
+			EXTERN		My_SYSTICK
+			EXTERN		ADDRESS_CHANGE
 			EXPORT  	__main					; Make available
 
 ;***************************************************************
@@ -45,42 +50,35 @@ __main		PROC
 			BL			EMP_FIELD
 			BL			SPI_CONFIG
 			BL 			SCREEN_INIT
-			
 
-						
-			
-			
-			
-address_change
 
+			BL			INIT_SYSTICK
+
+
+
+
+
+
+
+
+;			LDR			R1,=17					;x coordinate 
+;			LDR			R2,=00					;y coordinate
+;			LSL			R2,R2,#8
+;			ADD			R4,R1,R2
+;			BL			ADDRESS_CHANGE		
+
+;			MOV			R6,#6
 ;			LDR			R5,=OUT_PORTB_DC
-;			MOV			R1,#0x00
+;			MOV			R1,#0xFF
 ;			STR			R1,[R5]
+;			BL			DELAY_1ms
 			
-;			LDR			R5,=SSI0_DR				
-;			MOV			R1,#0x43
-;			STR			R1,[R5]
-			
-;			NOP
-;			NOP
-;			NOP
-			
-;			LDR			R5,=SSI0_DR				
-;			MOV			R1,#0x8A
-;			STR			R1,[R5]
-;			
-;			BL			DELAY_100ms
-			
-			
-irem_co		LDR			R5,=OUT_PORTB_DC
-			MOV			R1,#0xFF
-			STR			R1,[R5]
-			
-			NOP
-			NOP
-			NOP
+;loop		MOV			R4,#0xFF
+;			BL			DATA_WRITE
+;			SUBS		R6,R6,#1
+;			BNE			loop
 
-			BL			IREM_CO		
+;			BL			IREM_CO
 			
 
 END_code	B			END_code
