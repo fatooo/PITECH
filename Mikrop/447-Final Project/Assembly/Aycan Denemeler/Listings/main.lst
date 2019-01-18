@@ -1,0 +1,297 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 20000400 
+                       Field_Address
+                               EQU              0x20000400
+    7 00000000         
+    8 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    9 00000000 40005004 
+                       OUT_PORTB_RESET
+                               EQU              0x40005004  ;00000001
+   10 00000000 40008008 
+                       SSI0_DR EQU              0x40008008
+   11 00000000 4000800C 
+                       SSI0_SR EQU              0x4000800C
+   12 00000000         ;*******************************************************
+                       ********
+   13 00000000         ; Directives - This Data Section is part of the code
+   14 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   15 00000000         ;*******************************************************
+                       ******** 
+   16 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   17 00000000                 AREA             sdata, DATA, READONLY
+   18 00000000                 THUMB
+   19 00000000         
+   20 00000000         ;*******************************************************
+                       ********
+   21 00000000         ; Program section           
+   22 00000000         ;*******************************************************
+                       ********
+   23 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   24 00000000                 AREA             main, READONLY, CODE, ALIGN=2
+   25 00000000                 THUMB
+   26 00000000                 EXTERN           EMP_FIELD
+   27 00000000                 EXTERN           SPI_CONFIG
+   28 00000000                 EXTERN           SCREEN_INIT
+   29 00000000                 EXTERN           DELAY_100ms
+   30 00000000                 EXTERN           IREM_CO
+   31 00000000                 EXPORT           __main      ; Make available
+   32 00000000         
+   33 00000000         ;*******************************************************
+                       ********
+   34 00000000         ; Main Function
+   35 00000000         ; CE - PA3
+   36 00000000         ; Din- PA5
+   37 00000000         ; CLK- PA2
+   38 00000000         ; RST- PB0
+   39 00000000         ; DC - PB1
+   40 00000000         ;*******************************************************
+                       ******** 
+   41 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   42 00000000         __main  PROC
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   43 00000000         
+   44 00000000 4D08            LDR              R5,=Field_Address
+   45 00000002 F7FF FFFE       BL               EMP_FIELD
+   46 00000006 F7FF FFFE       BL               SPI_CONFIG
+   47 0000000A F7FF FFFE       BL               SCREEN_INIT
+   48 0000000E         
+   49 0000000E         
+   50 0000000E         
+   51 0000000E         
+   52 0000000E         
+   53 0000000E         
+   54 0000000E         address_change
+   55 0000000E         
+   56 0000000E         ;   LDR   R5,=OUT_PORTB_DC
+   57 0000000E         ;   MOV   R1,#0x00
+   58 0000000E         ;   STR   R1,[R5]
+   59 0000000E         
+   60 0000000E         ;   LDR   R5,=SSI0_DR    
+   61 0000000E         ;   MOV   R1,#0x43
+   62 0000000E         ;   STR   R1,[R5]
+   63 0000000E         
+   64 0000000E         ;   NOP
+   65 0000000E         ;   NOP
+   66 0000000E         ;   NOP
+   67 0000000E         
+   68 0000000E         ;   LDR   R5,=SSI0_DR    
+   69 0000000E         ;   MOV   R1,#0x8A
+   70 0000000E         ;   STR   R1,[R5]
+   71 0000000E         ;   
+   72 0000000E         ;   BL   DELAY_100ms
+   73 0000000E         
+   74 0000000E         
+   75 0000000E 4D06    irem_co LDR              R5,=OUT_PORTB_DC
+   76 00000010 F04F 01FF       MOV              R1,#0xFF
+   77 00000014 6029            STR              R1,[R5]
+   78 00000016         
+   79 00000016 BF00            NOP
+   80 00000018 BF00            NOP
+   81 0000001A BF00            NOP
+   82 0000001C         
+   83 0000001C F7FF FFFE       BL               IREM_CO
+   84 00000020         
+   85 00000020         
+   86 00000020 E7FE    END_code
+                               B                END_code
+   87 00000022         
+   88 00000022         ;*******************************************************
+                       ********
+   89 00000022         ; End of the program  section
+   90 00000022         ;*******************************************************
+                       ********
+   91 00000022         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+   92 00000022                 ENDP
+   93 00000022 00 00           ALIGN
+   94 00000024                 END
+              20000400 
+              40005008 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -ID:\Work
+\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\Includ
+e --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --predef
+ine="TM4C123GH6PM SETA 1" --list=.\listings\main.lst Main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 17 in file Main.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+END_code 00000020
+
+Symbol: END_code
+   Definitions
+      At line 86 in file Main.s
+   Uses
+      At line 86 in file Main.s
+Comment: END_code used once
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 42 in file Main.s
+   Uses
+      At line 31 in file Main.s
+Comment: __main used once
+address_change 0000000E
+
+Symbol: address_change
+   Definitions
+      At line 54 in file Main.s
+   Uses
+      None
+Comment: address_change unused
+irem_co 0000000E
+
+Symbol: irem_co
+   Definitions
+      At line 75 in file Main.s
+   Uses
+      None
+Comment: irem_co unused
+main 00000000
+
+Symbol: main
+   Definitions
+      At line 24 in file Main.s
+   Uses
+      None
+Comment: main unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+Field_Address 20000400
+
+Symbol: Field_Address
+   Definitions
+      At line 6 in file Main.s
+   Uses
+      At line 44 in file Main.s
+Comment: Field_Address used once
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 8 in file Main.s
+   Uses
+      At line 75 in file Main.s
+Comment: OUT_PORTB_DC used once
+OUT_PORTB_RESET 40005004
+
+Symbol: OUT_PORTB_RESET
+   Definitions
+      At line 9 in file Main.s
+   Uses
+      None
+Comment: OUT_PORTB_RESET unused
+SSI0_DR 40008008
+
+Symbol: SSI0_DR
+   Definitions
+      At line 10 in file Main.s
+   Uses
+      None
+Comment: SSI0_DR unused
+SSI0_SR 4000800C
+
+Symbol: SSI0_SR
+   Definitions
+      At line 11 in file Main.s
+   Uses
+      None
+Comment: SSI0_SR unused
+5 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+DELAY_100ms 00000000
+
+Symbol: DELAY_100ms
+   Definitions
+      At line 29 in file Main.s
+   Uses
+      None
+Comment: DELAY_100ms unused
+EMP_FIELD 00000000
+
+Symbol: EMP_FIELD
+   Definitions
+      At line 26 in file Main.s
+   Uses
+      At line 45 in file Main.s
+Comment: EMP_FIELD used once
+IREM_CO 00000000
+
+Symbol: IREM_CO
+   Definitions
+      At line 30 in file Main.s
+   Uses
+      At line 83 in file Main.s
+Comment: IREM_CO used once
+SCREEN_INIT 00000000
+
+Symbol: SCREEN_INIT
+   Definitions
+      At line 28 in file Main.s
+   Uses
+      At line 47 in file Main.s
+Comment: SCREEN_INIT used once
+SPI_CONFIG 00000000
+
+Symbol: SPI_CONFIG
+   Definitions
+      At line 27 in file Main.s
+   Uses
+      At line 46 in file Main.s
+Comment: SPI_CONFIG used once
+5 symbols
+352 symbols in table
