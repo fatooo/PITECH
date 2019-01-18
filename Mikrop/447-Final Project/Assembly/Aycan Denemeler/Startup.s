@@ -330,9 +330,13 @@ PendSV_Handler  PROC
                 EXPORT  PendSV_Handler            [WEAK]
                 B       .
                 ENDP
+				IMPORT My_SYSTICK	
 SysTick_Handler PROC
                 EXPORT  SysTick_Handler           [WEAK]
-                B       .
+					
+                B       My_SYSTICK ;;add systick timer to the startup code 
+				
+			
                 ENDP
 IntDefaultHandler\
                 PROC

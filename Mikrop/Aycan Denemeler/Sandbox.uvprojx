@@ -412,6 +412,11 @@
               <FileType>2</FileType>
               <FilePath>.\DELAY_100ms.s</FilePath>
             </File>
+            <File>
+              <FileName>SysTick_Timer.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\SysTick_Timer.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
