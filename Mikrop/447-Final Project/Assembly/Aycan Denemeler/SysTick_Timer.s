@@ -2,14 +2,22 @@ NVIC_ST_CTRL 	EQU 0xE000E010
 NVIC_ST_RELOAD 	EQU 0xE000E014
 NVIC_ST_CURRENT EQU 0xE000E018
 ;SHP_SYSPRI3 	EQU 0xE000ED20
-RELOAD_VALUE 	EQU 0x1599999 ;;; 1 saniye için degistir sonra
+RELOAD_VALUE 	EQU 0x1499999 ;;; 1 saniye için degistir sonra
+;RELOAD_VALUE 	EQU 0x2000000 ;;; 1 saniye için degistir sonra
 GPIO_PORTB_IN		EQU 0x400053C0				; B3 to B0
 GPIO_PORTB_OUT 		EQU 0x4000503C				; B7 to B4
+Field_Address		EQU			0x20000400
+
+OUT_PORTB_DC		EQU			0x40005008		;00000010
+OUT_PORTB_RESET		EQU			0x40005004		;00000001
+SSI0_DR				EQU			0x40008008
+SSI0_SR				EQU			0x4000800C
 				AREA routines, CODE, READONLY, ALIGN=2
 				THUMB
 				EXPORT INIT_SYSTICK
 				EXTERN DATA_WRITE
 				EXTERN ADDRESS_CHANGE
+					EXTERN DELAY_1ms
 INIT_SYSTICK PROC
 
 		LDR R1 , =NVIC_ST_CTRL
@@ -40,7 +48,7 @@ My_SYSTICK PROC
 			MOV R11, #1 ;FLAG FOR SECOND DIGIT
 			CMP R9, #0 ; r9 keeps the value from 20 to 0
 			BNE cont ; if r9 is 0 clear the screen 
-			MOV R9, #20 ; If R9 is 0 mov R9 =20 again and end the operation
+			MOV R9, #21 ; If R9 is 0 mov R9 =20 again and end the operation
 			;B  winlose ;     goes to end of the moduke win or lose
 cont		SUB R9, #1 ; substract r9 
 			MOV R10, #10 ;
@@ -48,8 +56,13 @@ cont		SUB R9, #1 ; substract r9
 			MUL r7, r8, r10;
 			SUB R7 , r9 ,r7 ; R7 keeps the second value
 			
-			LDR	R4,=0x0110
+			LDR	R4,=0x0047
 			BL	ADDRESS_CHANGE
+			
+			LDR			R5,=OUT_PORTB_DC
+			MOV			R1,#0xFF
+			STR			R1,[R5]
+			BL			DELAY_1ms
 			
 			CMP R8 , #2 ; 
 			BEQ write2 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Sandbox.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Sandbox.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jan 18 22:55:32 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Fri Jan 18 23:56:38 2019
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -14,6 +14,7 @@ Functions with no stack information
 </H3><UL>
  <LI><a href="#[7c]">Reset_Handler</a>
  <LI><a href="#[83]">DELAY_100ms</a>
+ <LI><a href="#[85]">DELAY_1ms</a>
 </UL>
 </UL>
 <P>
@@ -573,16 +574,16 @@ Global Symbols
 <P><STRONG><a name="[38]"></a>uDMA_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
-<P><STRONG><a name="[85]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[87]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[86]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[88]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[87]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[89]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[7d]"></a>__main</STRONG> (Thumb, 34 bytes, Stack size 0 bytes, main.o(main))
+<P><STRONG><a name="[7d]"></a>__main</STRONG> (Thumb, 20 bytes, Stack size 0 bytes, main.o(main))
 <BR><BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CONFIG
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SCREEN_INIT
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IREM_CO
+<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;INIT_SYSTICK
 <LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EMP_FIELD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
@@ -603,26 +604,37 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[83]"></a>DELAY_100ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_100ms.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SCREEN_INIT
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IREM_CO
+<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
+<LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SCREEN_INIT
 </UL>
 
-<P><STRONG><a name="[82]"></a>IREM_CO</STRONG> (Thumb, 320 bytes, Stack size 0 bytes, irem_co.o(routines))
+<P><STRONG><a name="[84]"></a>DATA_WRITE</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, data_write.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
+</UL>
+
+<P><STRONG><a name="[86]"></a>ADDRESS_CHANGE</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, address_change.o(routines))
 <BR><BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_100ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
 </UL>
 
-<P><STRONG><a name="[88]"></a>INIT_SYSTICK</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, systick_timer.o(routines), UNUSED)
+<P><STRONG><a name="[85]"></a>DELAY_1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_1ms.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
+<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
+</UL>
 
-<P><STRONG><a name="[7e]"></a>My_SYSTICK</STRONG> (Thumb, 544 bytes, Stack size 0 bytes, systick_timer.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
+<P><STRONG><a name="[82]"></a>INIT_SYSTICK</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, systick_timer.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
+</UL>
+
+<P><STRONG><a name="[7e]"></a>My_SYSTICK</STRONG> (Thumb, 570 bytes, Stack size 0 bytes, systick_timer.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
-</UL>
-
-<P><STRONG><a name="[84]"></a>DATA_WRITE</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, data_write.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
 </UL>
 <P>
 <H3>

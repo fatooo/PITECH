@@ -50,15 +50,11 @@ __main		PROC
 			BL			EMP_FIELD
 			BL			SPI_CONFIG
 			BL 			SCREEN_INIT
-
-
 			BL			INIT_SYSTICK
 
 
-
-
-
-
+			
+		
 
 
 ;			LDR			R1,=17					;x coordinate 
@@ -67,13 +63,13 @@ __main		PROC
 ;			ADD			R4,R1,R2
 ;			BL			ADDRESS_CHANGE		
 
-;			MOV			R6,#6
+;			MOV			R6,#600
 ;			LDR			R5,=OUT_PORTB_DC
 ;			MOV			R1,#0xFF
 ;			STR			R1,[R5]
 ;			BL			DELAY_1ms
 			
-;loop		MOV			R4,#0xFF
+;loop		MOV			R4,#0x00
 ;			BL			DATA_WRITE
 ;			SUBS		R6,R6,#1
 ;			BNE			loop

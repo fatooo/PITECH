@@ -48,92 +48,79 @@ ARM Macro Assembler    Page 1
    27 00000000                 EXTERN           SPI_CONFIG
    28 00000000                 EXTERN           SCREEN_INIT
    29 00000000                 EXTERN           DELAY_100ms
-   30 00000000                 EXTERN           IREM_CO
-   31 00000000                 EXPORT           __main      ; Make available
-   32 00000000         
-   33 00000000         ;*******************************************************
+   30 00000000                 EXTERN           DELAY_1ms
+   31 00000000                 EXTERN           IREM_CO
+   32 00000000                 EXTERN           DATA_WRITE
+   33 00000000                 EXTERN           INIT_SYSTICK
+   34 00000000                 EXTERN           My_SYSTICK
+   35 00000000                 EXTERN           ADDRESS_CHANGE
+   36 00000000                 EXPORT           __main      ; Make available
+   37 00000000         
+   38 00000000         ;*******************************************************
                        ********
-   34 00000000         ; Main Function
-   35 00000000         ; CE - PA3
-   36 00000000         ; Din- PA5
-   37 00000000         ; CLK- PA2
-   38 00000000         ; RST- PB0
-   39 00000000         ; DC - PB1
-   40 00000000         ;*******************************************************
-                       ******** 
-   41 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   42 00000000         __main  PROC
+   39 00000000         ; Main Function
+   40 00000000         ; CE - PA3
+   41 00000000         ; Din- PA5
+   42 00000000         ; CLK- PA2
+   43 00000000         ; RST- PB0
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   43 00000000         
-   44 00000000 4D08            LDR              R5,=Field_Address
-   45 00000002 F7FF FFFE       BL               EMP_FIELD
-   46 00000006 F7FF FFFE       BL               SPI_CONFIG
-   47 0000000A F7FF FFFE       BL               SCREEN_INIT
-   48 0000000E         
-   49 0000000E         
-   50 0000000E         
-   51 0000000E         
-   52 0000000E         
-   53 0000000E         
-   54 0000000E         address_change
-   55 0000000E         
-   56 0000000E         ;   LDR   R5,=OUT_PORTB_DC
-   57 0000000E         ;   MOV   R1,#0x00
-   58 0000000E         ;   STR   R1,[R5]
-   59 0000000E         
-   60 0000000E         ;   LDR   R5,=SSI0_DR    
-   61 0000000E         ;   MOV   R1,#0x43
-   62 0000000E         ;   STR   R1,[R5]
-   63 0000000E         
-   64 0000000E         ;   NOP
-   65 0000000E         ;   NOP
-   66 0000000E         ;   NOP
-   67 0000000E         
-   68 0000000E         ;   LDR   R5,=SSI0_DR    
-   69 0000000E         ;   MOV   R1,#0x8A
-   70 0000000E         ;   STR   R1,[R5]
-   71 0000000E         ;   
-   72 0000000E         ;   BL   DELAY_100ms
-   73 0000000E         
-   74 0000000E         
-   75 0000000E 4D06    irem_co LDR              R5,=OUT_PORTB_DC
-   76 00000010 F04F 01FF       MOV              R1,#0xFF
-   77 00000014 6029            STR              R1,[R5]
-   78 00000016         
-   79 00000016 BF00            NOP
-   80 00000018 BF00            NOP
-   81 0000001A BF00            NOP
-   82 0000001C         
-   83 0000001C F7FF FFFE       BL               IREM_CO
-   84 00000020         
-   85 00000020         
-   86 00000020 E7FE    END_code
+   44 00000000         ; DC - PB1
+   45 00000000         ;*******************************************************
+                       ******** 
+   46 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   47 00000000         __main  PROC
+   48 00000000         
+   49 00000000 4D04            LDR              R5,=Field_Address
+   50 00000002 F7FF FFFE       BL               EMP_FIELD
+   51 00000006 F7FF FFFE       BL               SPI_CONFIG
+   52 0000000A F7FF FFFE       BL               SCREEN_INIT
+   53 0000000E F7FF FFFE       BL               INIT_SYSTICK
+   54 00000012         
+   55 00000012         
+   56 00000012         
+   57 00000012         
+   58 00000012         
+   59 00000012         
+   60 00000012         ;   LDR   R1,=17     ;x coordinate 
+   61 00000012         ;   LDR   R2,=00     ;y coordinate
+   62 00000012         ;   LSL   R2,R2,#8
+   63 00000012         ;   ADD   R4,R1,R2
+   64 00000012         ;   BL   ADDRESS_CHANGE  
+   65 00000012         
+   66 00000012         ;   MOV   R6,#600
+   67 00000012         ;   LDR   R5,=OUT_PORTB_DC
+   68 00000012         ;   MOV   R1,#0xFF
+   69 00000012         ;   STR   R1,[R5]
+   70 00000012         ;   BL   DELAY_1ms
+   71 00000012         
+   72 00000012         ;loop  MOV   R4,#0x00
+   73 00000012         ;   BL   DATA_WRITE
+   74 00000012         ;   SUBS  R6,R6,#1
+   75 00000012         ;   BNE   loop
+   76 00000012         
+   77 00000012         ;   BL   IREM_CO
+   78 00000012         
+   79 00000012         
+   80 00000012 E7FE    END_code
                                B                END_code
-   87 00000022         
-   88 00000022         ;*******************************************************
+   81 00000014         
+   82 00000014         ;*******************************************************
                        ********
-   89 00000022         ; End of the program  section
-   90 00000022         ;*******************************************************
+   83 00000014         ; End of the program  section
+   84 00000014         ;*******************************************************
                        ********
-   91 00000022         ;LABEL      DIRECTIVE       VALUE                       
+   85 00000014         ;LABEL      DIRECTIVE       VALUE                       
                            COMMENT
-   92 00000022                 ENDP
-   93 00000022 00 00           ALIGN
-   94 00000024                 END
+   86 00000014                 ENDP
+   87 00000014                 ALIGN
+   88 00000014                 END
               20000400 
-              40005008 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-
-
-
-ARM Macro Assembler    Page 3 
-
-
 erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -IC:\Keil
 _v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSIS\
 Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --
@@ -159,38 +146,22 @@ Comment: sdata unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-END_code 00000020
+END_code 00000012
 
 Symbol: END_code
    Definitions
-      At line 86 in file Main.s
+      At line 80 in file Main.s
    Uses
-      At line 86 in file Main.s
+      At line 80 in file Main.s
 Comment: END_code used once
 __main 00000000
 
 Symbol: __main
    Definitions
-      At line 42 in file Main.s
+      At line 47 in file Main.s
    Uses
-      At line 31 in file Main.s
+      At line 36 in file Main.s
 Comment: __main used once
-address_change 0000000E
-
-Symbol: address_change
-   Definitions
-      At line 54 in file Main.s
-   Uses
-      None
-Comment: address_change unused
-irem_co 0000000E
-
-Symbol: irem_co
-   Definitions
-      At line 75 in file Main.s
-   Uses
-      None
-Comment: irem_co unused
 main 00000000
 
 Symbol: main
@@ -199,7 +170,7 @@ Symbol: main
    Uses
       None
 Comment: main unused
-5 symbols
+3 symbols
 
 
 
@@ -212,7 +183,7 @@ Symbol: Field_Address
    Definitions
       At line 6 in file Main.s
    Uses
-      At line 44 in file Main.s
+      At line 49 in file Main.s
 Comment: Field_Address used once
 OUT_PORTB_DC 40005008
 
@@ -220,8 +191,8 @@ Symbol: OUT_PORTB_DC
    Definitions
       At line 8 in file Main.s
    Uses
-      At line 75 in file Main.s
-Comment: OUT_PORTB_DC used once
+      None
+Comment: OUT_PORTB_DC unused
 OUT_PORTB_RESET 40005004
 
 Symbol: OUT_PORTB_RESET
@@ -253,6 +224,22 @@ Comment: SSI0_SR unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 35 in file Main.s
+   Uses
+      None
+Comment: ADDRESS_CHANGE unused
+DATA_WRITE 00000000
+
+Symbol: DATA_WRITE
+   Definitions
+      At line 32 in file Main.s
+   Uses
+      None
+Comment: DATA_WRITE unused
 DELAY_100ms 00000000
 
 Symbol: DELAY_100ms
@@ -261,29 +248,59 @@ Symbol: DELAY_100ms
    Uses
       None
 Comment: DELAY_100ms unused
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 30 in file Main.s
+   Uses
+      None
+Comment: DELAY_1ms unused
 EMP_FIELD 00000000
 
 Symbol: EMP_FIELD
    Definitions
       At line 26 in file Main.s
    Uses
-      At line 45 in file Main.s
+      At line 50 in file Main.s
 Comment: EMP_FIELD used once
+INIT_SYSTICK 00000000
+
+Symbol: INIT_SYSTICK
+   Definitions
+      At line 33 in file Main.s
+   Uses
+      At line 53 in file Main.s
+Comment: INIT_SYSTICK used once
 IREM_CO 00000000
 
 Symbol: IREM_CO
    Definitions
-      At line 30 in file Main.s
+      At line 31 in file Main.s
    Uses
-      At line 83 in file Main.s
-Comment: IREM_CO used once
+      None
+Comment: IREM_CO unused
+My_SYSTICK 00000000
+
+Symbol: My_SYSTICK
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+   Definitions
+      At line 34 in file Main.s
+   Uses
+      None
+Comment: My_SYSTICK unused
 SCREEN_INIT 00000000
 
 Symbol: SCREEN_INIT
    Definitions
       At line 28 in file Main.s
    Uses
-      At line 47 in file Main.s
+      At line 52 in file Main.s
 Comment: SCREEN_INIT used once
 SPI_CONFIG 00000000
 
@@ -291,7 +308,7 @@ Symbol: SPI_CONFIG
    Definitions
       At line 27 in file Main.s
    Uses
-      At line 46 in file Main.s
+      At line 51 in file Main.s
 Comment: SPI_CONFIG used once
-5 symbols
-352 symbols in table
+10 symbols
+355 symbols in table

@@ -7,7 +7,7 @@ Section Cross References
     main.o(main) refers to emptyplayfield.o(routines) for EMP_FIELD
     main.o(main) refers to spi_config.o(routines) for SPI_CONFIG
     main.o(main) refers to screen_init.o(routines) for SCREEN_INIT
-    main.o(main) refers to irem_co.o(routines) for IREM_CO
+    main.o(main) refers to systick_timer.o(routines) for INIT_SYSTICK
     startup.o(STACK) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup.o(HEAP) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
     startup.o(RESET) refers (Special) to heapauxi.o(.text) for __use_two_region_memory
@@ -19,6 +19,10 @@ Section Cross References
     startup.o(.text) refers to startup.o(STACK) for StackMem
     screen_init.o(routines) refers to delay_100ms.o(routines) for DELAY_100ms
     irem_co.o(routines) refers to delay_100ms.o(routines) for DELAY_100ms
+    data_write.o(routines) refers to delay_1ms.o(routines) for DELAY_1ms
+    address_change.o(routines) refers to delay_100ms.o(routines) for DELAY_100ms
+    systick_timer.o(routines) refers to address_change.o(routines) for ADDRESS_CHANGE
+    systick_timer.o(routines) refers to delay_1ms.o(routines) for DELAY_1ms
     systick_timer.o(routines) refers to data_write.o(routines) for DATA_WRITE
 
 
@@ -33,9 +37,11 @@ Removing Unused input sections from the image.
     Removing spi_config.o(sdata), (0 bytes).
     Removing screen_init.o(sdata), (0 bytes).
     Removing irem_co.o(sdata), (0 bytes).
+    Removing irem_co.o(routines), (324 bytes).
     Removing data_write.o(sdata), (0 bytes).
+    Removing address_change.o(sdata), (0 bytes).
 
-8 unused section(s) (total 48 bytes) removed from the image.
+10 unused section(s) (total 372 bytes) removed from the image.
 
 ==============================================================================
 
@@ -47,7 +53,9 @@ Image Symbol Table
 
     RESET                                    0x00000000   Section      648  startup.o(RESET)
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
+    ADDRESS_CHANGE.s                         0x00000000   Number         0  address_change.o ABSOLUTE
     DELAY_100ms.s                            0x00000000   Number         0  delay_100ms.o ABSOLUTE
+    DELAY_1ms.s                              0x00000000   Number         0  delay_1ms.o ABSOLUTE
     Data_write.s                             0x00000000   Number         0  data_write.o ABSOLUTE
     EmptyPlayfield.s                         0x00000000   Number         0  emptyplayfield.o ABSOLUTE
     IREM_CO.s                                0x00000000   Number         0  irem_co.o ABSOLUTE
@@ -59,22 +67,24 @@ Image Symbol Table
     dc.s                                     0x00000000   Number         0  dc.o ABSOLUTE
     $v0                                      0x0000026c   Number         0  startup.o(RESET)
     .text                                    0x00000288   Section        0  heapauxi.o(.text)
-    main                                     0x00000290   Section       44  main.o(main)
+    main                                     0x00000290   Section       24  main.o(main)
     $v0                                      0x00000290   Number         0  main.o(main)
-    routines                                 0x000002bc   Section      144  emptyplayfield.o(routines)
-    $v0                                      0x000002bc   Number         0  emptyplayfield.o(routines)
-    routines                                 0x0000034c   Section      200  spi_config.o(routines)
-    $v0                                      0x0000034c   Number         0  spi_config.o(routines)
-    routines                                 0x00000414   Section      180  screen_init.o(routines)
-    $v0                                      0x00000414   Number         0  screen_init.o(routines)
-    routines                                 0x000004c8   Section       28  delay_100ms.o(routines)
-    $v0                                      0x000004c8   Number         0  delay_100ms.o(routines)
-    routines                                 0x000004e4   Section      324  irem_co.o(routines)
-    $v0                                      0x000004e4   Number         0  irem_co.o(routines)
-    routines                                 0x00000628   Section      588  systick_timer.o(routines)
-    $v0                                      0x00000628   Number         0  systick_timer.o(routines)
-    routines                                 0x00000874   Section       36  data_write.o(routines)
-    $v0                                      0x00000874   Number         0  data_write.o(routines)
+    routines                                 0x000002a8   Section      144  emptyplayfield.o(routines)
+    $v0                                      0x000002a8   Number         0  emptyplayfield.o(routines)
+    routines                                 0x00000338   Section      200  spi_config.o(routines)
+    $v0                                      0x00000338   Number         0  spi_config.o(routines)
+    routines                                 0x00000400   Section      180  screen_init.o(routines)
+    $v0                                      0x00000400   Number         0  screen_init.o(routines)
+    routines                                 0x000004b4   Section       28  delay_100ms.o(routines)
+    $v0                                      0x000004b4   Number         0  delay_100ms.o(routines)
+    routines                                 0x000004d0   Section       40  data_write.o(routines)
+    $v0                                      0x000004d0   Number         0  data_write.o(routines)
+    routines                                 0x000004f8   Section       80  address_change.o(routines)
+    $v0                                      0x000004f8   Number         0  address_change.o(routines)
+    routines                                 0x00000548   Section       24  delay_1ms.o(routines)
+    $v0                                      0x00000548   Number         0  delay_1ms.o(routines)
+    routines                                 0x00000560   Section      620  systick_timer.o(routines)
+    $v0                                      0x00000560   Number         0  systick_timer.o(routines)
     STACK                                    0x20000000   Section     1024  startup.o(STACK)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
 
@@ -211,15 +221,16 @@ Image Symbol Table
     __use_two_region_memory                  0x00000289   Thumb Code     2  heapauxi.o(.text)
     __rt_heap_escrow$2region                 0x0000028b   Thumb Code     2  heapauxi.o(.text)
     __rt_heap_expand$2region                 0x0000028d   Thumb Code     2  heapauxi.o(.text)
-    __main                                   0x00000291   Thumb Code    34  main.o(main)
-    EMP_FIELD                                0x000002bd   Thumb Code   142  emptyplayfield.o(routines)
-    SPI_CONFIG                               0x0000034d   Thumb Code   150  spi_config.o(routines)
-    SCREEN_INIT                              0x00000415   Thumb Code   150  screen_init.o(routines)
-    DELAY_100ms                              0x000004c9   Thumb Code     0  delay_100ms.o(routines)
-    IREM_CO                                  0x000004e5   Thumb Code   320  irem_co.o(routines)
-    INIT_SYSTICK                             0x00000629   Thumb Code    28  systick_timer.o(routines)
-    My_SYSTICK                               0x00000645   Thumb Code   544  systick_timer.o(routines)
-    DATA_WRITE                               0x00000875   Thumb Code    26  data_write.o(routines)
+    __main                                   0x00000291   Thumb Code    20  main.o(main)
+    EMP_FIELD                                0x000002a9   Thumb Code   142  emptyplayfield.o(routines)
+    SPI_CONFIG                               0x00000339   Thumb Code   150  spi_config.o(routines)
+    SCREEN_INIT                              0x00000401   Thumb Code   150  screen_init.o(routines)
+    DELAY_100ms                              0x000004b5   Thumb Code     0  delay_100ms.o(routines)
+    DATA_WRITE                               0x000004d1   Thumb Code    30  data_write.o(routines)
+    ADDRESS_CHANGE                           0x000004f9   Thumb Code    68  address_change.o(routines)
+    DELAY_1ms                                0x00000549   Thumb Code     0  delay_1ms.o(routines)
+    INIT_SYSTICK                             0x00000561   Thumb Code    28  systick_timer.o(routines)
+    My_SYSTICK                               0x0000057d   Thumb Code   570  systick_timer.o(routines)
 
 
 
@@ -229,33 +240,34 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000c98, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000bcc, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000898, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x000007cc, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x00000000   0x00000000   0x00000288   Code   RO           15  * RESET               startup.o
-    0x00000288   0x00000288   0x00000006   Code   RO           51    .text               c_w.l(heapauxi.o)
+    0x00000288   0x00000288   0x00000006   Code   RO           59    .text               c_w.l(heapauxi.o)
     0x0000028e   0x0000028e   0x00000002   PAD
-    0x00000290   0x00000290   0x0000002c   Code   RO            2    main                main.o
-    0x000002bc   0x000002bc   0x00000090   Code   RO            9    routines            emptyplayfield.o
-    0x0000034c   0x0000034c   0x000000c8   Code   RO           23    routines            spi_config.o
-    0x00000414   0x00000414   0x000000b4   Code   RO           28    routines            screen_init.o
-    0x000004c8   0x000004c8   0x0000001c   Code   RO           32    routines            delay_100ms.o
-    0x000004e4   0x000004e4   0x00000144   Code   RO           36    routines            irem_co.o
-    0x00000628   0x00000628   0x0000024c   Code   RO           40    routines            systick_timer.o
-    0x00000874   0x00000874   0x00000024   Code   RO           45    routines            data_write.o
+    0x00000290   0x00000290   0x00000018   Code   RO            2    main                main.o
+    0x000002a8   0x000002a8   0x00000090   Code   RO            9    routines            emptyplayfield.o
+    0x00000338   0x00000338   0x000000c8   Code   RO           23    routines            spi_config.o
+    0x00000400   0x00000400   0x000000b4   Code   RO           28    routines            screen_init.o
+    0x000004b4   0x000004b4   0x0000001c   Code   RO           32    routines            delay_100ms.o
+    0x000004d0   0x000004d0   0x00000028   Code   RO           41    routines            data_write.o
+    0x000004f8   0x000004f8   0x00000050   Code   RO           46    routines            address_change.o
+    0x00000548   0x00000548   0x00000018   Code   RO           50    routines            delay_1ms.o
+    0x00000560   0x00000560   0x0000026c   Code   RO           53    routines            systick_timer.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000898, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x000007cc, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000898   0x00000400   Data   RW           13    STACK               startup.o
+    0x20000000   0x000007cc   0x00000400   Data   RW           13    STACK               startup.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000400, Load base: 0x00000c98, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000400, Load base: 0x00000bcc, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
@@ -267,18 +279,19 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-        36         10          0          0          0        408   data_write.o
+        80         12          0          0          0        432   address_change.o
+        40         10          0          0          0        408   data_write.o
         28          6          0          0          0        272   delay_100ms.o
+        24          0          0          0          0        272   delay_1ms.o
        144          2          0          0          0        452   emptyplayfield.o
-       324          4          0          0          0        508   irem_co.o
-        44         10          0          0          0        428   main.o
+        24          4          0          0          0        424   main.o
        180         30          0          0          0        460   screen_init.o
        200         50          0          0          0        456   spi_config.o
        648        622          0       1024          0        788   startup.o
-       588         16          0          0          0        604   systick_timer.o
+       620         22          0          0          0        612   systick_timer.o
 
     ----------------------------------------------------------------------
-      2192        750          0       1024          0       4376   Object Totals
+      1988        758          0       1024          0       4576   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -308,15 +321,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      2200        750          0       1024          0       3828   Grand Totals
-      2200        750          0       1024          0       3828   ELF Image Totals
-      2200        750          0       1024          0          0   ROM Totals
+      1996        758          0       1024          0       4028   Grand Totals
+      1996        758          0       1024          0       4028   ELF Image Totals
+      1996        758          0       1024          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 2200 (   2.15kB)
+    Total RO  Size (Code + RO Data)                 1996 (   1.95kB)
     Total RW  Size (RW Data + ZI Data)              1024 (   1.00kB)
-    Total ROM Size (Code + RO Data + RW Data)       3224 (   3.15kB)
+    Total ROM Size (Code + RO Data + RW Data)       3020 (   2.95kB)
 
 ==============================================================================
 

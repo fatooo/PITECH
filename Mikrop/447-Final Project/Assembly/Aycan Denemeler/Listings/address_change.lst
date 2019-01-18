@@ -1,0 +1,219 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    7 00000000         
+    8 00000000 40008008 
+                       SSI0_DR EQU              0x40008008
+    9 00000000 4000800C 
+                       SSI0_SR EQU              0x4000800C
+   10 00000000         ;*******************************************************
+                       ********
+   11 00000000         ; Directives - This Data Section is part of the code
+   12 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   13 00000000         ;*******************************************************
+                       ******** 
+   14 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   15 00000000                 AREA             sdata, DATA, READONLY
+   16 00000000                 THUMB
+   17 00000000         
+   18 00000000         ;*******************************************************
+                       ********
+   19 00000000         ; Program section           
+   20 00000000         ;*******************************************************
+                       ********
+   21 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   22 00000000                 AREA             routines,READONLY,CODE
+   23 00000000                 THUMB
+   24 00000000                 ALIGN
+   25 00000000                 EXTERN           DELAY_1ms
+   26 00000000                 EXTERN           DELAY_100ms
+   27 00000000                 EXPORT           ADDRESS_CHANGE
+   28 00000000         
+   29 00000000         ;*******************************************************
+                       ********
+   30 00000000         ; Main Function
+   31 00000000         ; Takes Coordinates in R4 and sends them to screen
+   32 00000000         ; Least Significant byte is X and Second one is Y
+   33 00000000         ;*******************************************************
+                       ******** 
+   34 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   35 00000000         
+   36 00000000         ADDRESS_CHANGE
+                               PROC
+   37 00000000         
+   38 00000000 B500            PUSH             {LR}
+   39 00000002         
+   40 00000002 4D10            LDR              R5,=OUT_PORTB_DC
+   41 00000004 F04F 0100       MOV              R1,#0x00
+   42 00000008 6029            STR              R1,[R5]
+   43 0000000A         
+   44 0000000A F7FF FFFE       BL               DELAY_100ms
+   45 0000000E         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   46 0000000E         
+   47 0000000E 4D0E    control LDR              R5,=SSI0_SR
+   48 00000010 6828            LDR              R0,[R5]
+   49 00000012 F000 0002       AND              R0,#0x02
+   50 00000016 2802            CMP              R0,#0x02
+   51 00000018 D1F9            BNE              control
+   52 0000001A         
+   53 0000001A F404 427F       AND              R2,R4,#0xFF00 ;Y coordinates
+   54 0000001E EA4F 2212       LSR              R2,R2,#8    ;shift 1 byte Right
+                                                            
+   55 00000022 F102 0240       ADD              R2,R2,#0x40
+   56 00000026 4D09            LDR              R5,=SSI0_DR
+   57 00000028 602A            STR              R2,[R5]     ;send Y coordinate
+   58 0000002A         
+   59 0000002A F7FF FFFE       BL               DELAY_100ms
+   60 0000002E         
+   61 0000002E F004 01FF       AND              R1,R4,#0xFF ;X coordinate
+   62 00000032 F101 0180       ADD              R1,R1,#0x80
+   63 00000036 4D05            LDR              R5,=SSI0_DR
+   64 00000038 6029            STR              R1,[R5]     ;Send X coordinate
+   65 0000003A         
+   66 0000003A F7FF FFFE       BL               DELAY_100ms
+   67 0000003E         
+   68 0000003E F85D EB04       POP              {LR}
+   69 00000042 4770            BX               LR
+   70 00000044         ;*******************************************************
+                       ********
+   71 00000044         ; End of the program  section
+   72 00000044         ;*******************************************************
+                       ********
+   73 00000044         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+   74 00000044                 ENDP
+   75 00000044                 ALIGN
+   76 00000044                 END
+              40005008 
+              4000800C 
+              40008008 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\address_change.d -o.\objects\address_change.o -I.\RTE
+\_Target_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC
+:\Keil_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_
+VERSION SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\address_c
+hange.lst ADDRESS_CHANGE.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 15 in file ADDRESS_CHANGE.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 36 in file ADDRESS_CHANGE.s
+   Uses
+      At line 27 in file ADDRESS_CHANGE.s
+Comment: ADDRESS_CHANGE used once
+control 0000000E
+
+Symbol: control
+   Definitions
+      At line 47 in file ADDRESS_CHANGE.s
+   Uses
+      At line 51 in file ADDRESS_CHANGE.s
+Comment: control used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 22 in file ADDRESS_CHANGE.s
+   Uses
+      None
+Comment: routines unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 6 in file ADDRESS_CHANGE.s
+   Uses
+      At line 40 in file ADDRESS_CHANGE.s
+Comment: OUT_PORTB_DC used once
+SSI0_DR 40008008
+
+Symbol: SSI0_DR
+   Definitions
+      At line 8 in file ADDRESS_CHANGE.s
+   Uses
+      At line 56 in file ADDRESS_CHANGE.s
+      At line 63 in file ADDRESS_CHANGE.s
+
+SSI0_SR 4000800C
+
+Symbol: SSI0_SR
+   Definitions
+      At line 9 in file ADDRESS_CHANGE.s
+   Uses
+      At line 47 in file ADDRESS_CHANGE.s
+Comment: SSI0_SR used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+DELAY_100ms 00000000
+
+Symbol: DELAY_100ms
+   Definitions
+      At line 26 in file ADDRESS_CHANGE.s
+   Uses
+      At line 44 in file ADDRESS_CHANGE.s
+      At line 59 in file ADDRESS_CHANGE.s
+      At line 66 in file ADDRESS_CHANGE.s
+
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 25 in file ADDRESS_CHANGE.s
+   Uses
+      None
+Comment: DELAY_1ms unused
+2 symbols
+345 symbols in table

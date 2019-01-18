@@ -39,7 +39,7 @@ ARM Macro Assembler    Page 1
    22 00000000                 AREA             routines,READONLY,CODE
    23 00000000                 THUMB
    24 00000000                 ALIGN
-   25 00000000                 EXTERN           DELAY_100ms
+   25 00000000                 EXTERN           DELAY_1ms
    26 00000000                 EXPORT           DATA_WRITE
    27 00000000         
    28 00000000         ;*******************************************************
@@ -54,7 +54,7 @@ ARM Macro Assembler    Page 1
                                PROC
    35 00000000 B500            PUSH             {LR}
    36 00000002         
-   37 00000002 4D06    control LDR              R5,=SSI0_SR
+   37 00000002 4D07    control LDR              R5,=SSI0_SR
    38 00000004 6828            LDR              R0,[R5]
    39 00000006 F000 0002       AND              R0,#0x02
    40 0000000A 2802            CMP              R0,#0x02
@@ -62,7 +62,7 @@ ARM Macro Assembler    Page 1
    42 0000000E         
    43 0000000E BF00            NOP
    44 00000010         
-   45 00000010 4D03            LDR              R5,=SSI0_DR
+   45 00000010 4D04            LDR              R5,=SSI0_DR
 
 
 
@@ -71,18 +71,20 @@ ARM Macro Assembler    Page 2
 
    46 00000012 602C            STR              R4,[R5]
    47 00000014         
-   48 00000014 F85D EB04       POP              {LR}
-   49 00000018 4770            BX               LR
-   50 0000001A         ;*******************************************************
+   48 00000014 F7FF FFFE       BL               DELAY_1ms
+   49 00000018         
+   50 00000018 F85D EB04       POP              {LR}
+   51 0000001C 4770            BX               LR
+   52 0000001E         ;*******************************************************
                        ********
-   51 0000001A         ; End of the program  section
-   52 0000001A         ;*******************************************************
+   53 0000001E         ; End of the program  section
+   54 0000001E         ;*******************************************************
                        ********
-   53 0000001A         ;LABEL      DIRECTIVE       VALUE                       
+   55 0000001E         ;LABEL      DIRECTIVE       VALUE                       
                            COMMENT
-   54 0000001A                 ENDP
-   55 0000001A 00 00           ALIGN
-   56 0000001C                 END
+   56 0000001E                 ENDP
+   57 0000001E 00 00           ALIGN
+   58 00000020                 END
               4000800C 
               40008008 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
@@ -174,13 +176,13 @@ Comment: SSI0_SR used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
-DELAY_100ms 00000000
+DELAY_1ms 00000000
 
-Symbol: DELAY_100ms
+Symbol: DELAY_1ms
    Definitions
       At line 25 in file Data_write.s
    Uses
-      None
-Comment: DELAY_100ms unused
+      At line 48 in file Data_write.s
+Comment: DELAY_1ms used once
 1 symbol
 344 symbols in table

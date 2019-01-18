@@ -139,7 +139,7 @@ ARM Macro Assembler    Page 3
    89 00000062 6029            STR              R1,[R5]
    90 00000064         
    91 00000064 4D12            LDR              R5,=SSI0_DR
-   92 00000066 F04F 01BE       MOV              R1,#0xBE
+   92 00000066 F04F 01BF       MOV              R1,#0xBF
    93 0000006A 6029            STR              R1,[R5]
    94 0000006C         
    95 0000006C 4D10            LDR              R5,=SSI0_DR
