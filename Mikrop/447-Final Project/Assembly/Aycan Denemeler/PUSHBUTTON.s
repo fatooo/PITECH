@@ -34,51 +34,50 @@ SYSCTL_RCGCGPIO_R  EQU   0x400FE608
 			AREA		routines,READONLY,CODE
 			THUMB
 			ALIGN
-			EXPORT		PUSHBUTTON
 			EXTERN WINNER
 			EXTERN LOSER
 
+			;	EXTERN SHIP_CURSOR
 ;***************************************************************
-;	Main Function
-;	CE - PA3
-;	Din- PA5
-;	CLK- PA2
+;	PORTF INITIALIZATION
+; INITIALIZE PF0 AND PF4 FOR PUSH BUTTONS ON THE BOARD
 ;***************************************************************	
-;LABEL		DIRECTIVE	VALUE					COMMENT
-PUSHBUTTON	;------------PortF_Init------------
-                    ; initialize input and output pins of Port F
-loop
-    LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second)
-    BL  delay                       ; delay at least (3*R0) cycles
-    BL  PortF_Input                 ; read all of the switches on Port F
-    CMP R0, #0x01                   ; R0 == 0x01?
-    BEQ sw1pressed                  ; if so, switch 1 pressed
-    CMP R0, #0x10                   ; R0 == 0x10?
-    BEQ sw2pressed                  ; if so, switch 2 pressed
-    CMP R0, #0x00                   ; R0 == 0x00?
-    BEQ bothpressed                 ; if so, both switches pressed
-    CMP R0, #0x11                   ; R0 == 0x11?
-    B   loop
-   ;B FINISH
-sw1pressed
-
-	BL WINNER 
-	B loop
-	;B FINISH
-sw2pressed
-
-	BL LOSER
-    B   loop
-  ;B FINISH
-bothpressed
-    MOV R0, #RED                  ; R0 = GREEN (green LED on)
-    BL  PortF_Output                ; turn the RED LED on
-    B   loop
-   ;B FINISH 
-   
-   
-   
-
+			EXPORT		PORTF_INIT
+PORTF_INIT  PROC
+	PUSH {LR}
+    LDR R1, =SYSCTL_RCGCGPIO_R      ; 1) activate clock for Port F
+    LDR R0, [R1]                 
+    ORR R0, R0, #0x20               ; set bit 5 to turn on clock
+    STR R0, [R1]                  
+    NOP
+    NOP                             ; allow time for clock to finish
+    LDR R1, =GPIO_PORTF_LOCK_R      ; 2) unlock the lock register
+    LDR R0, =0x4C4F434B             ; unlock GPIO Port F Commit Register
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_CR_R        ; enable commit for Port F
+    MOV R0, #0xFF                   ; 1 means allow access
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_AMSEL_R     ; 3) disable analog functionality
+    MOV R0, #0                      ; 0 means analog is off
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_PCTL_R      ; 4) configure as GPIO
+    MOV R0, #0x00000000             ; 0 means configure Port F as GPIO
+    STR R0, [R1]                  
+    LDR R1, =GPIO_PORTF_DIR_R       ; 5) set direction register
+    MOV R0,#0x0E                    ; PF0 and PF7-4 input, PF3-1 output
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_AFSEL_R     ; 6) regular port function
+    MOV R0, #0                      ; 0 means disable alternate function 
+    STR R0, [R1]                    
+    LDR R1, =GPIO_PORTF_PUR_R       ; pull-up resistors for PF4,PF0
+    MOV R0, #0x11                   ; enable weak pull-up on PF0 and PF4
+    STR R0, [R1]              
+    LDR R1, =GPIO_PORTF_DEN_R       ; 7) enable Port F digital port
+    MOV R0, #0xFF                   ; 1 means enable digital I/O
+    STR R0, [R1]   
+	POP{LR}
+    BX  LR      
+	ENDP
 
 ;------------delay------------
 ; Delay function for testing, which delays about 3*count cycles.
@@ -87,29 +86,68 @@ bothpressed
 ONESEC             EQU 5333333      ; approximately 1s delay at ~16 MHz clock
 QUARTERSEC         EQU 1333333      ; approximately 0.25s delay at ~16 MHz clock
 FIFTHSEC           EQU 1066666      ; approximately 0.2s delay at ~16 MHz clock
-delay
-    SUBS R0, R0, #1                 ; R0 = R0 - 1 (count = count - 1)
-    BNE delay                       ; if count (R0) != 0, skip to 'delay'
-    BX  LR                          ; return
+	
+			EXPORT delay
+delay		PROC
+			PUSH {LR}
+			SUBS R0, R0, #1                 ; R0 = R0 - 1 (count = count - 1)
+			BNE delay                       ; if count (R0) != 0, skip to 'delay'
+			POP{LR}
+			BX  LR                          ; return
+			ENDP
 
-;------------PortF_Init------------
-
-
+	
 ;------------PortF_Input------------
 ; Read and return the status of the switches.
+; R0 keeps the data according to push buttons
+			EXPORT PortF_Input
+PortF_Input PROC
+			PUSH {LR}
+			LDR R1, =GPIO_PORTF_DATA_R ; pointer to Port F data
+			LDR R0, [R1]               ; read all of Port F
+			AND R0,R0,#0x11            ; just the input pins PF0 and PF4
+			POP {LR}
+			BX  LR                     ; return R0 with inputs      GPIO PORTF DATA KEEPS THE PUSH BUTTON OPTIONS
+			ENDP
+	
 
-PortF_Input
-    LDR R1, =GPIO_PORTF_DATA_R ; pointer to Port F data
-    LDR R0, [R1]               ; read all of Port F
-    AND R0,R0,#0x11            ; just the input pins PF0 and PF4
-    BX  LR                     ; return R0 with inputs      GPIO PORTF DATA KEEPS THE PUSH BUTTON OPTIONS
 
-;------------PortF_Output------------
+;***************************************************************
+;	THIS IS THE LOOP TO CHECK WHETHER THE PUSH BUTTON IS PRESSED OR NOT
+; 	POLLING OPERATION
+;  	BRANCHS TO VISUALIZING SHIP SUBROUTINE
+;	BRANCHS TO ADC MODULES TO GET THE LOCATION
+;***************************************************************	
+			EXTERN ADC_READ_SHIP  ; INCLUDE ADC READING MODULES
+			EXTERN ADC_READ_CURSOR
+		;	EXTERN delay
+		;	EXTERN PortF_Input
+			EXPORT PUSHBUTTON
+;LABEL		DIRECTIVE	VALUE					COMMENT
 
-PortF_Output
-    LDR R1, =GPIO_PORTF_DATA_R ; pointer to Port F data
-    STR R0, [R1]               ; write to PF3-1
-FINISH   BX  LR                    
+PUSHBUTTON	PROC
+			PUSH {LR}
+loop
+	
+			LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second)
+			BL  delay                       ; delay at least (3*R0) cycles
+	
+			BL ADC_READ_SHIP               ;;; READ SHIP LOCATION 
+			BL  PortF_Input                 ; read all of the switches on Port F
+	
+			LSL R0,R0, #24; ;; SHIFT 24 TIMES
+			ADD R4, R4, R0 ;
+			
+			;BL CURSORLOCATION VISUALIZER FALAN 
+			;COMPARE THE CONDITION FOR 4 SHIPS 
+			; BEQ FINISH
+			
+			B   loop
+FINISH		POP{LR}    ; EXIT THE SUBMODULE IF THERE ARE 4 SHIPS
+			BX LR
+			ENDP
+	
 
-    ALIGN                           ; make sure the end of this section is aligned
-    END                             ; end of file
+
+			ALIGN                           ; 
+			END                             ; end of file

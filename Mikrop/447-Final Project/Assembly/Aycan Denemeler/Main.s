@@ -35,6 +35,8 @@ SSI0_SR				EQU			0x4000800C
 			EXTERN		ADDRESS_CHANGE
 			EXTERN 		PUSHBUTTON
 			EXTERN PORTF_INIT
+			EXTERN ADC_INIT
+				EXTERN ADC_READ_SHIP
 			EXPORT  	__main					; Make available
 
 ;***************************************************************
@@ -44,6 +46,8 @@ SSI0_SR				EQU			0x4000800C
 ;	CLK- PA2
 ;	RST- PB0
 ;	DC - PB1
+;  PE3 --- XDATA POT
+;  PE2 --- YDATA POT
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 __main		PROC
@@ -61,10 +65,16 @@ loop		MOV			R4,#0x00
 			SUBS		R6,R6,#1
 			BNE			loop
 			LDR			R5,=Field_Address
+			
+			
+			BL 			ADC_INIT
+			BL 			ADC_READ_SHIP
 			BL			EMP_FIELD
-			BL			INIT_SYSTICK
+		;	BL			INIT_SYSTICK
 			BL   		PORTF_INIT	
 			BL			PUSHBUTTON
+			
+			
 			
 
 			

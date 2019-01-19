@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\Sandbox.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\Sandbox.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Jan 19 04:32:49 2019
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Sat Jan 19 18:25:20 2019
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -96,15 +96,14 @@ Functions with no stack information
  <LI><a href="#[5b]">WideTimer5B_Handler</a>
  <LI><a href="#[39]">uDMA_Error</a>
  <LI><a href="#[38]">uDMA_Handler</a>
- <LI><a href="#[87]">DELAY_100ms</a>
- <LI><a href="#[88]">DELAY_1ms</a>
- <LI><a href="#[86]">PUSHBUTTON</a>
+ <LI><a href="#[88]">DELAY_100ms</a>
+ <LI><a href="#[89]">DELAY_1ms</a>
 </UL>
 </UL>
 <P>
 <H3>
 Mutually Recursive functions
-</H3> <LI><a href="#[86]">PUSHBUTTON</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[86]">PUSHBUTTON</a><BR>
+</H3> <LI><a href="#[8b]">delay</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8b]">delay</a><BR>
  <LI><a href="#[1]">NMI_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[1]">NMI_Handler</a><BR>
  <LI><a href="#[2]">HardFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[2]">HardFault_Handler</a><BR>
  <LI><a href="#[3]">MemManage_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[3]">MemManage_Handler</a><BR>
@@ -661,20 +660,21 @@ Global Symbols
 <P><STRONG><a name="[38]"></a>uDMA_Handler</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
-<P><STRONG><a name="[8b]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8d]"></a>__use_two_region_memory</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[8c]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8e]"></a>__rt_heap_escrow$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[8d]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
+<P><STRONG><a name="[8f]"></a>__rt_heap_expand$2region</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, heapauxi.o(.text), UNUSED)
 
-<P><STRONG><a name="[7d]"></a>__main</STRONG> (Thumb, 62 bytes, Stack size 0 bytes, main.o(main))
+<P><STRONG><a name="[7d]"></a>__main</STRONG> (Thumb, 66 bytes, Stack size 0 bytes, main.o(main))
 <BR><BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_CONFIG
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SCREEN_INIT
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PORTF_INIT
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;INIT_SYSTICK
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PORTF_INIT
 <LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;EMP_FIELD
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_READ_SHIP
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_INIT
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
@@ -688,83 +688,84 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[82]"></a>SCREEN_INIT</STRONG> (Thumb, 150 bytes, Stack size 0 bytes, screen_init.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_100ms
+<BR><BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_100ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
 </UL>
 
-<P><STRONG><a name="[87]"></a>DELAY_100ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_100ms.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
+<P><STRONG><a name="[88]"></a>DELAY_100ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_100ms.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SCREEN_INIT
 </UL>
 
 <P><STRONG><a name="[83]"></a>DATA_WRITE</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, data_write.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
+<BR><BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOSER
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
+<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
 </UL>
 
-<P><STRONG><a name="[89]"></a>ADDRESS_CHANGE</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, address_change.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_100ms
+<P><STRONG><a name="[8a]"></a>ADDRESS_CHANGE</STRONG> (Thumb, 68 bytes, Stack size 0 bytes, address_change.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_100ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOSER
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
+<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
 </UL>
 
-<P><STRONG><a name="[88]"></a>DELAY_1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_1ms.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOSER
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
+<P><STRONG><a name="[89]"></a>DELAY_1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, delay_1ms.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
 </UL>
 
-<P><STRONG><a name="[84]"></a>INIT_SYSTICK</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, systick_timer.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
-</UL>
+<P><STRONG><a name="[90]"></a>INIT_SYSTICK</STRONG> (Thumb, 38 bytes, Stack size 0 bytes, systick_timer.o(routines), UNUSED)
 
-<P><STRONG><a name="[7e]"></a>My_SYSTICK</STRONG> (Thumb, 584 bytes, Stack size 0 bytes, systick_timer.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOSER
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
+<P><STRONG><a name="[7e]"></a>My_SYSTICK</STRONG> (Thumb, 572 bytes, Stack size 0 bytes, systick_timer.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Handler
 </UL>
 
-<P><STRONG><a name="[7f]"></a>WINNER</STRONG> (Thumb, 444 bytes, Stack size 0 bytes, winner.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
+<P><STRONG><a name="[7f]"></a>WINNER</STRONG> (Thumb, 432 bytes, Stack size 0 bytes, winner.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
 </UL>
 <BR>[Called By]<UL><LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIOPortF_Handler
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
 </UL>
 
-<P><STRONG><a name="[8a]"></a>LOSER</STRONG> (Thumb, 244 bytes, Stack size 0 bytes, loser.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADDRESS_CHANGE
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DELAY_1ms
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DATA_WRITE
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;My_SYSTICK
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+<P><STRONG><a name="[86]"></a>PORTF_INIT</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, pushbutton.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
 </UL>
 
-<P><STRONG><a name="[86]"></a>PUSHBUTTON</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, pushbutton.o(routines))
-<BR><BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LOSER
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;WINNER
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+<P><STRONG><a name="[8b]"></a>delay</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, pushbutton.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+</UL>
+
+<P><STRONG><a name="[8c]"></a>PortF_Input</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, pushbutton.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
+</UL>
+
+<P><STRONG><a name="[87]"></a>PUSHBUTTON</STRONG> (Thumb, 30 bytes, Stack size 0 bytes, pushbutton.o(routines))
+<BR><BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortF_Input
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADC_READ_SHIP
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
+</UL>
+
+<P><STRONG><a name="[84]"></a>ADC_INIT</STRONG> (Thumb, 194 bytes, Stack size 0 bytes, adc_init.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
+</UL>
+
+<P><STRONG><a name="[85]"></a>ADC_READ_SHIP</STRONG> (Thumb, 108 bytes, Stack size 0 bytes, adc_init.o(routines))
+<BR><BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PUSHBUTTON
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
 </UL>
 
-<P><STRONG><a name="[85]"></a>PORTF_INIT</STRONG> (Thumb, 78 bytes, Stack size 0 bytes, portf_init.o(routines))
-<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main
-</UL>
+<P><STRONG><a name="[91]"></a>ADC_READ_CURSOR</STRONG> (Thumb, 108 bytes, Stack size 0 bytes, adc_init.o(routines), UNUSED)
 <P>
 <H3>
 Local Symbols

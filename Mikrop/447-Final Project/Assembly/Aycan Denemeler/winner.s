@@ -28,10 +28,10 @@ loop		MOV			R4,#0x00
 			
 			LDR	R4,=0x0218
 			BL	ADDRESS_CHANGE
-			LDR			R5,=OUT_PORTB_DC
-			MOV			R1,#0xFF
-			STR			R1,[R5]
-			BL			DELAY_1ms
+		;	LDR			R5,=OUT_PORTB_DC
+		;	MOV			R1,#0xFF
+		;	STR			R1,[R5]
+		;	BL			DELAY_1ms
 			
 			  ;{0x07, 0x08, 0x70, 0x08, 0x07} // 59 Y
 		MOV R4, #0x07
