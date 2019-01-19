@@ -8,6 +8,8 @@ PLAYFIELD			EQU			0x20000600		;600-7F7
 SHIP_EMPTY			EQU			0x20000800		;800-807
 SHIP_CIVIL			EQU			0x20000808		;808-80F
 SHIP_BATTLE			EQU			0x20000810		;810-817
+OLD_SHIP_LOC_X		EQU			0x20001000		;1000
+OLD_SHIP_LOC_Y		EQU			0x20001001		;1001	
 SHIP_MEMO			EQU			0x20001100		;1100-1149
 CURSOR_MEMO			EQU			0x20001150		;1150-1199
 ;***************************************************************
@@ -104,13 +106,21 @@ Battleship
 			MOV			R0,#0xFF
 			STRB		R0,[R5],#1
 			
-Clean_ship_cursor_memo
-			MOV			R1,#0xFF
-			LDR			R5,=SHIP_MEMO
+old_memo	MOV			R1,#0x10
+			LDR			R5,=OLD_SHIP_LOC_X
 			MOV			R0,#0x00
 loop		STRB		R0,[R5],#1			
 			SUBS		R1,R1,#1
 			BNE			loop
+			
+			
+Clean_ship_cursor_memo
+			MOV			R1,#0xFF
+			LDR			R5,=SHIP_MEMO
+			MOV			R0,#0x00
+loop2		STRB		R0,[R5],#1			
+			SUBS		R1,R1,#1
+			BNE			loop2
 	
 			POP			{LR}
 			BX			LR

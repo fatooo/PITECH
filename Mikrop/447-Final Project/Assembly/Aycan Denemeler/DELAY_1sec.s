@@ -1,14 +1,14 @@
 ;SYMBOL		DIRECTIVE	VALUE			COMMENT
-Delay		EQU			0x7D0			;number of loops need for 1ms (=2000)
+Delay		EQU			0x1E8480			;number of loops need for 1sec (=2000000)
 	
 ;LABEL		DIRECTIVE	VALUE			COMMENT
 			AREA		routines,READONLY,CODE
 			THUMB
-			EXPORT		DELAY_1ms
+			EXPORT		DELAY_1sec
 
 ;LABEL		DIRECTIVE	VALUE			COMMENT
 
-DELAY_1ms	
+DELAY_1sec	
 			PUSH		{R0}
 
 			LDR			R0,=Delay			
