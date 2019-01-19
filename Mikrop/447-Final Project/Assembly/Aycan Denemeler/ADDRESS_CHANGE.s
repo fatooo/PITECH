@@ -65,6 +65,10 @@ control		LDR			R5,=SSI0_SR
 			
 			BL			DELAY_100ms
 			
+			LDR			R5,=OUT_PORTB_DC
+			MOV			R1,#0xFF
+			STR			R1,[R5]			
+			
 			POP			{LR}
 			BX			LR
 ;***************************************************************
