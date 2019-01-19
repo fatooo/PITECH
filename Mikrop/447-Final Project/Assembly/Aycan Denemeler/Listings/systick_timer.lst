@@ -169,7 +169,7 @@ ARM Macro Assembler    Page 3
   100 00000052 EBA9 0707       SUB              R7 , r9 ,r7 ; R7 keeps the seco
                                                             nd value
   101 00000056         
-  102 00000056 F04F 0447       LDR              R4,=0x0047
+  102 00000056 F04F 0450       LDR              R4,=0x0050
   103 0000005A F7FF FFFE       BL               ADDRESS_CHANGE ; GO TO TOP RIGH
                                                             T CORNER
   104 0000005E         

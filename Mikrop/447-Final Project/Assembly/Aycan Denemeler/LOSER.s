@@ -28,10 +28,6 @@ loop		MOV			R4,#0x00
 			
 			LDR	R4,=0x021F
 			BL	ADDRESS_CHANGE
-		;	LDR			R5,=OUT_PORTB_DC
-		;	MOV			R1,#0xFF
-		;	STR			R1,[R5]
-		;	BL			DELAY_1ms
 			
 			  ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
 		MOV R4, #0x7F
@@ -68,11 +64,7 @@ loop		MOV			R4,#0x00
 		MOV R4, #0x49
 		BL DATA_WRITE	
 		MOV R4, #0x31
-		BL DATA_WRITE
-		
-
-			
-			
+		BL DATA_WRITE		
 			  ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
 		MOV R4, #0x7F 
 		BL DATA_WRITE		
@@ -84,8 +76,7 @@ loop		MOV			R4,#0x00
 		BL DATA_WRITE	
 		MOV R4, #0x41
 		BL DATA_WRITE
-	  ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R
-	  
+	  ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R	  
 		MOV R4, #0x7F 
 		BL DATA_WRITE		
 		MOV r4,#0x09
@@ -95,12 +86,7 @@ loop		MOV			R4,#0x00
 		MOV R4, #0x29
 		BL DATA_WRITE	
 		MOV R4, #0x46
-		BL DATA_WRITE
-		
- 
-	
-			
-			
+		BL DATA_WRITE			
 			POP {LR}
 			BX LR
 			ENDP

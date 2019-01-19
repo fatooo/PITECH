@@ -99,7 +99,7 @@ cont		SUB R9, #1 ; substract r9
 			MUL r7, r8, r10;
 			SUB R7 , r9 ,r7 ; R7 keeps the second value
 			
-			LDR	R4,=0x0047
+			LDR	R4,=0x0050
 			BL	ADDRESS_CHANGE  ; GO TO TOP RIGHT CORNER
 			
 			CMP R8 , #2 ;   FIND THE FIRST AND SECOND DIGIT BY COMPARING

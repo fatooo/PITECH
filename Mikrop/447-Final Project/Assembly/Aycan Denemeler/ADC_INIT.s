@@ -145,7 +145,7 @@ ADC_INIT	PROC
 	LDR R1, =ADC1_SSMUX3
 	LDR R0, [R1]
 	ORR R0 , #0x1; 
-	BIC R0, R0, #0xE ; clear bits 3:0 to select AIN1
+	BIC R0, R0, #0x000E ; clear bits 3:0 to select AIN1  00001
 	STR R0, [R1]
 	; Config sample sequence
 	LDR R1, =ADC1_SSCTL3
@@ -240,13 +240,13 @@ Cont1 			LDR R0, [R3]
 
 COMPUTE  
 
-			LDR R3, =56 ; R3 IS THE DIVISOR
+			LDR R3, =73 ; R3 IS THE DIVISOR
 			UDIV R5, R5, R3 ; 
-			ADD R5, #9 ; R5 KEEPS THE X
+			ADD R5, #8 ; R5 KEEPS THE X
 	
-			LDR R3, =24 ;
+			LDR R3, =170 ;
 			UDIV R1, R1, R3;
-			ADD R1, #9 ;  ; R1 KEEPS THE Y DATA
+			ADD R1, #8 ;  ; R1 KEEPS THE Y DATA
 		
 		
 			LSL R1,R1,#8 ; SHIFT Y DATA
@@ -319,11 +319,11 @@ Cont1_CURSOR    LDR R0, [R3]
 
 COMPUTE_CURSOR  
 
-				LDR R3, =62 ; R3 IS THE DIVISOR
+				LDR R3, =69 ; R3 IS THE DIVISOR
 				UDIV R5, R5, R3 ; 
 				ADD R5, #9 ; R5 KEEPS THE X
 	
-				LDR R3, =30 ;
+				LDR R3, =136 ;
 				UDIV R1, R1, R3;
 				ADD R1, #9 ;  ; R1 KEEPS THE Y DATA
 		

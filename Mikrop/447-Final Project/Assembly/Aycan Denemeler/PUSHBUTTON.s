@@ -20,6 +20,16 @@ SW1       EQU 0x10                 ; on the left side of the Launchpad board
 SW2       EQU 0x01                 ; on the right side of the Launchpad board
 SYSCTL_RCGCGPIO_R  EQU   0x400FE608
 
+SHIP1					EQU			0x20001100
+SHIP2					EQU			0x20001110
+SHIP3					EQU			0x20001120
+SHIP4					EQU			0x20001130
+
+CURSOR1					EQU			0x20001150
+CURSOR2					EQU			0x20001160
+CURSOR3					EQU			0x20001170
+CURSOR4					EQU			0x20001180
+
 
 
 ;***************************************************************
@@ -86,13 +96,13 @@ PORTF_INIT  PROC
 ONESEC             EQU 5333333      ; approximately 1s delay at ~16 MHz clock
 QUARTERSEC         EQU 1333333      ; approximately 0.25s delay at ~16 MHz clock
 FIFTHSEC           EQU 1066666      ; approximately 0.2s delay at ~16 MHz clock
-	
+TENTHSEC			EQU 533333	
 			EXPORT delay
 delay		PROC
-			PUSH {LR}
+			;PUSH {LR}
 			SUBS R0, R0, #1                 ; R0 = R0 - 1 (count = count - 1)
 			BNE delay                       ; if count (R0) != 0, skip to 'delay'
-			POP{LR}
+		;	POP{LR}
 			BX  LR                          ; return
 			ENDP
 
@@ -122,6 +132,7 @@ PortF_Input PROC
 			EXTERN ADC_READ_CURSOR
 		;	EXTERN delay
 		;	EXTERN PortF_Input
+			EXTERN ADDRESS_CHANGE
 			EXPORT PUSHBUTTON
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 
@@ -129,20 +140,77 @@ PUSHBUTTON	PROC
 			PUSH {LR}
 loop
 	
-			LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second)
+			LDR R0, =TENTHSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
 			BL  delay                       ; delay at least (3*R0) cycles
 	
 			BL ADC_READ_SHIP               ;;; READ SHIP LOCATION 
 			BL  PortF_Input                 ; read all of the switches on Port F
-	
-			LSL R0,R0, #24; ;; SHIFT 24 TIMES
-			ADD R4, R4, R0 ;
 			
-			;BL CURSORLOCATION VISUALIZER FALAN 
-			;COMPARE THE CONDITION FOR 4 SHIPS 
-			; BEQ FINISH
+			CMP R0, #0 ;  
+			BEQ CONT
+			
+			CMP R0, #3;
+			BEQ CONT
+			
+			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 
+			
+			;01 CIVILIAN
+			;10 BATLLESHIP
+			
+						
+
+
+			LSL R0,R0, #24; ;; SHIFT 24 TIMES
+			ADD R4, R4, R0 ;  R4 KEEPS STATUS OF PUSHBUTTONS AND XY DATA
+			
+			
+			LSR R0, #24 ; SHIFT RIGHT AGAIN
+			;;; CHECK STATUS FOR MAPPING CONDITION
+			CMP R0, #0 ;  
+			BEQ CONT
+			
+			CMP R0, #3;
+			BEQ CONT
+			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 
+			
+			;01 CIVILIAN
+			;10 BATLLESHIP
+
+			LDR R0, =SHIP1
+						
+				
+nextlocation	
+				
+				LDR R1, [R0] ; R0 KEEPS THE SHIP 1 VALUE 
+					
+
+				CMP R1, #0 ; IF EMPTY BLOCK 
+				BEQ  MAPPING				
+				AND R5,R0, #0xF0 ;   AND IT R5 SHOWS THE 2ND DIGIT 
+				CMP R5, #0x30 ; last ship location ss full so 4 ships demployed
+				BEQ FINISH  ; end this push button loop 
+				
+				
+				ADD R0, #0x10
+				B	   nextlocation
+			
+			
+MAPPING			STR R4, [R0] 
+			
+
+ 
+
+CONT 		;BL CURSOR LOCATION FALAN
+			
+		
+			
+	
 			
 			B   loop
+			
+			
+			
+
 FINISH		POP{LR}    ; EXIT THE SUBMODULE IF THERE ARE 4 SHIPS
 			BX LR
 			ENDP

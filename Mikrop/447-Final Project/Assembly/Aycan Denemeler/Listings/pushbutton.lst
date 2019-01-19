@@ -99,7 +99,7 @@ ARM Macro Assembler    Page 2
    46 00000000         PORTF_INIT
                                PROC
    47 00000000 B500            PUSH             {LR}
-   48 00000002 4923            LDR              R1, =SYSCTL_RCGCGPIO_R ; 1) act
+   48 00000002 4928            LDR              R1, =SYSCTL_RCGCGPIO_R ; 1) act
                                                             ivate clock for Por
                                                             t F
    49 00000004 6808            LDR              R0, [R1]
@@ -109,25 +109,25 @@ ARM Macro Assembler    Page 2
    52 0000000C BF00            NOP
    53 0000000E BF00            NOP                          ; allow time for cl
                                                             ock to finish
-   54 00000010 4920            LDR              R1, =GPIO_PORTF_LOCK_R ; 2) unl
+   54 00000010 4925            LDR              R1, =GPIO_PORTF_LOCK_R ; 2) unl
                                                             ock the lock regist
                                                             er
-   55 00000012 4821            LDR              R0, =0x4C4F434B ; unlock GPIO P
+   55 00000012 4826            LDR              R0, =0x4C4F434B ; unlock GPIO P
                                                             ort F Commit Regist
                                                             er
    56 00000014 6008            STR              R0, [R1]
-   57 00000016 4921            LDR              R1, =GPIO_PORTF_CR_R ; enable c
+   57 00000016 4926            LDR              R1, =GPIO_PORTF_CR_R ; enable c
                                                             ommit for Port F
    58 00000018 F04F 00FF       MOV              R0, #0xFF   ; 1 means allow acc
                                                             ess
    59 0000001C 6008            STR              R0, [R1]
-   60 0000001E 4920            LDR              R1, =GPIO_PORTF_AMSEL_R ; 3) di
+   60 0000001E 4925            LDR              R1, =GPIO_PORTF_AMSEL_R ; 3) di
                                                             sable analog functi
                                                             onality
    61 00000020 F04F 0000       MOV              R0, #0      ; 0 means analog is
                                                              off
    62 00000024 6008            STR              R0, [R1]
-   63 00000026 491F            LDR              R1, =GPIO_PORTF_PCTL_R ; 4) con
+   63 00000026 4924            LDR              R1, =GPIO_PORTF_PCTL_R ; 4) con
 
 
 
@@ -139,24 +139,24 @@ ARM Macro Assembler    Page 3
                                                             gure Port F as GPIO
                                                             
    65 0000002C 6008            STR              R0, [R1]
-   66 0000002E 491E            LDR              R1, =GPIO_PORTF_DIR_R ; 5) set 
+   66 0000002E 4923            LDR              R1, =GPIO_PORTF_DIR_R ; 5) set 
                                                             direction register
    67 00000030 F04F 000E       MOV              R0,#0x0E    ; PF0 and PF7-4 inp
                                                             ut, PF3-1 output
    68 00000034 6008            STR              R0, [R1]
-   69 00000036 491D            LDR              R1, =GPIO_PORTF_AFSEL_R ; 6) re
+   69 00000036 4922            LDR              R1, =GPIO_PORTF_AFSEL_R ; 6) re
                                                             gular port function
                                                             
    70 00000038 F04F 0000       MOV              R0, #0      ; 0 means disable a
                                                             lternate function 
    71 0000003C 6008            STR              R0, [R1]
-   72 0000003E 491C            LDR              R1, =GPIO_PORTF_PUR_R ; pull-up
+   72 0000003E 4921            LDR              R1, =GPIO_PORTF_PUR_R ; pull-up
                                                              resistors for PF4,
                                                             PF0
    73 00000040 F04F 0011       MOV              R0, #0x11   ; enable weak pull-
                                                             up on PF0 and PF4
    74 00000044 6008            STR              R0, [R1]
-   75 00000046 491B            LDR              R1, =GPIO_PORTF_DEN_R ; 7) enab
+   75 00000046 4920            LDR              R1, =GPIO_PORTF_DEN_R ; 7) enab
                                                             le Port F digital p
                                                             ort
    76 00000048 F04F 00FF       MOV              R0, #0xFF   ; 1 means enable di
@@ -188,10 +188,10 @@ ARM Macro Assembler    Page 3
    89 00000054         
    90 00000054                 EXPORT           delay
    91 00000054         delay   PROC
-   92 00000054 B500            PUSH             {LR}
-   93 00000056 1E40            SUBS             R0, R0, #1  ; R0 = R0 - 1 (coun
+   92 00000054         ;PUSH {LR}
+   93 00000054 1E40            SUBS             R0, R0, #1  ; R0 = R0 - 1 (coun
                                                             t = count - 1)
-   94 00000058 D1FE            BNE              delay       ; if count (R0) != 
+   94 00000056 D1FE            BNE              delay       ; if count (R0) != 
                                                             0, skip to 'delay'
 
 
@@ -199,91 +199,105 @@ ARM Macro Assembler    Page 3
 ARM Macro Assembler    Page 4 
 
 
-   95 0000005A F85D EB04       POP{LR}
-   96 0000005E 4770            BX               LR          ; return
-   97 00000060                 ENDP
-   98 00000060         
-   99 00000060         
-  100 00000060         ;------------PortF_Input------------
-  101 00000060         ; Read and return the status of the switches.
-  102 00000060         ; R0 keeps the data according to push buttons
-  103 00000060                 EXPORT           PortF_Input
-  104 00000060         PortF_Input
+   95 00000058         ; POP{LR}
+   96 00000058 4770            BX               LR          ; return
+   97 0000005A                 ENDP
+   98 0000005A         
+   99 0000005A         
+  100 0000005A         ;------------PortF_Input------------
+  101 0000005A         ; Read and return the status of the switches.
+  102 0000005A         ; R0 keeps the data according to push buttons
+  103 0000005A                 EXPORT           PortF_Input
+  104 0000005A         PortF_Input
                                PROC
-  105 00000060 B500            PUSH             {LR}
-  106 00000062 4915            LDR              R1, =GPIO_PORTF_DATA_R ; pointe
+  105 0000005A B500            PUSH             {LR}
+  106 0000005C 491B            LDR              R1, =GPIO_PORTF_DATA_R ; pointe
                                                             r to Port F data
-  107 00000064 6808            LDR              R0, [R1]    ; read all of Port 
+  107 0000005E 6808            LDR              R0, [R1]    ; read all of Port 
                                                             F
-  108 00000066 F000 0011       AND              R0,R0,#0x11 ; just the input pi
+  108 00000060 F000 0011       AND              R0,R0,#0x11 ; just the input pi
                                                             ns PF0 and PF4
-  109 0000006A F85D EB04       POP              {LR}
-  110 0000006E 4770            BX               LR          ; return R0 with in
+  109 00000064 F85D EB04       POP              {LR}
+  110 00000068 4770            BX               LR          ; return R0 with in
                                                             puts      GPIO PORT
                                                             F DATA KEEPS THE PU
                                                             SH BUTTON OPTIONS
-  111 00000070                 ENDP
-  112 00000070         
-  113 00000070         
-  114 00000070         
-  115 00000070         ;*******************************************************
+  111 0000006A                 ENDP
+  112 0000006A         
+  113 0000006A         
+  114 0000006A         
+  115 0000006A         ;*******************************************************
                        ********
-  116 00000070         ; THIS IS THE LOOP TO CHECK WHETHER THE PUSH BUTTON IS P
+  116 0000006A         ; THIS IS THE LOOP TO CHECK WHETHER THE PUSH BUTTON IS P
                        RESSED OR NOT
-  117 00000070         ;  POLLING OPERATION
-  118 00000070         ;   BRANCHS TO VISUALIZING SHIP SUBROUTINE
-  119 00000070         ; BRANCHS TO ADC MODULES TO GET THE LOCATION
-  120 00000070         ;*******************************************************
+  117 0000006A         ;  POLLING OPERATION
+  118 0000006A         ;   BRANCHS TO VISUALIZING SHIP SUBROUTINE
+  119 0000006A         ; BRANCHS TO ADC MODULES TO GET THE LOCATION
+  120 0000006A         ;*******************************************************
                        ******** 
-  121 00000070                 EXTERN           ADC_READ_SHIP ; INCLUDE ADC REA
+  121 0000006A                 EXTERN           ADC_READ_SHIP ; INCLUDE ADC REA
                                                             DING MODULES
-  122 00000070                 EXTERN           ADC_READ_CURSOR
-  123 00000070         ; EXTERN delay
-  124 00000070         ; EXTERN PortF_Input
-  125 00000070                 EXPORT           PUSHBUTTON
-  126 00000070         ;LABEL  DIRECTIVE VALUE     COMMENT
-  127 00000070         
-  128 00000070         PUSHBUTTON
+  122 0000006A                 EXTERN           ADC_READ_CURSOR
+  123 0000006A         ; EXTERN delay
+  124 0000006A         ; EXTERN PortF_Input
+  125 0000006A                 EXTERN           ADDRESS_CHANGE
+  126 0000006A                 EXPORT           PUSHBUTTON
+  127 0000006A         ;LABEL  DIRECTIVE VALUE     COMMENT
+  128 0000006A         
+  129 0000006A         PUSHBUTTON
                                PROC
-  129 00000070 B500            PUSH             {LR}
-  130 00000072         loop
-  131 00000072         
-  132 00000072 4812            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
+  130 0000006A B500            PUSH             {LR}
+  131 0000006C         loop
+  132 0000006C         
+  133 0000006C 4818            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
                                                             delay 0.2 second)
-  133 00000074 F7FF FFFE       BL               delay       ; delay at least (3
+  134 0000006E F7FF FFFE       BL               delay       ; delay at least (3
                                                             *R0) cycles
-  134 00000078         
-  135 00000078 F7FF FFFE       BL               ADC_READ_SHIP ;;; READ SHIP LOC
+  135 00000072         
+  136 00000072 F7FF FFFE       BL               ADC_READ_SHIP ;;; READ SHIP LOC
                                                             ATION 
-  136 0000007C F7FF FFFE       BL               PortF_Input ; read all of the s
+  137 00000076 F7FF FFFE       BL               PortF_Input ; read all of the s
                                                             witches on Port F
-  137 00000080         
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-  138 00000080 EA4F 6000       LSL              R0,R0, #24  ; ;; SHIFT 24 TIMES
-                                                            
-  139 00000084 4404            ADD              R4, R4, R0  ;
-  140 00000086         
-  141 00000086         ;BL CURSORLOCATION VISUALIZER FALAN 
-  142 00000086         ;COMPARE THE CONDITION FOR 4 SHIPS 
-  143 00000086         ; BEQ FINISH
-  144 00000086         
-  145 00000086 E7F4            B                loop
-  146 00000088 F85D EB04 
+  138 0000007A         
+  139 0000007A         ; LSL R0,R0, #24; ;; SHIFT 24 TIMES
+  140 0000007A         ; ADD R4, R4, R0 ;  R4 KEEPS STATUS OF PUSHUTTONS AND XY
+                        DATA
+  141 0000007A         
+  142 0000007A         
+  143 0000007A         ;BL CURSORLOCATION VISUALIZER FALAN 
+  144 0000007A         ;;deneme deneme deneme 
+  145 0000007A F404 427F       AND              R2,R4,#0xFF00 ;Y coordinates
+  146 0000007E EA4F 2212       LSR              R2, #8      ;
+  147 00000082 F04F 0108       MOV              R1, #8      ;
+  148 00000086 FBB2 F2F1       UDIV             R2, R2, R1  ; 
+  149 0000008A EA4F 2202       LSL              R2, #8      ;
+  150 0000008E F004 03FF       AND              R3,R4,#0x00FF ;Y coordinates
+  151 00000092         ; LSR    R2, #8;
+  152 00000092 EB02 0803       ADD              R8, R2,R3   ;;
+  153 00000096 F7FF FFFE       BL               WINNER
+  154 0000009A         
+  155 0000009A         
+  156 0000009A         ;COMPARE THE CONDITION FOR 4 SHIPS 
+  157 0000009A         ; BEQ FINISH
+  158 0000009A         
+  159 0000009A E7E7            B                loop
+  160 0000009C F85D EB04 
                        FINISH  POP{LR}                      ; EXIT THE SUBMODUL
                                                             E IF THERE ARE 4 SH
                                                             IPS
-  147 0000008C 4770            BX               LR
-  148 0000008E                 ENDP
-  149 0000008E         
-  150 0000008E         
-  151 0000008E         
-  152 0000008E 00 00           ALIGN                        ; 
-  153 00000090                 END                          ; end of file
+  161 000000A0 4770            BX               LR
+  162 000000A2                 ENDP
+  163 000000A2         
+  164 000000A2         
+  165 000000A2         
+  166 000000A2 00 00           ALIGN                        ; 
+  167 000000A4                 END                          ; end of file
               400FE608 
               40025520 
               4C4F434B 
@@ -308,11 +322,11 @@ SHBUTTON.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-FINISH 00000088
+FINISH 0000009C
 
 Symbol: FINISH
    Definitions
-      At line 146 in file PUSHBUTTON.s
+      At line 160 in file PUSHBUTTON.s
    Uses
       None
 Comment: FINISH unused
@@ -324,22 +338,22 @@ Symbol: PORTF_INIT
    Uses
       At line 45 in file PUSHBUTTON.s
 Comment: PORTF_INIT used once
-PUSHBUTTON 00000070
+PUSHBUTTON 0000006A
 
 Symbol: PUSHBUTTON
    Definitions
-      At line 128 in file PUSHBUTTON.s
+      At line 129 in file PUSHBUTTON.s
    Uses
-      At line 125 in file PUSHBUTTON.s
+      At line 126 in file PUSHBUTTON.s
 Comment: PUSHBUTTON used once
-PortF_Input 00000060
+PortF_Input 0000005A
 
 Symbol: PortF_Input
    Definitions
       At line 104 in file PUSHBUTTON.s
    Uses
       At line 103 in file PUSHBUTTON.s
-      At line 136 in file PUSHBUTTON.s
+      At line 137 in file PUSHBUTTON.s
 
 delay 00000054
 
@@ -349,15 +363,15 @@ Symbol: delay
    Uses
       At line 90 in file PUSHBUTTON.s
       At line 94 in file PUSHBUTTON.s
-      At line 133 in file PUSHBUTTON.s
+      At line 134 in file PUSHBUTTON.s
 
-loop 00000072
+loop 0000006C
 
 Symbol: loop
    Definitions
-      At line 130 in file PUSHBUTTON.s
+      At line 131 in file PUSHBUTTON.s
    Uses
-      At line 145 in file PUSHBUTTON.s
+      At line 159 in file PUSHBUTTON.s
 Comment: loop used once
 routines 00000000
 
@@ -394,7 +408,7 @@ Symbol: FIFTHSEC
    Definitions
       At line 88 in file PUSHBUTTON.s
    Uses
-      At line 132 in file PUSHBUTTON.s
+      At line 133 in file PUSHBUTTON.s
 Comment: FIFTHSEC used once
 GPIO_LOCK_KEY 4C4F434B
 
@@ -565,8 +579,16 @@ Symbol: ADC_READ_SHIP
    Definitions
       At line 121 in file PUSHBUTTON.s
    Uses
-      At line 135 in file PUSHBUTTON.s
+      At line 136 in file PUSHBUTTON.s
 Comment: ADC_READ_SHIP used once
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 125 in file PUSHBUTTON.s
+   Uses
+      None
+Comment: ADDRESS_CHANGE unused
 LOSER 00000000
 
 Symbol: LOSER
@@ -581,7 +603,7 @@ Symbol: WINNER
    Definitions
       At line 37 in file PUSHBUTTON.s
    Uses
-      None
-Comment: WINNER unused
-4 symbols
-366 symbols in table
+      At line 153 in file PUSHBUTTON.s
+Comment: WINNER used once
+5 symbols
+367 symbols in table

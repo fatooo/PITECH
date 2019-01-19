@@ -36,6 +36,7 @@ SSI0_SR				EQU			0x4000800C
 			EXTERN 		PUSHBUTTON
 			EXTERN PORTF_INIT
 			EXTERN ADC_INIT
+			EXTERN WINNER
 				EXTERN ADC_READ_SHIP
 			EXPORT  	__main					; Make available
 
@@ -65,11 +66,11 @@ loop		MOV			R4,#0x00
 			SUBS		R6,R6,#1
 			BNE			loop
 			LDR			R5,=Field_Address
-			
-			
+						
 			BL 			ADC_INIT
-			BL 			ADC_READ_SHIP
+		;BL 			ADC_READ_SHIP
 			BL			EMP_FIELD
+		;	BL 			WINNER
 		;	BL			INIT_SYSTICK
 			BL   		PORTF_INIT	
 			BL			PUSHBUTTON

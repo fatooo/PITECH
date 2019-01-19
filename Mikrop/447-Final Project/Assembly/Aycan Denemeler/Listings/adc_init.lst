@@ -274,8 +274,9 @@ ARM Macro Assembler    Page 5
   145 00000090 494E            LDR              R1, =ADC1_SSMUX3
   146 00000092 6808            LDR              R0, [R1]
   147 00000094 F040 0001       ORR              R0 , #0x1   ; 
-  148 00000098 F020 000E       BIC              R0, R0, #0xE ; clear bits 3:0 t
-                                                            o select AIN1
+  148 00000098 F020 000E       BIC              R0, R0, #0x000E ; clear bits 3:
+                                                            0 to select AIN1  0
+                                                            0001
   149 0000009C 6008            STR              R0, [R1]
   150 0000009E         ; Config sample sequence
   151 0000009E 494C            LDR              R1, =ADC1_SSCTL3
@@ -322,13 +323,13 @@ ARM Macro Assembler    Page 5
   182 000000C2 B500            PUSH             {LR}
   183 000000C4         *******************************
   184 000000C4         ; READ AIN0 FIRST 
-  185 000000C4         ; PE3 CONTROLS X DATA
 
 
 
 ARM Macro Assembler    Page 6 
 
 
+  185 000000C4         ; PE3 CONTROLS X DATA
   186 000000C4         ; VERTICAL MOVEMENT
   187 000000C4         ; KEEPS DATA IN R5
   188 000000C4         *******************************
@@ -387,13 +388,13 @@ ARM Macro Assembler    Page 6
   226 000000FE 6821            LDR              R1,[R4]     ; R1 KEEPS THE ADC1
                                                              READING
   227 00000100 F04F 0008       MOV              R0, #8
-  228 00000104 4E3B            LDR              R6,= ADC1_ISC
 
 
 
 ARM Macro Assembler    Page 7 
 
 
+  228 00000104 4E3B            LDR              R6,= ADC1_ISC
   229 00000106 6030            STR              R0, [R6]    ; clear flag in ISC
                                                             
   230 00000108         
@@ -409,14 +410,14 @@ ARM Macro Assembler    Page 7
   240 00000108         
   241 00000108         COMPUTE
   242 00000108         
-  243 00000108 F04F 0338       LDR              R3, =56     ; R3 IS THE DIVISOR
+  243 00000108 F04F 0349       LDR              R3, =73     ; R3 IS THE DIVISOR
                                                             
   244 0000010C FBB5 F5F3       UDIV             R5, R5, R3  ; 
-  245 00000110 F105 0509       ADD              R5, #9      ; R5 KEEPS THE X
+  245 00000110 F105 0508       ADD              R5, #8      ; R5 KEEPS THE X
   246 00000114         
-  247 00000114 F04F 0318       LDR              R3, =24     ;
+  247 00000114 F04F 03AA       LDR              R3, =170    ;
   248 00000118 FBB1 F1F3       UDIV             R1, R1, R3  ;
-  249 0000011C F101 0109       ADD              R1, #9      ;  ; R1 KEEPS THE Y
+  249 0000011C F101 0108       ADD              R1, #8      ;  ; R1 KEEPS THE Y
                                                              DATA
   250 00000120         
   251 00000120         
@@ -452,13 +453,13 @@ ARM Macro Assembler    Page 7
   276 0000012E         ADC_READ_CURSOR
                                PROC
   277 0000012E B500            PUSH             {LR}
-  278 00000130 4B29            LDR              R3, =ADC0_RIS 
 
 
 
 ARM Macro Assembler    Page 8 
 
 
+  278 00000130 4B29            LDR              R3, =ADC0_RIS 
                                                             ; interrupt address
                                                             
   279 00000132 4C2A            LDR              R4, =ADC0_SSFIFO3 
@@ -517,24 +518,24 @@ ARM Macro Assembler    Page 8
   313 00000174         
   314 00000174         ****************
   315 00000174         ; R1 KEEPS ADC1 READING
-  316 00000174         ; R5 KEEPS ADC0 READING
 
 
 
 ARM Macro Assembler    Page 9 
 
 
+  316 00000174         ; R5 KEEPS ADC0 READING
   317 00000174         
   318 00000174         **********
   319 00000174         
   320 00000174         COMPUTE_CURSOR
   321 00000174         
-  322 00000174 F04F 033E       LDR              R3, =62     ; R3 IS THE DIVISOR
+  322 00000174 F04F 0345       LDR              R3, =69     ; R3 IS THE DIVISOR
                                                             
   323 00000178 FBB5 F5F3       UDIV             R5, R5, R3  ; 
   324 0000017C F105 0509       ADD              R5, #9      ; R5 KEEPS THE X
   325 00000180         
-  326 00000180 F04F 031E       LDR              R3, =30     ;
+  326 00000180 F04F 0388       LDR              R3, =136    ;
   327 00000184 FBB1 F1F3       UDIV             R1, R1, R3  ;
   328 00000188 F101 0109       ADD              R1, #9      ;  ; R1 KEEPS THE Y
                                                              DATA
