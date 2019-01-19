@@ -4,7 +4,6 @@
 ;***************************************************************
 ;SYMBOL				DIRECTIVE	VALUE			COMMENT
 
-
 ;***************************************************************
 ; Directives - This Data Section is part of the code
 ; It is in the read only section  so values cannot be changed.
@@ -24,11 +23,12 @@
 
 ;***************************************************************
 ;	Main Function
+;	Generates memorymap for empty playfield
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 EMP_FIELD	PROC
 			PUSH		{R0-R4}
-	
+			
 			MOV			R0,#0x00
 			MOV			R1,#0x05
 			
@@ -77,7 +77,7 @@ loop5		STRB		R0,[R5],#1
 			SUBS		R1,R1,#1
 			BNE			loop5	
 			
-			MOV			R0,#0x80
+			MOV			R0,#0x01
 			MOV			R1,#0x42
 			
 loop6		STRB		R0,[R5],#1

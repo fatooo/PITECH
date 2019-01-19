@@ -30,12 +30,16 @@ SSI0_SR				EQU			0x4000800C
 ;	Main Function
 ;	Takes Coordinates in R4 and sends them to screen
 ;	Least Significant byte is X and Second one is Y
+;	0000.0000.0000.0000.YYYY.YYYY.XXXX.XXXX
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 
 ADDRESS_CHANGE	PROC
 			
 			PUSH		{LR}
+			PUSH		{R0-R6}
+			
+			
 			
 			LDR			R5,=OUT_PORTB_DC
 			MOV			R1,#0x00
@@ -43,13 +47,12 @@ ADDRESS_CHANGE	PROC
 			
 			BL			DELAY_100ms
 			
-			
 control		LDR			R5,=SSI0_SR
 			LDR			R0,[R5]
 			AND			R0,#0x02
 			CMP			R0,#0x02
 			BNE			control
-			
+
 			AND			R2,R4,#0xFF00		;Y coordinates
 			LSR			R2,R2,#8			;shift 1 byte Right
 			ADD			R2,R2,#0x40			
@@ -69,6 +72,7 @@ control		LDR			R5,=SSI0_SR
 			MOV			R1,#0xFF
 			STR			R1,[R5]			
 			
+			POP			{R0-R6}
 			POP			{LR}
 			BX			LR
 ;***************************************************************

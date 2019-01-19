@@ -33,6 +33,8 @@ SSI0_SR				EQU			0x4000800C
 
 DATA_WRITE	PROC
 			PUSH		{LR}
+			PUSH		{R0}
+			PUSH		{R5}
 			
 control		LDR			R5,=SSI0_SR
 			LDR			R0,[R5]
@@ -46,7 +48,9 @@ control		LDR			R5,=SSI0_SR
 			STR			R4,[R5]
 			
 			BL			DELAY_1ms
-	
+			
+			POP			{R5}
+			POP			{R0}
 			POP			{LR}
 			BX			LR
 ;***************************************************************
