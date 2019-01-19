@@ -39,101 +39,94 @@ ARM Macro Assembler    Page 1
    28 00000012         
    29 00000012 F240 241F       LDR              R4,=0x021F
    30 00000016 F7FF FFFE       BL               ADDRESS_CHANGE
-   31 0000001A 4D36            LDR              R5,=OUT_PORTB_DC
-   32 0000001C F04F 01FF       MOV              R1,#0xFF
-   33 00000020 6029            STR              R1,[R5]
-   34 00000022 F7FF FFFE       BL               DELAY_1ms
-   35 00000026         
-   36 00000026         ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
-   37 00000026 F04F 047F       MOV              R4, #0x7F
-   38 0000002A F7FF FFFE       BL               DATA_WRITE
-   39 0000002E F04F 0440       MOV              r4,#0x40
-   40 00000032 F7FF FFFE       BL               DATA_WRITE
-   41 00000036 F04F 0440       MOV              R4, #0x40
-   42 0000003A F7FF FFFE       BL               DATA_WRITE
-   43 0000003E F04F 0440       MOV              R4, #0x40
-   44 00000042 F7FF FFFE       BL               DATA_WRITE
-   45 00000046 F04F 0440       MOV              R4, #0x40
-   46 0000004A F7FF FFFE       BL               DATA_WRITE
-   47 0000004E         
-   48 0000004E         
-   49 0000004E         ;0x3e, 0x41, 0x41, 0x41, 0x3e} // 4f O
-   50 0000004E         
-   51 0000004E F04F 043E       MOV              R4, #0x3E
-   52 00000052 F7FF FFFE       BL               DATA_WRITE
-   53 00000056 F04F 0441       MOV              r4,#0x41
-   54 0000005A F7FF FFFE       BL               DATA_WRITE
+   31 0000001A         ; LDR   R5,=OUT_PORTB_DC
+   32 0000001A         ; MOV   R1,#0xFF
+   33 0000001A         ; STR   R1,[R5]
+   34 0000001A         ; BL   DELAY_1ms
+   35 0000001A         
+   36 0000001A         ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
+   37 0000001A F04F 047F       MOV              R4, #0x7F
+   38 0000001E F7FF FFFE       BL               DATA_WRITE
+   39 00000022 F04F 0440       MOV              r4,#0x40
+   40 00000026 F7FF FFFE       BL               DATA_WRITE
+   41 0000002A F04F 0440       MOV              R4, #0x40
+   42 0000002E F7FF FFFE       BL               DATA_WRITE
+   43 00000032 F04F 0440       MOV              R4, #0x40
+   44 00000036 F7FF FFFE       BL               DATA_WRITE
+   45 0000003A F04F 0440       MOV              R4, #0x40
+   46 0000003E F7FF FFFE       BL               DATA_WRITE
+   47 00000042         
+   48 00000042         
+   49 00000042         ;0x3e, 0x41, 0x41, 0x41, 0x3e} // 4f O
+   50 00000042         
+   51 00000042 F04F 043E       MOV              R4, #0x3E
+   52 00000046 F7FF FFFE       BL               DATA_WRITE
+   53 0000004A F04F 0441       MOV              r4,#0x41
+   54 0000004E F7FF FFFE       BL               DATA_WRITE
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   55 0000005E F04F 0441       MOV              R4, #0x41
-   56 00000062 F7FF FFFE       BL               DATA_WRITE
-   57 00000066 F04F 0441       MOV              R4, #0x41
-   58 0000006A F7FF FFFE       BL               DATA_WRITE
-   59 0000006E F04F 043E       MOV              R4, #0x3E
-   60 00000072 F7FF FFFE       BL               DATA_WRITE
-   61 00000076         ;  ,{0x46, 0x49, 0x49, 0x49, 0x31} // 53 S
-   62 00000076 F04F 0446       MOV              R4, #0x46
-   63 0000007A F7FF FFFE       BL               DATA_WRITE
-   64 0000007E F04F 0449       MOV              r4,#0x49
-   65 00000082 F7FF FFFE       BL               DATA_WRITE
-   66 00000086 F04F 0449       MOV              R4, #0x49
-   67 0000008A F7FF FFFE       BL               DATA_WRITE
-   68 0000008E F04F 0449       MOV              R4, #0x49
-   69 00000092 F7FF FFFE       BL               DATA_WRITE
-   70 00000096 F04F 0431       MOV              R4, #0x31
-   71 0000009A F7FF FFFE       BL               DATA_WRITE
-   72 0000009E         
-   73 0000009E         
-   74 0000009E         
-   75 0000009E         
-   76 0000009E         ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
-   77 0000009E F04F 047F       MOV              R4, #0x7F
-   78 000000A2 F7FF FFFE       BL               DATA_WRITE
-   79 000000A6 F04F 0449       MOV              r4,#0x49
-   80 000000AA F7FF FFFE       BL               DATA_WRITE
-   81 000000AE F04F 0449       MOV              R4, #0x49
-   82 000000B2 F7FF FFFE       BL               DATA_WRITE
-   83 000000B6 F04F 0449       MOV              R4, #0x49
-   84 000000BA F7FF FFFE       BL               DATA_WRITE
-   85 000000BE F04F 0441       MOV              R4, #0x41
-   86 000000C2 F7FF FFFE       BL               DATA_WRITE
-   87 000000C6         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R
-   88 000000C6         
-   89 000000C6 F04F 047F       MOV              R4, #0x7F
-   90 000000CA F7FF FFFE       BL               DATA_WRITE
-   91 000000CE F04F 0409       MOV              r4,#0x09
-   92 000000D2 F7FF FFFE       BL               DATA_WRITE
-   93 000000D6 F04F 0419       MOV              R4, #0x19
-   94 000000DA F7FF FFFE       BL               DATA_WRITE
-   95 000000DE F04F 0429       MOV              R4, #0x29
-   96 000000E2 F7FF FFFE       BL               DATA_WRITE
-   97 000000E6 F04F 0446       MOV              R4, #0x46
-   98 000000EA F7FF FFFE       BL               DATA_WRITE
-   99 000000EE         
-  100 000000EE         
-  101 000000EE         
-  102 000000EE         
-  103 000000EE         
-  104 000000EE F85D EB04       POP              {LR}
-  105 000000F2 4770            BX               LR
-  106 000000F4                 ENDP
-  107 000000F4                 ALIGN
-  108 000000F4                 END
-              40005008 
+   55 00000052 F04F 0441       MOV              R4, #0x41
+   56 00000056 F7FF FFFE       BL               DATA_WRITE
+   57 0000005A F04F 0441       MOV              R4, #0x41
+   58 0000005E F7FF FFFE       BL               DATA_WRITE
+   59 00000062 F04F 043E       MOV              R4, #0x3E
+   60 00000066 F7FF FFFE       BL               DATA_WRITE
+   61 0000006A         ;  ,{0x46, 0x49, 0x49, 0x49, 0x31} // 53 S
+   62 0000006A F04F 0446       MOV              R4, #0x46
+   63 0000006E F7FF FFFE       BL               DATA_WRITE
+   64 00000072 F04F 0449       MOV              r4,#0x49
+   65 00000076 F7FF FFFE       BL               DATA_WRITE
+   66 0000007A F04F 0449       MOV              R4, #0x49
+   67 0000007E F7FF FFFE       BL               DATA_WRITE
+   68 00000082 F04F 0449       MOV              R4, #0x49
+   69 00000086 F7FF FFFE       BL               DATA_WRITE
+   70 0000008A F04F 0431       MOV              R4, #0x31
+   71 0000008E F7FF FFFE       BL               DATA_WRITE
+   72 00000092         
+   73 00000092         
+   74 00000092         
+   75 00000092         
+   76 00000092         ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
+   77 00000092 F04F 047F       MOV              R4, #0x7F
+   78 00000096 F7FF FFFE       BL               DATA_WRITE
+   79 0000009A F04F 0449       MOV              r4,#0x49
+   80 0000009E F7FF FFFE       BL               DATA_WRITE
+   81 000000A2 F04F 0449       MOV              R4, #0x49
+   82 000000A6 F7FF FFFE       BL               DATA_WRITE
+   83 000000AA F04F 0449       MOV              R4, #0x49
+   84 000000AE F7FF FFFE       BL               DATA_WRITE
+   85 000000B2 F04F 0441       MOV              R4, #0x41
+   86 000000B6 F7FF FFFE       BL               DATA_WRITE
+   87 000000BA         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R
+   88 000000BA         
+   89 000000BA F04F 047F       MOV              R4, #0x7F
+   90 000000BE F7FF FFFE       BL               DATA_WRITE
+   91 000000C2 F04F 0409       MOV              r4,#0x09
+   92 000000C6 F7FF FFFE       BL               DATA_WRITE
+   93 000000CA F04F 0419       MOV              R4, #0x19
+   94 000000CE F7FF FFFE       BL               DATA_WRITE
+   95 000000D2 F04F 0429       MOV              R4, #0x29
+   96 000000D6 F7FF FFFE       BL               DATA_WRITE
+   97 000000DA F04F 0446       MOV              R4, #0x46
+   98 000000DE F7FF FFFE       BL               DATA_WRITE
+   99 000000E2         
+  100 000000E2         
+  101 000000E2         
+  102 000000E2         
+  103 000000E2         
+  104 000000E2 F85D EB04       POP              {LR}
+  105 000000E6 4770            BX               LR
+  106 000000E8                 ENDP
+  107 000000E8                 ALIGN
+  108 000000E8                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\loser.d -o.\objects\loser.o -I.\RTE\_Target_1 -IC:\Ke
 il_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSI
 S\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" 
-
-
-
-ARM Macro Assembler    Page 3 
-
-
 --predefine="TM4C123GH6PM SETA 1" --list=.\listings\loser.lst LOSER.s
 
 
@@ -178,8 +171,8 @@ Symbol: OUT_PORTB_DC
    Definitions
       At line 1 in file LOSER.s
    Uses
-      At line 31 in file LOSER.s
-Comment: OUT_PORTB_DC used once
+      None
+Comment: OUT_PORTB_DC unused
 1 symbol
 
 
@@ -242,7 +235,7 @@ Symbol: DELAY_1ms
    Definitions
       At line 6 in file LOSER.s
    Uses
-      At line 34 in file LOSER.s
-Comment: DELAY_1ms used once
+      None
+Comment: DELAY_1ms unused
 4 symbols
-344 symbols in table
+342 symbols in table

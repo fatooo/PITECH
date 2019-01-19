@@ -1,25 +1,43 @@
-NVIC_ST_CTRL 	EQU 0xE000E010
-NVIC_ST_RELOAD 	EQU 0xE000E014
-NVIC_ST_CURRENT EQU 0xE000E018
-;SHP_SYSPRI3 	EQU 0xE000ED20
-RELOAD_VALUE 	EQU 0x1499999 ;;; 1 saniye için degistir sonra
-;RELOAD_VALUE 	EQU 0x2000000 ;;; 1 saniye için degistir sonra
-GPIO_PORTB_IN		EQU 0x400053C0				; B3 to B0
-GPIO_PORTB_OUT 		EQU 0x4000503C				; B7 to B4
+;*************************************************************** 
+; EQU Directives
+; These directives do not allocate memory
+;***************************************************************
+;SYMBOL				DIRECTIVE	VALUE			COMMENT
+NVIC_ST_CTRL 		EQU 		0xE000E010
+NVIC_ST_RELOAD 		EQU 		0xE000E014
+NVIC_ST_CURRENT 	EQU			0xE000E018
+;SHP_SYSPRI3 		EQU 		0xE000ED20
+RELOAD_VALUE 		EQU 		0x1499999 ;;; 1 saniye için degistir sonra
+
+GPIO_PORTB_IN		EQU		 	0x400053C0				; B3 to B0
+GPIO_PORTB_OUT 		EQU 		0x4000503C				; B7 to B4
 Field_Address		EQU			0x20000400
 
 OUT_PORTB_DC		EQU			0x40005008		;00000010
 OUT_PORTB_RESET		EQU			0x40005004		;00000001
 SSI0_DR				EQU			0x40008008
 SSI0_SR				EQU			0x4000800C
+	
+;***************************************************************
+; Program section					      
+;***************************************************************
+;LABEL		DIRECTIVE	VALUE					COMMENT
 				AREA routines, CODE, READONLY, ALIGN=2
 				THUMB
 				EXPORT INIT_SYSTICK
 				EXTERN DATA_WRITE
 				EXTERN ADDRESS_CHANGE
-					EXTERN DELAY_1ms
-INIT_SYSTICK PROC
+				EXTERN DELAY_1ms
+;***************************************************************
+;  INITIALIZE SYSTICK 
+;  THIS CODE SECTION INITIALIZE SYSTICK OPERATION FOR TIMER FROM 20-0
 
+;***************************************************************	
+;LABEL		DIRECTIVE	VALUE					COMMENT
+INIT_SYSTICK PROC
+		
+		PUSH {LR}
+		
 		LDR R1 , =NVIC_ST_CTRL
 		MOV R0 , #0
 		STR R0 , [ R1 ]
@@ -36,28 +54,45 @@ INIT_SYSTICK PROC
 		STR R0 , [ R1 ]
 		MOV R9, #21 ;
 		
+		
+		
+		POP{LR}
 		BX LR
 		ENDP
 			
-			
+		
+;***************************************************************
+;  My_SYSTICK CODE WORKS FOR COUNTING DOWNWARD AND SHOW IT ON THE SCREEEN ACCORDINGLY 
+;  
+
+;***************************************************************	
+;LABEL		DIRECTIVE	VALUE					COMMENT
+
+
+
 		EXPORT My_SYSTICK
-		EXTERN WINNER
-			EXTERN LOSER
+		EXTERN WINNER   ; EXTERN THE SUBSYTEMS USED UN THIS MODULE
+		EXTERN LOSER
 	
 My_SYSTICK PROC   
 			
 			PUSH  	{LR}
+			PUSH {R0- R6}  ; PUSHED IMPORTANT VALUES
 			
-			MOV R11, #1 ;FLAG FOR SECOND DIGIT
+			MOV R11, #1 ;FLAG FOR SECOND DIGIT  
+						; INITIALIZE THE FLAG TO 1 IN ORDER TO WRITE 2 DIGITS EVERY OPERATION
 			CMP R9, #0 ; r9 keeps the value from 20 to 0
 			BNE cont ; if r9 is 0 clear the screen 
-			LDR R1 , =NVIC_ST_CTRL
+			LDR R1 , =NVIC_ST_CTRL  ;; AFTER 20 SECONDS DISABLE THE SYSTICK TIMER
 			MOV R0 , #0
 			STR R0 , [ R1 ]
 			MOV R9, #21 ; If R9 is 0 mov R9 =20 again and end the operation
-			BL LOSER
-			B FINISH
-			;B  winlose ;     goes to end of the moduke win or lose
+			
+		;	BL LOSER    ;;;; BRANCH TO THE DECISON SUBMODULE FOR WINLOSE CONDUTION 
+				
+			B FINISH   ;; TO END THIS SUBMODULE AFTER THE END OF THE OPERATION
+
+
 cont		SUB R9, #1 ; substract r9 
 			MOV R10, #10 ;
 			UDIV R8,R9 , r10 ; r8 keeps the first data which is either 0 1 2
@@ -65,14 +100,9 @@ cont		SUB R9, #1 ; substract r9
 			SUB R7 , r9 ,r7 ; R7 keeps the second value
 			
 			LDR	R4,=0x0047
-			BL	ADDRESS_CHANGE
+			BL	ADDRESS_CHANGE  ; GO TO TOP RIGHT CORNER
 			
-			LDR			R5,=OUT_PORTB_DC
-			MOV			R1,#0xFF
-			STR			R1,[R5]
-			BL			DELAY_1ms
-			
-			CMP R8 , #2 ; 
+			CMP R8 , #2 ;   FIND THE FIRST AND SECOND DIGIT BY COMPARING
 			BEQ write2 
 			CMP R8,#1; 
 			BEQ write1
@@ -80,24 +110,17 @@ cont		SUB R9, #1 ; substract r9
 			BEQ write0
 	
 write0  MOV R4, #0x3e 
-		BL DATA_WRITE
-		
+		BL DATA_WRITE		
 		MOV r4,#0x51
-		BL DATA_WRITE
-		
+		BL DATA_WRITE		
 		MOV R4, #0x49
-		BL DATA_WRITE
-	
+		BL DATA_WRITE	
 		MOV R4, #0x45
-		BL DATA_WRITE
-			
+		BL DATA_WRITE			
 		MOV R4, #0x3e
-		BL DATA_WRITE
-		
+		BL DATA_WRITE	
 		B writebosluk
-
 	
-
 write1  MOV R4, #0x00 
 		BL DATA_WRITE
 		MOV r4,#0x42
@@ -213,10 +236,11 @@ write9   MOV R4, #0x06
 			
 writebosluk 
 			MOV R4, #0x00 
-			BL DATA_WRITE
-			CMP R11, #0
-			BEQ FINISH
-			SUB R11, #1
+			BL DATA_WRITE   
+			
+			CMP R11, #0 ;;; CHECK THE FLAG TO KNOW IF THE SECOND DIGIT PRINTED
+			BEQ FINISH  ;; IF 2 DIGITS PRINTED END THE OPERATION 
+			SUB R11, #1 ;; ELSE PRINT THE SECOND DIGIT AND DECREASE THE FLAG
 
 			CMP R7, #0;
 			BEQ write0
@@ -239,8 +263,9 @@ writebosluk
 			CMP R7, #9;
 			BEQ write9
 			
-FINISH			
+FINISH		POP {R0-R6}	
 			POP {LR}
 			BX LR 
 			ENDP
+			ALIGN
 			END

@@ -4,331 +4,382 @@
 ARM Macro Assembler    Page 1 
 
 
-    1 00000000 E000E010 
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 E000E010 
                        NVIC_ST_CTRL
                                EQU              0xE000E010
-    2 00000000 E000E014 
+    7 00000000 E000E014 
                        NVIC_ST_RELOAD
                                EQU              0xE000E014
-    3 00000000 E000E018 
+    8 00000000 E000E018 
                        NVIC_ST_CURRENT
                                EQU              0xE000E018
-    4 00000000         ;SHP_SYSPRI3  EQU 0xE000ED20
-    5 00000000 01499999 
+    9 00000000         ;SHP_SYSPRI3   EQU   0xE000ED20
+   10 00000000 01499999 
                        RELOAD_VALUE
                                EQU              0x1499999   ;;; 1 saniye için d
                                                             egistir sonra
-    6 00000000         ;RELOAD_VALUE  EQU 0x2000000 ;;; 1 saniye için degistir 
-                       sonra
-    7 00000000 400053C0 
+   11 00000000         
+   12 00000000 400053C0 
                        GPIO_PORTB_IN
                                EQU              0x400053C0  ; B3 to B0
-    8 00000000 4000503C 
+   13 00000000 4000503C 
                        GPIO_PORTB_OUT
                                EQU              0x4000503C  ; B7 to B4
-    9 00000000 20000400 
+   14 00000000 20000400 
                        Field_Address
                                EQU              0x20000400
-   10 00000000         
-   11 00000000 40005008 
+   15 00000000         
+   16 00000000 40005008 
                        OUT_PORTB_DC
                                EQU              0x40005008  ;00000010
-   12 00000000 40005004 
+   17 00000000 40005004 
                        OUT_PORTB_RESET
                                EQU              0x40005004  ;00000001
-   13 00000000 40008008 
+   18 00000000 40008008 
                        SSI0_DR EQU              0x40008008
-   14 00000000 4000800C 
+   19 00000000 4000800C 
                        SSI0_SR EQU              0x4000800C
-   15 00000000                 AREA             routines, CODE, READONLY, ALIGN
+   20 00000000         
+   21 00000000         ;*******************************************************
+                       ********
+   22 00000000         ; Program section           
+   23 00000000         ;*******************************************************
+                       ********
+   24 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   25 00000000                 AREA             routines, CODE, READONLY, ALIGN
 =2
-   16 00000000                 THUMB
-   17 00000000                 EXPORT           INIT_SYSTICK
-   18 00000000                 EXTERN           DATA_WRITE
-   19 00000000                 EXTERN           ADDRESS_CHANGE
-   20 00000000                 EXTERN           DELAY_1ms
-   21 00000000         INIT_SYSTICK
-                               PROC
-   22 00000000         
-   23 00000000 4999            LDR              R1 , =NVIC_ST_CTRL
-   24 00000002 F04F 0000       MOV              R0 , #0
-   25 00000006 6008            STR              R0 , [ R1 ]
-   26 00000008 4998            LDR              R1 , =NVIC_ST_RELOAD
-   27 0000000A 4899            LDR              R0 , =RELOAD_VALUE
-   28 0000000C 6008            STR              R0 , [ R1 ]
-   29 0000000E 4999            LDR              R1 , =NVIC_ST_CURRENT
-   30 00000010 6008            STR              R0 , [ R1 ]
-   31 00000012         ;LDR R1 , =SHP_SYSPRI3 
-   32 00000012         ;MOV R0 , #0x40000000
-   33 00000012         ;STR R0 , [ R1 ]
-   34 00000012 4995            LDR              R1 , =NVIC_ST_CTRL
-   35 00000014 F04F 0003       MOV              R0 , #0x03
+   26 00000000                 THUMB
+   27 00000000                 EXPORT           INIT_SYSTICK
+   28 00000000                 EXTERN           DATA_WRITE
+   29 00000000                 EXTERN           ADDRESS_CHANGE
+   30 00000000                 EXTERN           DELAY_1ms
+   31 00000000         ;*******************************************************
+                       ********
+   32 00000000         ;  INITIALIZE SYSTICK 
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   36 00000018 6008            STR              R0 , [ R1 ]
-   37 0000001A F04F 0915       MOV              R9, #21     ;
-   38 0000001E         
-   39 0000001E 4770            BX               LR
-   40 00000020                 ENDP
-   41 00000020         
-   42 00000020         
-   43 00000020                 EXPORT           My_SYSTICK
-   44 00000020                 EXTERN           WINNER
-   45 00000020                 EXTERN           LOSER
-   46 00000020         
-   47 00000020         My_SYSTICK
+   33 00000000         ;  THIS CODE SECTION INITIALIZE SYSTICK OPERATION FOR TI
+                       MER FROM 20-0
+   34 00000000         
+   35 00000000         ;*******************************************************
+                       ******** 
+   36 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   37 00000000         INIT_SYSTICK
                                PROC
-   48 00000020         
-   49 00000020 B500            PUSH             {LR}
-   50 00000022         
-   51 00000022 F04F 0B01       MOV              R11, #1     ;FLAG FOR SECOND DI
-                                                            GIT
-   52 00000026 F1B9 0F00       CMP              R9, #0      ; r9 keeps the valu
-                                                            e from 20 to 0
-   53 0000002A D108            BNE              cont        ; if r9 is 0 clear 
-                                                            the screen 
-   54 0000002C 498E            LDR              R1 , =NVIC_ST_CTRL
-   55 0000002E F04F 0000       MOV              R0 , #0
-   56 00000032 6008            STR              R0 , [ R1 ]
-   57 00000034 F04F 0915       MOV              R9, #21     ; If R9 is 0 mov R9
-                                                             =20 again and end 
-                                                            the operation
-   58 00000038 F7FF FFFE       BL               LOSER
-   59 0000003C E111            B                FINISH
-   60 0000003E         ;B  winlose ;     goes to end of the moduke win or lose
-   61 0000003E F1A9 0901 
-                       cont    SUB              R9, #1      ; substract r9 
-   62 00000042 F04F 0A0A       MOV              R10, #10    ;
-   63 00000046 FBB9 F8FA       UDIV             R8,R9 , r10 ; r8 keeps the firs
-                                                            t data which is eit
-                                                            her 0 1 2
-   64 0000004A FB08 F70A       MUL              r7, r8, r10 ;
-   65 0000004E EBA9 0707       SUB              R7 , r9 ,r7 ; R7 keeps the seco
-                                                            nd value
-   66 00000052         
-   67 00000052 F04F 0447       LDR              R4,=0x0047
-   68 00000056 F7FF FFFE       BL               ADDRESS_CHANGE
-   69 0000005A         
-   70 0000005A 4D87            LDR              R5,=OUT_PORTB_DC
-   71 0000005C F04F 01FF       MOV              R1,#0xFF
-   72 00000060 6029            STR              R1,[R5]
-   73 00000062 F7FF FFFE       BL               DELAY_1ms
-   74 00000066         
-   75 00000066 F1B8 0F02       CMP              R8 , #2     ; 
-   76 0000006A D02F            BEQ              write2
-   77 0000006C F1B8 0F01       CMP              R8,#1       ; 
-   78 00000070 D017            BEQ              write1
-   79 00000072 F1B8 0F00       CMP              R8, #0      ;
-   80 00000076 D0FF            BEQ              write0
-   81 00000078         
-   82 00000078 F04F 043E 
-                       write0  MOV              R4, #0x3e
-   83 0000007C F7FF FFFE       BL               DATA_WRITE
+   38 00000000         
+   39 00000000 B500            PUSH             {LR}
+   40 00000002         
+   41 00000002 4998            LDR              R1 , =NVIC_ST_CTRL
+   42 00000004 F04F 0000       MOV              R0 , #0
+   43 00000008 6008            STR              R0 , [ R1 ]
+   44 0000000A 4997            LDR              R1 , =NVIC_ST_RELOAD
+   45 0000000C 4897            LDR              R0 , =RELOAD_VALUE
+   46 0000000E 6008            STR              R0 , [ R1 ]
+   47 00000010 4997            LDR              R1 , =NVIC_ST_CURRENT
+   48 00000012 6008            STR              R0 , [ R1 ]
+   49 00000014         ;LDR R1 , =SHP_SYSPRI3 
+   50 00000014         ;MOV R0 , #0x40000000
+   51 00000014         ;STR R0 , [ R1 ]
+   52 00000014 4993            LDR              R1 , =NVIC_ST_CTRL
+   53 00000016 F04F 0003       MOV              R0 , #0x03
+   54 0000001A 6008            STR              R0 , [ R1 ]
+   55 0000001C F04F 0915       MOV              R9, #21     ;
+   56 00000020         
+   57 00000020         
+   58 00000020         
+   59 00000020 F85D EB04       POP{LR}
+   60 00000024 4770            BX               LR
+   61 00000026                 ENDP
+   62 00000026         
+   63 00000026         
+   64 00000026         ;*******************************************************
+                       ********
+   65 00000026         ;  My_SYSTICK CODE WORKS FOR COUNTING DOWNWARD AND SHOW 
+                       IT ON THE SCREEEN ACCORDINGLY 
+   66 00000026         ;  
+   67 00000026         
+   68 00000026         ;*******************************************************
+                       ******** 
+   69 00000026         ;LABEL  DIRECTIVE VALUE     COMMENT
+   70 00000026         
+   71 00000026         
+   72 00000026         
+   73 00000026                 EXPORT           My_SYSTICK
+   74 00000026                 EXTERN           WINNER      ; EXTERN THE SUBSYT
+                                                            EMS USED UN THIS MO
+                                                            DULE
+   75 00000026                 EXTERN           LOSER
+   76 00000026         
+   77 00000026         My_SYSTICK
+                               PROC
+   78 00000026         
+   79 00000026 B500            PUSH             {LR}
+   80 00000028 B47F            PUSH             {R0- R6}    ; PUSHED IMPORTANT 
+                                                            VALUES
+   81 0000002A         
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   84 00000080         
-   85 00000080 F04F 0451       MOV              r4,#0x51
-   86 00000084 F7FF FFFE       BL               DATA_WRITE
-   87 00000088         
-   88 00000088 F04F 0449       MOV              R4, #0x49
-   89 0000008C F7FF FFFE       BL               DATA_WRITE
-   90 00000090         
-   91 00000090 F04F 0445       MOV              R4, #0x45
-   92 00000094 F7FF FFFE       BL               DATA_WRITE
-   93 00000098         
-   94 00000098 F04F 043E       MOV              R4, #0x3e
-   95 0000009C F7FF FFFE       BL               DATA_WRITE
-   96 000000A0         
-   97 000000A0 E0BC            B                writebosluk
-   98 000000A2         
-   99 000000A2         
-  100 000000A2         
-  101 000000A2 F04F 0400 
-                       write1  MOV              R4, #0x00
-  102 000000A6 F7FF FFFE       BL               DATA_WRITE
-  103 000000AA F04F 0442       MOV              r4,#0x42
-  104 000000AE F7FF FFFE       BL               DATA_WRITE
-  105 000000B2 F04F 047F       MOV              R4, #0x7F
-  106 000000B6 F7FF FFFE       BL               DATA_WRITE
-  107 000000BA F04F 0440       MOV              R4, #0x40
-  108 000000BE F7FF FFFE       BL               DATA_WRITE
-  109 000000C2 F04F 0400       MOV              R4, #0x00
-  110 000000C6 F7FF FFFE       BL               DATA_WRITE
-  111 000000CA E0A7            B                writebosluk
-  112 000000CC         
-  113 000000CC F04F 0442 
-                       write2  MOV              R4, #0x42
-  114 000000D0 F7FF FFFE       BL               DATA_WRITE
-  115 000000D4 F04F 0461       MOV              r4,#0x61
-  116 000000D8 F7FF FFFE       BL               DATA_WRITE
-  117 000000DC F04F 0451       MOV              R4, #0x51
-  118 000000E0 F7FF FFFE       BL               DATA_WRITE
-  119 000000E4 F04F 0449       MOV              R4, #0x49
-  120 000000E8 F7FF FFFE       BL               DATA_WRITE
-  121 000000EC F04F 0446       MOV              R4, #0x46
-  122 000000F0 F7FF FFFE       BL               DATA_WRITE
-  123 000000F4 E092            B                writebosluk
-  124 000000F6         
-  125 000000F6         
-  126 000000F6 F04F 0421 
-                       write3  MOV              R4, #0x21
-  127 000000FA F7FF FFFE       BL               DATA_WRITE
-  128 000000FE F04F 0441       MOV              r4,#0x41
-  129 00000102 F7FF FFFE       BL               DATA_WRITE
-  130 00000106 F04F 0445       MOV              R4, #0x45
-  131 0000010A F7FF FFFE       BL               DATA_WRITE
-  132 0000010E F04F 044B       MOV              R4, #0x4b
-  133 00000112 F7FF FFFE       BL               DATA_WRITE
-  134 00000116 F04F 0431       MOV              R4, #0x31
-  135 0000011A F7FF FFFE       BL               DATA_WRITE
-  136 0000011E E07D            B                writebosluk
-  137 00000120         
-  138 00000120 F04F 0418 
-                       write4  MOV              R4, #0x18
+   82 0000002A F04F 0B01       MOV              R11, #1     ;FLAG FOR SECOND DI
+                                                            GIT  
+   83 0000002E         ; INITIALIZE THE FLAG TO 1 IN ORDER TO WRITE 2 DIGITS EV
+                       ERY OPERATION
+   84 0000002E F1B9 0F00       CMP              R9, #0      ; r9 keeps the valu
+                                                            e from 20 to 0
+   85 00000032 D106            BNE              cont        ; if r9 is 0 clear 
+                                                            the screen 
+   86 00000034 498B            LDR              R1 , =NVIC_ST_CTRL ;; AFTER 20 
+                                                            SECONDS DISABLE THE
+                                                             SYSTICK TIMER
+   87 00000036 F04F 0000       MOV              R0 , #0
+   88 0000003A 6008            STR              R0 , [ R1 ]
+   89 0000003C F04F 0915       MOV              R9, #21     ; If R9 is 0 mov R9
+                                                             =20 again and end 
+                                                            the operation
+   90 00000040         
+   91 00000040         ; BL LOSER    ;;;; BRANCH TO THE DECISON SUBMODULE FOR W
+                       INLOSE CONDUTION 
+   92 00000040         
+   93 00000040 E10B            B                FINISH      ;; TO END THIS SUBM
+                                                            ODULE AFTER THE END
+                                                             OF THE OPERATION
+   94 00000042         
+   95 00000042         
+   96 00000042 F1A9 0901 
+                       cont    SUB              R9, #1      ; substract r9 
+   97 00000046 F04F 0A0A       MOV              R10, #10    ;
+   98 0000004A FBB9 F8FA       UDIV             R8,R9 , r10 ; r8 keeps the firs
+                                                            t data which is eit
+                                                            her 0 1 2
+   99 0000004E FB08 F70A       MUL              r7, r8, r10 ;
+  100 00000052 EBA9 0707       SUB              R7 , r9 ,r7 ; R7 keeps the seco
+                                                            nd value
+  101 00000056         
+  102 00000056 F04F 0447       LDR              R4,=0x0047
+  103 0000005A F7FF FFFE       BL               ADDRESS_CHANGE ; GO TO TOP RIGH
+                                                            T CORNER
+  104 0000005E         
+  105 0000005E F1B8 0F02       CMP              R8 , #2     ;   FIND THE FIRST 
+                                                            AND SECOND DIGIT BY
+                                                             COMPARING
+  106 00000062 D02F            BEQ              write2
+  107 00000064 F1B8 0F01       CMP              R8,#1       ; 
+  108 00000068 D017            BEQ              write1
+  109 0000006A F1B8 0F00       CMP              R8, #0      ;
+  110 0000006E D0FF            BEQ              write0
+  111 00000070         
+  112 00000070 F04F 043E 
+                       write0  MOV              R4, #0x3e
+  113 00000074 F7FF FFFE       BL               DATA_WRITE
+  114 00000078 F04F 0451       MOV              r4,#0x51
+  115 0000007C F7FF FFFE       BL               DATA_WRITE
+  116 00000080 F04F 0449       MOV              R4, #0x49
+  117 00000084 F7FF FFFE       BL               DATA_WRITE
+  118 00000088 F04F 0445       MOV              R4, #0x45
+  119 0000008C F7FF FFFE       BL               DATA_WRITE
+  120 00000090 F04F 043E       MOV              R4, #0x3e
+  121 00000094 F7FF FFFE       BL               DATA_WRITE
 
 
 
 ARM Macro Assembler    Page 4 
 
 
-  139 00000124 F7FF FFFE       BL               DATA_WRITE
-  140 00000128 F04F 0414       MOV              r4,#0x14
-  141 0000012C F7FF FFFE       BL               DATA_WRITE
-  142 00000130 F04F 0412       MOV              R4, #0x12
-  143 00000134 F7FF FFFE       BL               DATA_WRITE
-  144 00000138 F04F 047F       MOV              R4, #0x7f
-  145 0000013C F7FF FFFE       BL               DATA_WRITE
-  146 00000140 F04F 0410       MOV              R4, #0x10
-  147 00000144 F7FF FFFE       BL               DATA_WRITE
-  148 00000148 E068            B                writebosluk
-  149 0000014A         
-  150 0000014A F04F 0427 
+  122 00000098 E0BC            B                writebosluk
+  123 0000009A         
+  124 0000009A F04F 0400 
+                       write1  MOV              R4, #0x00
+  125 0000009E F7FF FFFE       BL               DATA_WRITE
+  126 000000A2 F04F 0442       MOV              r4,#0x42
+  127 000000A6 F7FF FFFE       BL               DATA_WRITE
+  128 000000AA F04F 047F       MOV              R4, #0x7F
+  129 000000AE F7FF FFFE       BL               DATA_WRITE
+  130 000000B2 F04F 0440       MOV              R4, #0x40
+  131 000000B6 F7FF FFFE       BL               DATA_WRITE
+  132 000000BA F04F 0400       MOV              R4, #0x00
+  133 000000BE F7FF FFFE       BL               DATA_WRITE
+  134 000000C2 E0A7            B                writebosluk
+  135 000000C4         
+  136 000000C4 F04F 0442 
+                       write2  MOV              R4, #0x42
+  137 000000C8 F7FF FFFE       BL               DATA_WRITE
+  138 000000CC F04F 0461       MOV              r4,#0x61
+  139 000000D0 F7FF FFFE       BL               DATA_WRITE
+  140 000000D4 F04F 0451       MOV              R4, #0x51
+  141 000000D8 F7FF FFFE       BL               DATA_WRITE
+  142 000000DC F04F 0449       MOV              R4, #0x49
+  143 000000E0 F7FF FFFE       BL               DATA_WRITE
+  144 000000E4 F04F 0446       MOV              R4, #0x46
+  145 000000E8 F7FF FFFE       BL               DATA_WRITE
+  146 000000EC E092            B                writebosluk
+  147 000000EE         
+  148 000000EE         
+  149 000000EE F04F 0421 
+                       write3  MOV              R4, #0x21
+  150 000000F2 F7FF FFFE       BL               DATA_WRITE
+  151 000000F6 F04F 0441       MOV              r4,#0x41
+  152 000000FA F7FF FFFE       BL               DATA_WRITE
+  153 000000FE F04F 0445       MOV              R4, #0x45
+  154 00000102 F7FF FFFE       BL               DATA_WRITE
+  155 00000106 F04F 044B       MOV              R4, #0x4b
+  156 0000010A F7FF FFFE       BL               DATA_WRITE
+  157 0000010E F04F 0431       MOV              R4, #0x31
+  158 00000112 F7FF FFFE       BL               DATA_WRITE
+  159 00000116 E07D            B                writebosluk
+  160 00000118         
+  161 00000118 F04F 0418 
+                       write4  MOV              R4, #0x18
+  162 0000011C F7FF FFFE       BL               DATA_WRITE
+  163 00000120 F04F 0414       MOV              r4,#0x14
+  164 00000124 F7FF FFFE       BL               DATA_WRITE
+  165 00000128 F04F 0412       MOV              R4, #0x12
+  166 0000012C F7FF FFFE       BL               DATA_WRITE
+  167 00000130 F04F 047F       MOV              R4, #0x7f
+  168 00000134 F7FF FFFE       BL               DATA_WRITE
+  169 00000138 F04F 0410       MOV              R4, #0x10
+  170 0000013C F7FF FFFE       BL               DATA_WRITE
+  171 00000140 E068            B                writebosluk
+  172 00000142         
+  173 00000142 F04F 0427 
                        write5  MOV              R4, #0x27
-  151 0000014E F7FF FFFE       BL               DATA_WRITE
-  152 00000152 F04F 0445       MOV              r4,#0x45
-  153 00000156 F7FF FFFE       BL               DATA_WRITE
-  154 0000015A F04F 0445       MOV              R4, #0x45
-  155 0000015E F7FF FFFE       BL               DATA_WRITE
-  156 00000162 F04F 0445       MOV              R4, #0x45
-  157 00000166 F7FF FFFE       BL               DATA_WRITE
-  158 0000016A F04F 0439       MOV              R4, #0x39
-  159 0000016E F7FF FFFE       BL               DATA_WRITE
-  160 00000172 E053            B                writebosluk
-  161 00000174         
-  162 00000174         
-  163 00000174 F04F 043C 
-                       write6  MOV              R4, #0x3c
-  164 00000178 F7FF FFFE       BL               DATA_WRITE
-  165 0000017C F04F 044A       MOV              r4,#0x4a
-  166 00000180 F7FF FFFE       BL               DATA_WRITE
-  167 00000184 F04F 0449       MOV              R4, #0x49
-  168 00000188 F7FF FFFE       BL               DATA_WRITE
-  169 0000018C F04F 0449       MOV              R4, #0x49
-  170 00000190 F7FF FFFE       BL               DATA_WRITE
-  171 00000194 F04F 0430       MOV              R4, #0x30
-  172 00000198 F7FF FFFE       BL               DATA_WRITE
-  173 0000019C E03E            B                writebosluk
-  174 0000019E         
-  175 0000019E         
-  176 0000019E F04F 0401 
-                       write7  MOV              R4, #0x01
-  177 000001A2 F7FF FFFE       BL               DATA_WRITE
-  178 000001A6 F04F 0471       MOV              r4,#0x71
-  179 000001AA F7FF FFFE       BL               DATA_WRITE
-  180 000001AE F04F 0409       MOV              R4, #0x09
-  181 000001B2 F7FF FFFE       BL               DATA_WRITE
-  182 000001B6 F04F 0405       MOV              R4, #0x05
-  183 000001BA F7FF FFFE       BL               DATA_WRITE
-  184 000001BE F04F 0403       MOV              R4, #0x03
-  185 000001C2 F7FF FFFE       BL               DATA_WRITE
-  186 000001C6 E029            B                writebosluk
-  187 000001C8         
-  188 000001C8         
-  189 000001C8 F04F 0436 
-                       write8  MOV              R4, #0x36
-  190 000001CC F7FF FFFE       BL               DATA_WRITE
-  191 000001D0 F04F 0449       MOV              r4,#0x49
-  192 000001D4 F7FF FFFE       BL               DATA_WRITE
-  193 000001D8 F04F 0449       MOV              R4, #0x49
+  174 00000146 F7FF FFFE       BL               DATA_WRITE
+  175 0000014A F04F 0445       MOV              r4,#0x45
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-  194 000001DC F7FF FFFE       BL               DATA_WRITE
-  195 000001E0 F04F 0449       MOV              R4, #0x49
-  196 000001E4 F7FF FFFE       BL               DATA_WRITE
-  197 000001E8 F04F 0436       MOV              R4, #0x36
-  198 000001EC F7FF FFFE       BL               DATA_WRITE
-  199 000001F0 E014            B                writebosluk
-  200 000001F2         
-  201 000001F2         
-  202 000001F2 F04F 0406 
+  176 0000014E F7FF FFFE       BL               DATA_WRITE
+  177 00000152 F04F 0445       MOV              R4, #0x45
+  178 00000156 F7FF FFFE       BL               DATA_WRITE
+  179 0000015A F04F 0445       MOV              R4, #0x45
+  180 0000015E F7FF FFFE       BL               DATA_WRITE
+  181 00000162 F04F 0439       MOV              R4, #0x39
+  182 00000166 F7FF FFFE       BL               DATA_WRITE
+  183 0000016A E053            B                writebosluk
+  184 0000016C         
+  185 0000016C         
+  186 0000016C F04F 043C 
+                       write6  MOV              R4, #0x3c
+  187 00000170 F7FF FFFE       BL               DATA_WRITE
+  188 00000174 F04F 044A       MOV              r4,#0x4a
+  189 00000178 F7FF FFFE       BL               DATA_WRITE
+  190 0000017C F04F 0449       MOV              R4, #0x49
+  191 00000180 F7FF FFFE       BL               DATA_WRITE
+  192 00000184 F04F 0449       MOV              R4, #0x49
+  193 00000188 F7FF FFFE       BL               DATA_WRITE
+  194 0000018C F04F 0430       MOV              R4, #0x30
+  195 00000190 F7FF FFFE       BL               DATA_WRITE
+  196 00000194 E03E            B                writebosluk
+  197 00000196         
+  198 00000196         
+  199 00000196 F04F 0401 
+                       write7  MOV              R4, #0x01
+  200 0000019A F7FF FFFE       BL               DATA_WRITE
+  201 0000019E F04F 0471       MOV              r4,#0x71
+  202 000001A2 F7FF FFFE       BL               DATA_WRITE
+  203 000001A6 F04F 0409       MOV              R4, #0x09
+  204 000001AA F7FF FFFE       BL               DATA_WRITE
+  205 000001AE F04F 0405       MOV              R4, #0x05
+  206 000001B2 F7FF FFFE       BL               DATA_WRITE
+  207 000001B6 F04F 0403       MOV              R4, #0x03
+  208 000001BA F7FF FFFE       BL               DATA_WRITE
+  209 000001BE E029            B                writebosluk
+  210 000001C0         
+  211 000001C0         
+  212 000001C0 F04F 0436 
+                       write8  MOV              R4, #0x36
+  213 000001C4 F7FF FFFE       BL               DATA_WRITE
+  214 000001C8 F04F 0449       MOV              r4,#0x49
+  215 000001CC F7FF FFFE       BL               DATA_WRITE
+  216 000001D0 F04F 0449       MOV              R4, #0x49
+  217 000001D4 F7FF FFFE       BL               DATA_WRITE
+  218 000001D8 F04F 0449       MOV              R4, #0x49
+  219 000001DC F7FF FFFE       BL               DATA_WRITE
+  220 000001E0 F04F 0436       MOV              R4, #0x36
+  221 000001E4 F7FF FFFE       BL               DATA_WRITE
+  222 000001E8 E014            B                writebosluk
+  223 000001EA         
+  224 000001EA         
+  225 000001EA F04F 0406 
                        write9  MOV              R4, #0x06
-  203 000001F6 F7FF FFFE       BL               DATA_WRITE
-  204 000001FA F04F 0449       MOV              r4,#0x49
-  205 000001FE F7FF FFFE       BL               DATA_WRITE
-  206 00000202 F04F 0449       MOV              R4, #0x49
-  207 00000206 F7FF FFFE       BL               DATA_WRITE
-  208 0000020A F04F 0429       MOV              R4, #0x29
-  209 0000020E F7FF FFFE       BL               DATA_WRITE
-  210 00000212 F04F 041E       MOV              R4, #0x1e
-  211 00000216 F7FF FFFE       BL               DATA_WRITE
-  212 0000021A E7FF            B                writebosluk
-  213 0000021C         
-  214 0000021C         writebosluk
-  215 0000021C F04F 0400       MOV              R4, #0x00
-  216 00000220 F7FF FFFE       BL               DATA_WRITE
-  217 00000224 F1BB 0F00       CMP              R11, #0
-  218 00000228 D01B            BEQ              FINISH
-  219 0000022A F1AB 0B01       SUB              R11, #1
-  220 0000022E         
-  221 0000022E 2F00            CMP              R7, #0      ;
-  222 00000230 F43F AF22       BEQ              write0
-  223 00000234 2F01            CMP              R7, #1      ;
-  224 00000236 F43F AF34       BEQ              write1
-  225 0000023A 2F02            CMP              R7, #2      ;
-  226 0000023C F43F AF46       BEQ              write2
-  227 00000240 2F03            CMP              R7, #3      ;
-  228 00000242 F43F AF58       BEQ              write3
-  229 00000246 2F04            CMP              R7, #4      ;
-  230 00000248 F43F AF6A       BEQ              write4
-  231 0000024C 2F05            CMP              R7, #5      ;
-  232 0000024E F43F AF7C       BEQ              write5
-  233 00000252 2F06            CMP              R7, #6      ;
-  234 00000254 D08E            BEQ              write6
-  235 00000256 2F07            CMP              R7, #7      ;
-  236 00000258 D0A1            BEQ              write7
-  237 0000025A 2F08            CMP              R7, #8      ;
-  238 0000025C D0B4            BEQ              write8
-  239 0000025E 2F09            CMP              R7, #9      ;
-  240 00000260 D0C7            BEQ              write9
-  241 00000262         
-  242 00000262         FINISH
-  243 00000262 F85D EB04       POP              {LR}
-  244 00000266 4770            BX               LR
-  245 00000268                 ENDP
-  246 00000268                 END
-              E000E010 
-              E000E014 
-              01499999 
-              E000E018 
-              40005008 
+  226 000001EE F7FF FFFE       BL               DATA_WRITE
+  227 000001F2 F04F 0449       MOV              r4,#0x49
+  228 000001F6 F7FF FFFE       BL               DATA_WRITE
+  229 000001FA F04F 0449       MOV              R4, #0x49
+  230 000001FE F7FF FFFE       BL               DATA_WRITE
 
 
 
 ARM Macro Assembler    Page 6 
 
 
+  231 00000202 F04F 0429       MOV              R4, #0x29
+  232 00000206 F7FF FFFE       BL               DATA_WRITE
+  233 0000020A F04F 041E       MOV              R4, #0x1e
+  234 0000020E F7FF FFFE       BL               DATA_WRITE
+  235 00000212 E7FF            B                writebosluk
+  236 00000214         
+  237 00000214         writebosluk
+  238 00000214 F04F 0400       MOV              R4, #0x00
+  239 00000218 F7FF FFFE       BL               DATA_WRITE
+  240 0000021C         
+  241 0000021C F1BB 0F00       CMP              R11, #0     ;;; CHECK THE FLAG 
+                                                            TO KNOW IF THE SECO
+                                                            ND DIGIT PRINTED
+  242 00000220 D01B            BEQ              FINISH      ;; IF 2 DIGITS PRIN
+                                                            TED END THE OPERATI
+                                                            ON 
+  243 00000222 F1AB 0B01       SUB              R11, #1     ;; ELSE PRINT THE S
+                                                            ECOND DIGIT AND DEC
+                                                            REASE THE FLAG
+  244 00000226         
+  245 00000226 2F00            CMP              R7, #0      ;
+  246 00000228 F43F AF22       BEQ              write0
+  247 0000022C 2F01            CMP              R7, #1      ;
+  248 0000022E F43F AF34       BEQ              write1
+  249 00000232 2F02            CMP              R7, #2      ;
+  250 00000234 F43F AF46       BEQ              write2
+  251 00000238 2F03            CMP              R7, #3      ;
+  252 0000023A F43F AF58       BEQ              write3
+  253 0000023E 2F04            CMP              R7, #4      ;
+  254 00000240 F43F AF6A       BEQ              write4
+  255 00000244 2F05            CMP              R7, #5      ;
+  256 00000246 F43F AF7C       BEQ              write5
+  257 0000024A 2F06            CMP              R7, #6      ;
+  258 0000024C D08E            BEQ              write6
+  259 0000024E 2F07            CMP              R7, #7      ;
+  260 00000250 D0A1            BEQ              write7
+  261 00000252 2F08            CMP              R7, #8      ;
+  262 00000254 D0B4            BEQ              write8
+  263 00000256 2F09            CMP              R7, #9      ;
+  264 00000258 D0C7            BEQ              write9
+  265 0000025A         
+  266 0000025A BC7F    FINISH  POP              {R0-R6}
+  267 0000025C F85D EB04       POP              {LR}
+  268 00000260 4770            BX               LR
+  269 00000262                 ENDP
+  270 00000262 00 00           ALIGN
+  271 00000264                 END
+              E000E010 
+              E000E014 
+              01499999 
+              E000E018 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\systick_timer.d -o.\objects\systick_timer.o -I.\RTE\_
 Target_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\
@@ -341,64 +392,64 @@ er.lst SysTick_Timer.s
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-FINISH 00000262
+FINISH 0000025A
 
 Symbol: FINISH
    Definitions
-      At line 242 in file SysTick_Timer.s
+      At line 266 in file SysTick_Timer.s
    Uses
-      At line 59 in file SysTick_Timer.s
-      At line 218 in file SysTick_Timer.s
+      At line 93 in file SysTick_Timer.s
+      At line 242 in file SysTick_Timer.s
 
 INIT_SYSTICK 00000000
 
 Symbol: INIT_SYSTICK
    Definitions
-      At line 21 in file SysTick_Timer.s
+      At line 37 in file SysTick_Timer.s
    Uses
-      At line 17 in file SysTick_Timer.s
+      At line 27 in file SysTick_Timer.s
 Comment: INIT_SYSTICK used once
-My_SYSTICK 00000020
+My_SYSTICK 00000026
 
 Symbol: My_SYSTICK
    Definitions
-      At line 47 in file SysTick_Timer.s
+      At line 77 in file SysTick_Timer.s
    Uses
-      At line 43 in file SysTick_Timer.s
+      At line 73 in file SysTick_Timer.s
 Comment: My_SYSTICK used once
-cont 0000003E
+cont 00000042
 
 Symbol: cont
    Definitions
-      At line 61 in file SysTick_Timer.s
+      At line 96 in file SysTick_Timer.s
    Uses
-      At line 53 in file SysTick_Timer.s
+      At line 85 in file SysTick_Timer.s
 Comment: cont used once
 routines 00000000
 
 Symbol: routines
    Definitions
-      At line 15 in file SysTick_Timer.s
+      At line 25 in file SysTick_Timer.s
    Uses
       None
 Comment: routines unused
-write0 00000078
+write0 00000070
 
 Symbol: write0
    Definitions
-      At line 82 in file SysTick_Timer.s
+      At line 112 in file SysTick_Timer.s
    Uses
-      At line 80 in file SysTick_Timer.s
-      At line 222 in file SysTick_Timer.s
+      At line 110 in file SysTick_Timer.s
+      At line 246 in file SysTick_Timer.s
 
-write1 000000A2
+write1 0000009A
 
 Symbol: write1
    Definitions
-      At line 101 in file SysTick_Timer.s
+      At line 124 in file SysTick_Timer.s
    Uses
-      At line 78 in file SysTick_Timer.s
-      At line 224 in file SysTick_Timer.s
+      At line 108 in file SysTick_Timer.s
+      At line 248 in file SysTick_Timer.s
 
 
 
@@ -406,64 +457,64 @@ Symbol: write1
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
-write2 000000CC
+write2 000000C4
 
 Symbol: write2
    Definitions
-      At line 113 in file SysTick_Timer.s
+      At line 136 in file SysTick_Timer.s
    Uses
-      At line 76 in file SysTick_Timer.s
-      At line 226 in file SysTick_Timer.s
+      At line 106 in file SysTick_Timer.s
+      At line 250 in file SysTick_Timer.s
 
-write3 000000F6
+write3 000000EE
 
 Symbol: write3
    Definitions
-      At line 126 in file SysTick_Timer.s
+      At line 149 in file SysTick_Timer.s
    Uses
-      At line 228 in file SysTick_Timer.s
+      At line 252 in file SysTick_Timer.s
 Comment: write3 used once
-write4 00000120
+write4 00000118
 
 Symbol: write4
    Definitions
-      At line 138 in file SysTick_Timer.s
+      At line 161 in file SysTick_Timer.s
    Uses
-      At line 230 in file SysTick_Timer.s
+      At line 254 in file SysTick_Timer.s
 Comment: write4 used once
-write5 0000014A
+write5 00000142
 
 Symbol: write5
    Definitions
-      At line 150 in file SysTick_Timer.s
+      At line 173 in file SysTick_Timer.s
    Uses
-      At line 232 in file SysTick_Timer.s
+      At line 256 in file SysTick_Timer.s
 Comment: write5 used once
-write6 00000174
+write6 0000016C
 
 Symbol: write6
    Definitions
-      At line 163 in file SysTick_Timer.s
+      At line 186 in file SysTick_Timer.s
    Uses
-      At line 234 in file SysTick_Timer.s
+      At line 258 in file SysTick_Timer.s
 Comment: write6 used once
-write7 0000019E
+write7 00000196
 
 Symbol: write7
    Definitions
-      At line 176 in file SysTick_Timer.s
+      At line 199 in file SysTick_Timer.s
    Uses
-      At line 236 in file SysTick_Timer.s
+      At line 260 in file SysTick_Timer.s
 Comment: write7 used once
-write8 000001C8
+write8 000001C0
 
 Symbol: write8
    Definitions
-      At line 189 in file SysTick_Timer.s
+      At line 212 in file SysTick_Timer.s
    Uses
-      At line 238 in file SysTick_Timer.s
+      At line 262 in file SysTick_Timer.s
 Comment: write8 used once
-write9 000001F2
+write9 000001EA
 
 
 
@@ -473,26 +524,26 @@ Relocatable symbols
 
 Symbol: write9
    Definitions
-      At line 202 in file SysTick_Timer.s
+      At line 225 in file SysTick_Timer.s
    Uses
-      At line 240 in file SysTick_Timer.s
+      At line 264 in file SysTick_Timer.s
 Comment: write9 used once
-writebosluk 0000021C
+writebosluk 00000214
 
 Symbol: writebosluk
    Definitions
-      At line 214 in file SysTick_Timer.s
+      At line 237 in file SysTick_Timer.s
    Uses
-      At line 97 in file SysTick_Timer.s
-      At line 111 in file SysTick_Timer.s
-      At line 123 in file SysTick_Timer.s
-      At line 136 in file SysTick_Timer.s
-      At line 148 in file SysTick_Timer.s
-      At line 160 in file SysTick_Timer.s
-      At line 173 in file SysTick_Timer.s
-      At line 186 in file SysTick_Timer.s
-      At line 199 in file SysTick_Timer.s
-      At line 212 in file SysTick_Timer.s
+      At line 122 in file SysTick_Timer.s
+      At line 134 in file SysTick_Timer.s
+      At line 146 in file SysTick_Timer.s
+      At line 159 in file SysTick_Timer.s
+      At line 171 in file SysTick_Timer.s
+      At line 183 in file SysTick_Timer.s
+      At line 196 in file SysTick_Timer.s
+      At line 209 in file SysTick_Timer.s
+      At line 222 in file SysTick_Timer.s
+      At line 235 in file SysTick_Timer.s
 
 16 symbols
 
@@ -505,7 +556,7 @@ Field_Address 20000400
 
 Symbol: Field_Address
    Definitions
-      At line 9 in file SysTick_Timer.s
+      At line 14 in file SysTick_Timer.s
    Uses
       None
 Comment: Field_Address unused
@@ -513,7 +564,7 @@ GPIO_PORTB_IN 400053C0
 
 Symbol: GPIO_PORTB_IN
    Definitions
-      At line 7 in file SysTick_Timer.s
+      At line 12 in file SysTick_Timer.s
    Uses
       None
 Comment: GPIO_PORTB_IN unused
@@ -521,7 +572,7 @@ GPIO_PORTB_OUT 4000503C
 
 Symbol: GPIO_PORTB_OUT
    Definitions
-      At line 8 in file SysTick_Timer.s
+      At line 13 in file SysTick_Timer.s
    Uses
       None
 Comment: GPIO_PORTB_OUT unused
@@ -529,36 +580,36 @@ NVIC_ST_CTRL E000E010
 
 Symbol: NVIC_ST_CTRL
    Definitions
-      At line 1 in file SysTick_Timer.s
+      At line 6 in file SysTick_Timer.s
    Uses
-      At line 23 in file SysTick_Timer.s
-      At line 34 in file SysTick_Timer.s
-      At line 54 in file SysTick_Timer.s
+      At line 41 in file SysTick_Timer.s
+      At line 52 in file SysTick_Timer.s
+      At line 86 in file SysTick_Timer.s
 
 NVIC_ST_CURRENT E000E018
 
 Symbol: NVIC_ST_CURRENT
    Definitions
-      At line 3 in file SysTick_Timer.s
+      At line 8 in file SysTick_Timer.s
    Uses
-      At line 29 in file SysTick_Timer.s
+      At line 47 in file SysTick_Timer.s
 Comment: NVIC_ST_CURRENT used once
 NVIC_ST_RELOAD E000E014
 
 Symbol: NVIC_ST_RELOAD
    Definitions
-      At line 2 in file SysTick_Timer.s
+      At line 7 in file SysTick_Timer.s
    Uses
-      At line 26 in file SysTick_Timer.s
+      At line 44 in file SysTick_Timer.s
 Comment: NVIC_ST_RELOAD used once
 OUT_PORTB_DC 40005008
 
 Symbol: OUT_PORTB_DC
    Definitions
-      At line 11 in file SysTick_Timer.s
+      At line 16 in file SysTick_Timer.s
    Uses
-      At line 70 in file SysTick_Timer.s
-Comment: OUT_PORTB_DC used once
+      None
+Comment: OUT_PORTB_DC unused
 OUT_PORTB_RESET 40005004
 
 
@@ -569,7 +620,7 @@ Absolute symbols
 
 Symbol: OUT_PORTB_RESET
    Definitions
-      At line 12 in file SysTick_Timer.s
+      At line 17 in file SysTick_Timer.s
    Uses
       None
 Comment: OUT_PORTB_RESET unused
@@ -577,15 +628,15 @@ RELOAD_VALUE 01499999
 
 Symbol: RELOAD_VALUE
    Definitions
-      At line 5 in file SysTick_Timer.s
+      At line 10 in file SysTick_Timer.s
    Uses
-      At line 27 in file SysTick_Timer.s
+      At line 45 in file SysTick_Timer.s
 Comment: RELOAD_VALUE used once
 SSI0_DR 40008008
 
 Symbol: SSI0_DR
    Definitions
-      At line 13 in file SysTick_Timer.s
+      At line 18 in file SysTick_Timer.s
    Uses
       None
 Comment: SSI0_DR unused
@@ -593,7 +644,7 @@ SSI0_SR 4000800C
 
 Symbol: SSI0_SR
    Definitions
-      At line 14 in file SysTick_Timer.s
+      At line 19 in file SysTick_Timer.s
    Uses
       None
 Comment: SSI0_SR unused
@@ -608,95 +659,95 @@ ADDRESS_CHANGE 00000000
 
 Symbol: ADDRESS_CHANGE
    Definitions
-      At line 19 in file SysTick_Timer.s
+      At line 29 in file SysTick_Timer.s
    Uses
-      At line 68 in file SysTick_Timer.s
+      At line 103 in file SysTick_Timer.s
 Comment: ADDRESS_CHANGE used once
 DATA_WRITE 00000000
 
 Symbol: DATA_WRITE
    Definitions
-      At line 18 in file SysTick_Timer.s
+      At line 28 in file SysTick_Timer.s
    Uses
-      At line 83 in file SysTick_Timer.s
-      At line 86 in file SysTick_Timer.s
-      At line 89 in file SysTick_Timer.s
-      At line 92 in file SysTick_Timer.s
-      At line 95 in file SysTick_Timer.s
-      At line 102 in file SysTick_Timer.s
-      At line 104 in file SysTick_Timer.s
-      At line 106 in file SysTick_Timer.s
-      At line 108 in file SysTick_Timer.s
-      At line 110 in file SysTick_Timer.s
-      At line 114 in file SysTick_Timer.s
-      At line 116 in file SysTick_Timer.s
-      At line 118 in file SysTick_Timer.s
-      At line 120 in file SysTick_Timer.s
-      At line 122 in file SysTick_Timer.s
+      At line 113 in file SysTick_Timer.s
+      At line 115 in file SysTick_Timer.s
+      At line 117 in file SysTick_Timer.s
+      At line 119 in file SysTick_Timer.s
+      At line 121 in file SysTick_Timer.s
+      At line 125 in file SysTick_Timer.s
       At line 127 in file SysTick_Timer.s
       At line 129 in file SysTick_Timer.s
       At line 131 in file SysTick_Timer.s
       At line 133 in file SysTick_Timer.s
-      At line 135 in file SysTick_Timer.s
+      At line 137 in file SysTick_Timer.s
       At line 139 in file SysTick_Timer.s
       At line 141 in file SysTick_Timer.s
       At line 143 in file SysTick_Timer.s
       At line 145 in file SysTick_Timer.s
-      At line 147 in file SysTick_Timer.s
-      At line 151 in file SysTick_Timer.s
-      At line 153 in file SysTick_Timer.s
-      At line 155 in file SysTick_Timer.s
-      At line 157 in file SysTick_Timer.s
-      At line 159 in file SysTick_Timer.s
+      At line 150 in file SysTick_Timer.s
+      At line 152 in file SysTick_Timer.s
+      At line 154 in file SysTick_Timer.s
+      At line 156 in file SysTick_Timer.s
+      At line 158 in file SysTick_Timer.s
+      At line 162 in file SysTick_Timer.s
       At line 164 in file SysTick_Timer.s
       At line 166 in file SysTick_Timer.s
       At line 168 in file SysTick_Timer.s
       At line 170 in file SysTick_Timer.s
-      At line 172 in file SysTick_Timer.s
-      At line 177 in file SysTick_Timer.s
-      At line 179 in file SysTick_Timer.s
-      At line 181 in file SysTick_Timer.s
-      At line 183 in file SysTick_Timer.s
-      At line 185 in file SysTick_Timer.s
-      At line 190 in file SysTick_Timer.s
-      At line 192 in file SysTick_Timer.s
-      At line 194 in file SysTick_Timer.s
-      At line 196 in file SysTick_Timer.s
-      At line 198 in file SysTick_Timer.s
+      At line 174 in file SysTick_Timer.s
+      At line 176 in file SysTick_Timer.s
+      At line 178 in file SysTick_Timer.s
+      At line 180 in file SysTick_Timer.s
+      At line 182 in file SysTick_Timer.s
+      At line 187 in file SysTick_Timer.s
+      At line 189 in file SysTick_Timer.s
+      At line 191 in file SysTick_Timer.s
+      At line 193 in file SysTick_Timer.s
+      At line 195 in file SysTick_Timer.s
+      At line 200 in file SysTick_Timer.s
+      At line 202 in file SysTick_Timer.s
+      At line 204 in file SysTick_Timer.s
+      At line 206 in file SysTick_Timer.s
+      At line 208 in file SysTick_Timer.s
+      At line 213 in file SysTick_Timer.s
+      At line 215 in file SysTick_Timer.s
+      At line 217 in file SysTick_Timer.s
+      At line 219 in file SysTick_Timer.s
+      At line 221 in file SysTick_Timer.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
-      At line 203 in file SysTick_Timer.s
-      At line 205 in file SysTick_Timer.s
-      At line 207 in file SysTick_Timer.s
-      At line 209 in file SysTick_Timer.s
-      At line 211 in file SysTick_Timer.s
-      At line 216 in file SysTick_Timer.s
+      At line 226 in file SysTick_Timer.s
+      At line 228 in file SysTick_Timer.s
+      At line 230 in file SysTick_Timer.s
+      At line 232 in file SysTick_Timer.s
+      At line 234 in file SysTick_Timer.s
+      At line 239 in file SysTick_Timer.s
 
 DELAY_1ms 00000000
 
 Symbol: DELAY_1ms
    Definitions
-      At line 20 in file SysTick_Timer.s
+      At line 30 in file SysTick_Timer.s
    Uses
-      At line 73 in file SysTick_Timer.s
-Comment: DELAY_1ms used once
+      None
+Comment: DELAY_1ms unused
 LOSER 00000000
 
 Symbol: LOSER
    Definitions
-      At line 45 in file SysTick_Timer.s
+      At line 75 in file SysTick_Timer.s
    Uses
-      At line 58 in file SysTick_Timer.s
-Comment: LOSER used once
+      None
+Comment: LOSER unused
 WINNER 00000000
 
 Symbol: WINNER
    Definitions
-      At line 44 in file SysTick_Timer.s
+      At line 74 in file SysTick_Timer.s
    Uses
       None
 Comment: WINNER unused

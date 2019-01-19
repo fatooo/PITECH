@@ -413,11 +413,6 @@
               <FilePath>.\DELAY_100ms.s</FilePath>
             </File>
             <File>
-              <FileName>IREM_CO.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\IREM_CO.s</FilePath>
-            </File>
-            <File>
               <FileName>Data_write.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\Data_write.s</FilePath>
@@ -453,9 +448,9 @@
               <FilePath>.\PUSHBUTTON.s</FilePath>
             </File>
             <File>
-              <FileName>PORTF_INIT.s</FileName>
+              <FileName>ADC_INIT.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\PORTF_INIT.s</FilePath>
+              <FilePath>.\ADC_INIT.s</FilePath>
             </File>
           </Files>
         </Group>
