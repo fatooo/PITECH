@@ -1,0 +1,129 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;LABEL  DIRECTIVE VALUE  COMMENT
+    2 00000000                 AREA             routines,   READONLY, CODE
+    3 00000000                 THUMB
+    4 00000000                 EXPORT           CONVRT
+    5 00000000         
+    6 00000000         CONVRT  PROC
+    7 00000000 B41F            PUSH{R0-R4}
+    8 00000002         
+    9 00000002         ;R4 contains hexadecimal number 
+   10 00000002         ;   LDR   R5,=0x20000400  ;Memory location of ASCII code
+                       s stars 
+   11 00000002 F04F 0000       LDR              R0,=0x00    ;Initilize R0 as ze
+                                                            ro 
+   12 00000006 F04F 010A 
+                       loop    MOV              R1,#10      ;Make R1 as A
+   13 0000000A FBB4 F3F1       UDIV             R3, R4, R1  ;Divide R4(dividend
+                                                            ) by R1(divider) sa
+                                                            ve value in R3(divi
+                                                            sion) 
+   14 0000000E FB01 F103       MUL              R1, R3      ;R3*R1->R1
+   15 00000012 EBA4 0201       SUB              R2, R4, R1  ;By subtraction, ge
+                                                            t remainder as the 
+                                                            first least sig dig
+                                                            it of decimal num
+   16 00000016 F102 0230       ADD              R2,#0x30    ;Add 0x30 and have 
+                                                            ASCII equivalent
+   17 0000001A         
+   18 0000001A B404            PUSH{R2}                     ;PUSH R2 in order t
+                                                            o write decimal in 
+                                                            proper order
+   19 0000001C F100 0001       ADD              R0,#1       ;R0 is counter of h
+                                                            ow many digits deci
+                                                            mal number has   
+   20 00000020 B10B            CBZ              R3,  End1   ;If R3=0 go to End1
+                                                            
+   21 00000022 461C            MOV              R4, R3      ;Save division into
+                                                             dividend to get ne
+                                                            xt decimal digit
+   22 00000024 E7EF            B                loop
+   23 00000026         
+   24 00000026 BC04    End1    POP{R2}                      ;POP R2 containing 
+                                                            ASCII codes
+   25 00000028 F805 2B01       STRB             R2,[R5],#1  ;Store R2 into memo
+                                                            ry pointed by R5 an
+                                                            d increment memory 
+                                                            location
+   26 0000002C F1A0 0001       SUB              R0,#1       ;Check R0 counter
+   27 00000030 B100            CBZ              R0, End2
+   28 00000032 E7F8            B                End1
+   29 00000034         
+   30 00000034         End2                                 ;LDR   R0,=0x09  
+   31 00000034         ;STRB  R0,[R5] ,#1   ;Put 0x04 at the end of the string 
+                       for ending OutStr
+   32 00000034         
+   33 00000034         ;LDR  R5,=0x20000400
+   34 00000034         
+   35 00000034                 ENDP
+   36 00000034         
+   37 00000034 BC1F            POP{R0-R4}
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   38 00000036 4770            BX               LR
+   39 00000038         
+   40 00000038                 ALIGN
+   41 00000038                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\convrt.d -o.\objects\convrt.o -I.\RTE\_Target_1 -ID:\
+Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\In
+clude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --pr
+edefine="TM4C123GH6PM SETA 1" --list=.\listings\convrt.lst CONVRT.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+CONVRT 00000000
+
+Symbol: CONVRT
+   Definitions
+      At line 6 in file CONVRT.s
+   Uses
+      At line 4 in file CONVRT.s
+Comment: CONVRT used once
+End1 00000026
+
+Symbol: End1
+   Definitions
+      At line 24 in file CONVRT.s
+   Uses
+      At line 20 in file CONVRT.s
+      At line 28 in file CONVRT.s
+
+End2 00000034
+
+Symbol: End2
+   Definitions
+      At line 30 in file CONVRT.s
+   Uses
+      At line 27 in file CONVRT.s
+Comment: End2 used once
+loop 00000006
+
+Symbol: loop
+   Definitions
+      At line 12 in file CONVRT.s
+   Uses
+      At line 22 in file CONVRT.s
+Comment: loop used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 2 in file CONVRT.s
+   Uses
+      None
+Comment: routines unused
+5 symbols
+339 symbols in table
