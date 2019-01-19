@@ -30,7 +30,6 @@ Section Cross References
     loser.o(routines) refers to data_write.o(routines) for DATA_WRITE
     loser.o(routines) refers to address_change.o(routines) for ADDRESS_CHANGE
     pushbutton.o(routines) refers to adc_init.o(routines) for ADC_READ_SHIP
-    pushbutton.o(routines) refers to winner.o(routines) for WINNER
     winorlose.o(routines) refers to loser.o(routines) for LOSER
     winorlose.o(routines) refers to winner.o(routines) for WINNER
 
@@ -100,10 +99,10 @@ Image Symbol Table
     $v0                                      0x000005a8   Number         0  systick_timer.o(routines)
     routines                                 0x0000081c   Section      432  winner.o(routines)
     $v0                                      0x0000081c   Number         0  winner.o(routines)
-    routines                                 0x000009cc   Section      212  pushbutton.o(routines)
+    routines                                 0x000009cc   Section      232  pushbutton.o(routines)
     $v0                                      0x000009cc   Number         0  pushbutton.o(routines)
-    routines                                 0x00000aa0   Section      504  adc_init.o(routines)
-    $v0                                      0x00000aa0   Number         0  adc_init.o(routines)
+    routines                                 0x00000ab4   Section      504  adc_init.o(routines)
+    $v0                                      0x00000ab4   Number         0  adc_init.o(routines)
     STACK                                    0x20000000   Section     1024  startup.o(STACK)
     StackMem                                 0x20000000   Data           0  startup.o(STACK)
 
@@ -250,14 +249,14 @@ Image Symbol Table
     DELAY_1ms                                0x00000591   Thumb Code     0  delay_1ms.o(routines)
     INIT_SYSTICK                             0x000005a9   Thumb Code    38  systick_timer.o(routines)
     My_SYSTICK                               0x000005cf   Thumb Code   572  systick_timer.o(routines)
-    WINNER                                   0x0000081d   Thumb Code   430  winner.o(routines)
+    WINNER                                   0x0000081d   Thumb Code   432  winner.o(routines)
     PORTF_INIT                               0x000009cd   Thumb Code    84  pushbutton.o(routines)
     delay                                    0x00000a21   Thumb Code     6  pushbutton.o(routines)
     PortF_Input                              0x00000a27   Thumb Code    16  pushbutton.o(routines)
-    PUSHBUTTON                               0x00000a37   Thumb Code    56  pushbutton.o(routines)
-    ADC_INIT                                 0x00000aa1   Thumb Code   194  adc_init.o(routines)
-    ADC_READ_SHIP                            0x00000b63   Thumb Code   108  adc_init.o(routines)
-    ADC_READ_CURSOR                          0x00000bcf   Thumb Code   108  adc_init.o(routines)
+    PUSHBUTTON                               0x00000a37   Thumb Code    74  pushbutton.o(routines)
+    ADC_INIT                                 0x00000ab5   Thumb Code   194  adc_init.o(routines)
+    ADC_READ_SHIP                            0x00000b77   Thumb Code   108  adc_init.o(routines)
+    ADC_READ_CURSOR                          0x00000be3   Thumb Code   108  adc_init.o(routines)
 
 
 
@@ -267,9 +266,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000026d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00001098, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x000010ac, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000c98, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x00000000, Load base: 0x00000000, Size: 0x00000cac, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -286,18 +285,18 @@ Memory Map of the image
     0x00000590   0x00000590   0x00000018   Code   RO           45    routines            delay_1ms.o
     0x000005a8   0x000005a8   0x00000274   Code   RO           48    routines            systick_timer.o
     0x0000081c   0x0000081c   0x000001b0   Code   RO           52    routines            winner.o
-    0x000009cc   0x000009cc   0x000000d4   Code   RO           60    routines            pushbutton.o
-    0x00000aa0   0x00000aa0   0x000001f8   Code   RO           64    routines            adc_init.o
+    0x000009cc   0x000009cc   0x000000e8   Code   RO           60    routines            pushbutton.o
+    0x00000ab4   0x00000ab4   0x000001f8   Code   RO           64    routines            adc_init.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000c98, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x00000cac, Size: 0x00000400, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x00000c98   0x00000400   Data   RW           13    STACK               startup.o
+    0x20000000   0x00000cac   0x00000400   Data   RW           13    STACK               startup.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000400, Load base: 0x00001098, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000400, Load base: 0x000010ac, Size: 0x00000000, Max: 0xffffffff, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
@@ -316,15 +315,15 @@ Image component sizes
         24          0          0          0          0        272   delay_1ms.o
        144          2          0          0          0        452   emptyplayfield.o
         72         10          0          0          0        436   main.o
-       212         50          0          0          0        568   pushbutton.o
+       232         52          0          0          0        584   pushbutton.o
        180         30          0          0          0        460   screen_init.o
        200         50          0          0          0        456   spi_config.o
        664        624          0       1024          0        796   startup.o
        628         18          0          0          0        616   systick_timer.o
-       432          2          0          0          0        496   winner.o
+       432          0          0          0          0        496   winner.o
 
     ----------------------------------------------------------------------
-      3216        908          0       1024          0       6308   Object Totals
+      3236        908          0       1024          0       6324   Object Totals
          0          0          0          0          0          0   (incl. Generated)
          0          0          0          0          0          0   (incl. Padding)
 
@@ -354,15 +353,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3224        908          0       1024          0       5460   Grand Totals
-      3224        908          0       1024          0       5460   ELF Image Totals
-      3224        908          0       1024          0          0   ROM Totals
+      3244        908          0       1024          0       5476   Grand Totals
+      3244        908          0       1024          0       5476   ELF Image Totals
+      3244        908          0       1024          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3224 (   3.15kB)
+    Total RO  Size (Code + RO Data)                 3244 (   3.17kB)
     Total RW  Size (RW Data + ZI Data)              1024 (   1.00kB)
-    Total ROM Size (Code + RO Data + RW Data)       4248 (   4.15kB)
+    Total ROM Size (Code + RO Data + RW Data)       4268 (   4.17kB)
 
 ==============================================================================
 

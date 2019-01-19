@@ -15,23 +15,23 @@ ARM Macro Assembler    Page 1
     6 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
     7 00000000         ; ADC Registers
     8 00000000         
-    9 00000000 20001000 
-                       SHIP1   EQU              0x20001000
-   10 00000000 20001010 
-                       SHIP2   EQU              0x20001010
-   11 00000000 20001020 
-                       SHIP3   EQU              0x20001020
-   12 00000000 20001030 
-                       SHIP4   EQU              0x20001030
+    9 00000000 20001100 
+                       SHIP1   EQU              0x20001100
+   10 00000000 20001110 
+                       SHIP2   EQU              0x20001110
+   11 00000000 20001120 
+                       SHIP3   EQU              0x20001120
+   12 00000000 20001130 
+                       SHIP4   EQU              0x20001130
    13 00000000         
-   14 00000000 20001050 
-                       CURSOR1 EQU              0x20001050
-   15 00000000 20001060 
-                       CURSOR2 EQU              0x20001060
-   16 00000000 20001070 
-                       CURSOR3 EQU              0x20001070
-   17 00000000 20001080 
-                       CURSOR4 EQU              0x20001080
+   14 00000000 20001150 
+                       CURSOR1 EQU              0x20001150
+   15 00000000 20001160 
+                       CURSOR2 EQU              0x20001160
+   16 00000000 20001170 
+                       CURSOR3 EQU              0x20001170
+   17 00000000 20001180 
+                       CURSOR4 EQU              0x20001180
    18 00000000         
    19 00000000         ;*******************************************************
                        ********
@@ -82,10 +82,10 @@ ARM Macro Assembler    Page 2
    46 0000000C 4B24            LDR              R3,= CURSOR1 ; R3 KEEPS CURSOR 
                                                             LOCATION FOR FIRST 
                                                             CURSOR
-   47 0000000E 2A01            CMP              R2, #1      ; CHECK IF IT IS BA
+   47 0000000E 2A02            CMP              R2, #2      ; CHECK IF IT IS BA
                                                             TTLESHIP 
    48 00000010 D001            BEQ              BATTLESHIP
-   49 00000012 2A02            CMP              R2, #2
+   49 00000012 2A01            CMP              R2, #1
    50 00000014 D018            BEQ              CIVILIAN
    51 00000016         ********
    52 00000016         ; R0 KEEPS THE SHIP LOCATION IN THE MOMORY
@@ -147,8 +147,8 @@ ARM Macro Assembler    Page 3
                                                             LAST CURSOR LOCATIO
                                                             N
    84 00000040 D022            BEQ              LOSE
-   85 00000042 F103 030A       ADD              R3,R3, #10  ; INCREASE THE CURS
-                                                            OR LOCATION
+   85 00000042 F103 0310       ADD              R3,R3, #0x10 ; INCREASE THE CUR
+                                                            SOR LOCATION
    86 00000046 E7E6            B                BATTLESHIP
    87 00000048         
    88 00000048         
@@ -208,8 +208,8 @@ ARM Macro Assembler    Page 4
                                                             LAST CURSOR LOCATIO
                                                             N
   117 00000072 D002            BEQ              checknewship
-  118 00000074 F103 030A       ADD              R3,R3, #10  ; INCREASE THE CURS
-                                                            OR LOCATION
+  118 00000074 F103 0310       ADD              R3,R3, #0x10 ; INCREASE THE CUR
+                                                            SOR LOCATION
   119 00000078 E7E6            B                CIVILIAN
   120 0000007A         
   121 0000007A         
@@ -222,8 +222,8 @@ ARM Macro Assembler    Page 4
                                                             LAST CURSOR LOCATIO
                                                             N
   125 00000080 D005            BEQ              WIN
-  126 00000082 F100 000A       ADD              R0,R0, #10  ; INCREASE THE CURS
-                                                            OR LOCATION
+  126 00000082 F100 0010       ADD              R0,R0, #0x10 ; INCREASE THE CUR
+                                                            SOR LOCATION
   127 00000086 E7BE            B                nextship
   128 00000088         
   129 00000088         
@@ -244,8 +244,8 @@ ARM Macro Assembler    Page 4
   142 0000009C                 ENDP
   143 0000009C                 ALIGN
   144 0000009C                 END
-              20001000 
-              20001050 
+              20001100 
+              20001150 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\winorlose.d -o.\objects\winorlose.o -I.\RTE\_Target_1
  -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\
@@ -370,7 +370,7 @@ Comment: routines unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
-CURSOR1 20001050
+CURSOR1 20001150
 
 Symbol: CURSOR1
    Definitions
@@ -378,7 +378,7 @@ Symbol: CURSOR1
    Uses
       At line 46 in file WINORLOSE.s
 Comment: CURSOR1 used once
-CURSOR2 20001060
+CURSOR2 20001160
 
 Symbol: CURSOR2
    Definitions
@@ -386,7 +386,7 @@ Symbol: CURSOR2
    Uses
       None
 Comment: CURSOR2 unused
-CURSOR3 20001070
+CURSOR3 20001170
 
 Symbol: CURSOR3
    Definitions
@@ -394,7 +394,7 @@ Symbol: CURSOR3
    Uses
       None
 Comment: CURSOR3 unused
-CURSOR4 20001080
+CURSOR4 20001180
 
 Symbol: CURSOR4
    Definitions
@@ -402,7 +402,7 @@ Symbol: CURSOR4
    Uses
       None
 Comment: CURSOR4 unused
-SHIP1 20001000
+SHIP1 20001100
 
 Symbol: SHIP1
    Definitions
@@ -410,7 +410,7 @@ Symbol: SHIP1
    Uses
       At line 41 in file WINORLOSE.s
 Comment: SHIP1 used once
-SHIP2 20001010
+SHIP2 20001110
 
 Symbol: SHIP2
    Definitions
@@ -418,7 +418,7 @@ Symbol: SHIP2
    Uses
       None
 Comment: SHIP2 unused
-SHIP3 20001020
+SHIP3 20001120
 
 Symbol: SHIP3
    Definitions
@@ -426,7 +426,7 @@ Symbol: SHIP3
    Uses
       None
 Comment: SHIP3 unused
-SHIP4 20001030
+SHIP4 20001130
 
 Symbol: SHIP4
 
