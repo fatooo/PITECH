@@ -33,6 +33,8 @@ SSI0_SR				EQU			0x4000800C
 			EXTERN		INIT_SYSTICK
 			EXTERN		My_SYSTICK
 			EXTERN		ADDRESS_CHANGE
+			EXTERN 		PUSHBUTTON
+			EXTERN PORTF_INIT
 			EXPORT  	__main					; Make available
 
 ;***************************************************************
@@ -50,8 +52,20 @@ __main		PROC
 			BL			EMP_FIELD
 			BL			SPI_CONFIG
 			BL 			SCREEN_INIT
+			MOV			R6,#600
+			LDR			R5,=OUT_PORTB_DC
+			MOV			R1,#0xFF
+			STR			R1,[R5]
+loop		MOV			R4,#0x00
+			BL			DATA_WRITE
+			SUBS		R6,R6,#1
+			BNE			loop
+			LDR			R5,=Field_Address
+			BL			EMP_FIELD
 			BL			INIT_SYSTICK
-
+			BL   		PORTF_INIT	
+			BL			PUSHBUTTON
+			
 
 			
 		
@@ -69,7 +83,7 @@ __main		PROC
 ;			STR			R1,[R5]
 ;			BL			DELAY_1ms
 			
-;loop		MOV			R4,#0x00
+;loop		MOV			R4,#0x01
 ;			BL			DATA_WRITE
 ;			SUBS		R6,R6,#1
 ;			BNE			loop
@@ -77,7 +91,8 @@ __main		PROC
 ;			BL			IREM_CO
 			
 
-END_code	B			END_code
+END_code	BL PUSHBUTTON
+				B			END_code
 			
 ;***************************************************************
 ; End of the program  section

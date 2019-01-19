@@ -1,0 +1,335 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    2 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+    3 00000000                 AREA             routines,READONLY,CODE
+    4 00000000                 THUMB
+    5 00000000                 ALIGN
+    6 00000000                 EXTERN           DELAY_1ms
+    7 00000000                 EXTERN           DELAY_100ms
+    8 00000000                 EXTERN           DATA_WRITE
+    9 00000000                 EXTERN           ADDRESS_CHANGE
+   10 00000000                 EXPORT           WINNER
+   11 00000000         
+   12 00000000         ;*******************************************************
+                       ********
+   13 00000000         ; YOU WIN!! IS GOING TO BE SHOWN ON SCREEN
+   14 00000000         ; 
+   15 00000000         ; 
+   16 00000000         ;*******************************************************
+                       ******** 
+   17 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   18 00000000         
+   19 00000000         WINNER  PROC
+   20 00000000         
+   21 00000000 B500            PUSH             {LR}
+   22 00000002 F44F 7616       MOV              R6,#600
+   23 00000006 F04F 0400 
+                       loop    MOV              R4,#0x00
+   24 0000000A F7FF FFFE       BL               DATA_WRITE
+   25 0000000E 1E76            SUBS             R6,R6,#1
+   26 00000010 D1F9            BNE              loop
+   27 00000012         
+   28 00000012         
+   29 00000012 F44F 7406       LDR              R4,=0x0218
+   30 00000016 F7FF FFFE       BL               ADDRESS_CHANGE
+   31 0000001A 4D68            LDR              R5,=OUT_PORTB_DC
+   32 0000001C F04F 01FF       MOV              R1,#0xFF
+   33 00000020 6029            STR              R1,[R5]
+   34 00000022 F7FF FFFE       BL               DELAY_1ms
+   35 00000026         
+   36 00000026         ;{0x07, 0x08, 0x70, 0x08, 0x07} // 59 Y
+   37 00000026 F04F 0407       MOV              R4, #0x07
+   38 0000002A F7FF FFFE       BL               DATA_WRITE
+   39 0000002E F04F 0408       MOV              r4,#0x08
+   40 00000032 F7FF FFFE       BL               DATA_WRITE
+   41 00000036 F04F 0470       MOV              R4, #0x70
+   42 0000003A F7FF FFFE       BL               DATA_WRITE
+   43 0000003E F04F 0408       MOV              R4, #0x08
+   44 00000042 F7FF FFFE       BL               DATA_WRITE
+   45 00000046 F04F 0407       MOV              R4, #0x07
+   46 0000004A F7FF FFFE       BL               DATA_WRITE
+   47 0000004E         
+   48 0000004E         
+   49 0000004E         ;0x3e, 0x41, 0x41, 0x41, 0x3e} // 4f O
+   50 0000004E         
+   51 0000004E F04F 043E       MOV              R4, #0x3E
+   52 00000052 F7FF FFFE       BL               DATA_WRITE
+   53 00000056 F04F 0441       MOV              r4,#0x41
+   54 0000005A F7FF FFFE       BL               DATA_WRITE
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   55 0000005E F04F 0441       MOV              R4, #0x41
+   56 00000062 F7FF FFFE       BL               DATA_WRITE
+   57 00000066 F04F 0441       MOV              R4, #0x41
+   58 0000006A F7FF FFFE       BL               DATA_WRITE
+   59 0000006E F04F 043E       MOV              R4, #0x3E
+   60 00000072 F7FF FFFE       BL               DATA_WRITE
+   61 00000076         ;{0x3f, 0x40, 0x40, 0x40, 0x3f} // 55 U
+   62 00000076 F04F 043F       MOV              R4, #0x3F
+   63 0000007A F7FF FFFE       BL               DATA_WRITE
+   64 0000007E F04F 0440       MOV              r4,#0x40
+   65 00000082 F7FF FFFE       BL               DATA_WRITE
+   66 00000086 F04F 0440       MOV              R4, #0x40
+   67 0000008A F7FF FFFE       BL               DATA_WRITE
+   68 0000008E F04F 0440       MOV              R4, #0x40
+   69 00000092 F7FF FFFE       BL               DATA_WRITE
+   70 00000096 F04F 043F       MOV              R4, #0x3F
+   71 0000009A F7FF FFFE       BL               DATA_WRITE
+   72 0000009E         
+   73 0000009E F04F 0400       MOV              R4 , #00
+   74 000000A2 F7FF FFFE       BL               DATA_WRITE
+   75 000000A6 F04F 0400       MOV              R4 , #00
+   76 000000AA F7FF FFFE       BL               DATA_WRITE
+   77 000000AE F04F 0400       MOV              R4 , #00
+   78 000000B2 F7FF FFFE       BL               DATA_WRITE
+   79 000000B6 F04F 0400       MOV              R4 , #00
+   80 000000BA F7FF FFFE       BL               DATA_WRITE
+   81 000000BE F04F 0400       MOV              R4 , #00
+   82 000000C2 F7FF FFFE       BL               DATA_WRITE
+   83 000000C6         
+   84 000000C6         
+   85 000000C6         
+   86 000000C6         ;{0x3f, 0x40, 0x38, 0x40, 0x3f} // 57 W
+   87 000000C6 F04F 043F       MOV              R4, #0x3F
+   88 000000CA F7FF FFFE       BL               DATA_WRITE
+   89 000000CE F04F 0440       MOV              r4,#0x40
+   90 000000D2 F7FF FFFE       BL               DATA_WRITE
+   91 000000D6 F04F 0438       MOV              R4, #0x38
+   92 000000DA F7FF FFFE       BL               DATA_WRITE
+   93 000000DE F04F 0440       MOV              R4, #0x40
+   94 000000E2 F7FF FFFE       BL               DATA_WRITE
+   95 000000E6 F04F 043F       MOV              R4, #0x3F
+   96 000000EA F7FF FFFE       BL               DATA_WRITE
+   97 000000EE         ;{0x00, 0x41, 0x7f, 0x41, 0x00} // 49 I
+   98 000000EE         
+   99 000000EE F04F 0400       MOV              R4, #0x00
+  100 000000F2 F7FF FFFE       BL               DATA_WRITE
+  101 000000F6 F04F 0441       MOV              r4,#0x41
+  102 000000FA F7FF FFFE       BL               DATA_WRITE
+  103 000000FE F04F 047F       MOV              R4, #0x7F
+  104 00000102 F7FF FFFE       BL               DATA_WRITE
+  105 00000106 F04F 0441       MOV              R4, #0x41
+  106 0000010A F7FF FFFE       BL               DATA_WRITE
+  107 0000010E F04F 0400       MOV              R4, #0x00
+  108 00000112 F7FF FFFE       BL               DATA_WRITE
+  109 00000116         
+  110 00000116         ;{0x7f, 0x04, 0x08, 0x10, 0x7f} // 4e N  
+  111 00000116         
+  112 00000116 F04F 047F       MOV              R4, #0x7F
+  113 0000011A F7FF FFFE       BL               DATA_WRITE
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+  114 0000011E F04F 0404       MOV              r4,#0x04
+  115 00000122 F7FF FFFE       BL               DATA_WRITE
+  116 00000126 F04F 0408       MOV              R4, #0x08
+  117 0000012A F7FF FFFE       BL               DATA_WRITE
+  118 0000012E F04F 0410       MOV              R4, #0x10
+  119 00000132 F7FF FFFE       BL               DATA_WRITE
+  120 00000136 F04F 047F       MOV              R4, #0x7F
+  121 0000013A F7FF FFFE       BL               DATA_WRITE
+  122 0000013E         
+  123 0000013E         ;{0x00, 0x00, 0x5f, 0x00, 0x00} // 21 !
+  124 0000013E         
+  125 0000013E F04F 0400       MOV              R4, #0x00
+  126 00000142 F7FF FFFE       BL               DATA_WRITE
+  127 00000146 F04F 0400       MOV              r4,#0x00
+  128 0000014A F7FF FFFE       BL               DATA_WRITE
+  129 0000014E F04F 045F       MOV              R4, #0x5F
+  130 00000152 F7FF FFFE       BL               DATA_WRITE
+  131 00000156 F04F 0400       MOV              R4, #0x00
+  132 0000015A F7FF FFFE       BL               DATA_WRITE
+  133 0000015E F04F 0400       MOV              R4, #0x00
+  134 00000162 F7FF FFFE       BL               DATA_WRITE
+  135 00000166         
+  136 00000166 F04F 0400       MOV              R4, #0x00
+  137 0000016A F7FF FFFE       BL               DATA_WRITE
+  138 0000016E F04F 0400       MOV              r4,#0x00
+  139 00000172 F7FF FFFE       BL               DATA_WRITE
+  140 00000176 F04F 045F       MOV              R4, #0x5F
+  141 0000017A F7FF FFFE       BL               DATA_WRITE
+  142 0000017E F04F 0400       MOV              R4, #0x00
+  143 00000182 F7FF FFFE       BL               DATA_WRITE
+  144 00000186 F04F 0400       MOV              R4, #0x00
+  145 0000018A F7FF FFFE       BL               DATA_WRITE
+  146 0000018E F04F 0400       MOV              R4, #0x00
+  147 00000192 F7FF FFFE       BL               DATA_WRITE
+  148 00000196 F04F 0400       MOV              r4,#0x00
+  149 0000019A F7FF FFFE       BL               DATA_WRITE
+  150 0000019E F04F 045F       MOV              R4, #0x5F
+  151 000001A2 F7FF FFFE       BL               DATA_WRITE
+  152 000001A6 F04F 0400       MOV              R4, #0x00
+  153 000001AA F7FF FFFE       BL               DATA_WRITE
+  154 000001AE F04F 0400       MOV              R4, #0x00
+  155 000001B2 F7FF FFFE       BL               DATA_WRITE
+  156 000001B6         
+  157 000001B6         
+  158 000001B6         
+  159 000001B6         
+  160 000001B6 F85D EB04       POP              {LR}
+  161 000001BA 4770            BX               LR
+  162 000001BC                 ENDP
+  163 000001BC                 ALIGN
+  164 000001BC                 END
+              40005008 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\winner.d -o.\objects\winner.o -I.\RTE\_Target_1 -IC:\
+Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CM
+SIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526
+" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\winner.lst winner.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+WINNER 00000000
+
+Symbol: WINNER
+   Definitions
+      At line 19 in file winner.s
+   Uses
+      At line 10 in file winner.s
+Comment: WINNER used once
+loop 00000006
+
+Symbol: loop
+   Definitions
+      At line 23 in file winner.s
+   Uses
+      At line 26 in file winner.s
+Comment: loop used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 3 in file winner.s
+   Uses
+      None
+Comment: routines unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 1 in file winner.s
+   Uses
+      At line 31 in file winner.s
+Comment: OUT_PORTB_DC used once
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 9 in file winner.s
+   Uses
+      At line 30 in file winner.s
+Comment: ADDRESS_CHANGE used once
+DATA_WRITE 00000000
+
+Symbol: DATA_WRITE
+   Definitions
+      At line 8 in file winner.s
+   Uses
+      At line 24 in file winner.s
+      At line 38 in file winner.s
+      At line 40 in file winner.s
+      At line 42 in file winner.s
+      At line 44 in file winner.s
+      At line 46 in file winner.s
+      At line 52 in file winner.s
+      At line 54 in file winner.s
+      At line 56 in file winner.s
+      At line 58 in file winner.s
+      At line 60 in file winner.s
+      At line 63 in file winner.s
+      At line 65 in file winner.s
+      At line 67 in file winner.s
+      At line 69 in file winner.s
+      At line 71 in file winner.s
+      At line 74 in file winner.s
+      At line 76 in file winner.s
+      At line 78 in file winner.s
+      At line 80 in file winner.s
+      At line 82 in file winner.s
+      At line 88 in file winner.s
+      At line 90 in file winner.s
+      At line 92 in file winner.s
+      At line 94 in file winner.s
+      At line 96 in file winner.s
+      At line 100 in file winner.s
+      At line 102 in file winner.s
+      At line 104 in file winner.s
+      At line 106 in file winner.s
+      At line 108 in file winner.s
+      At line 113 in file winner.s
+      At line 115 in file winner.s
+      At line 117 in file winner.s
+      At line 119 in file winner.s
+      At line 121 in file winner.s
+      At line 126 in file winner.s
+      At line 128 in file winner.s
+      At line 130 in file winner.s
+      At line 132 in file winner.s
+      At line 134 in file winner.s
+      At line 137 in file winner.s
+      At line 139 in file winner.s
+      At line 141 in file winner.s
+      At line 143 in file winner.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+      At line 145 in file winner.s
+      At line 147 in file winner.s
+      At line 149 in file winner.s
+      At line 151 in file winner.s
+      At line 153 in file winner.s
+      At line 155 in file winner.s
+
+DELAY_100ms 00000000
+
+Symbol: DELAY_100ms
+   Definitions
+      At line 7 in file winner.s
+   Uses
+      None
+Comment: DELAY_100ms unused
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 6 in file winner.s
+   Uses
+      At line 34 in file winner.s
+Comment: DELAY_1ms used once
+4 symbols
+344 symbols in table

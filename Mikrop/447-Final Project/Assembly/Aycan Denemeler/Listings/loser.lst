@@ -1,0 +1,248 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    2 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+    3 00000000                 AREA             routines,READONLY,CODE
+    4 00000000                 THUMB
+    5 00000000                 ALIGN
+    6 00000000                 EXTERN           DELAY_1ms
+    7 00000000                 EXTERN           DELAY_100ms
+    8 00000000                 EXTERN           DATA_WRITE
+    9 00000000                 EXTERN           ADDRESS_CHANGE
+   10 00000000                 EXPORT           LOSER
+   11 00000000         
+   12 00000000         ;*******************************************************
+                       ********
+   13 00000000         ; LOSER IS GOING TO BE SHOWN ON SCREEN
+   14 00000000         ; 
+   15 00000000         ; 
+   16 00000000         ;*******************************************************
+                       ******** 
+   17 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   18 00000000         
+   19 00000000         LOSER   PROC
+   20 00000000         
+   21 00000000 B500            PUSH             {LR}
+   22 00000002 F44F 7616       MOV              R6,#600
+   23 00000006 F04F 0400 
+                       loop    MOV              R4,#0x00
+   24 0000000A F7FF FFFE       BL               DATA_WRITE
+   25 0000000E 1E76            SUBS             R6,R6,#1
+   26 00000010 D1F9            BNE              loop
+   27 00000012         
+   28 00000012         
+   29 00000012 F240 241F       LDR              R4,=0x021F
+   30 00000016 F7FF FFFE       BL               ADDRESS_CHANGE
+   31 0000001A 4D36            LDR              R5,=OUT_PORTB_DC
+   32 0000001C F04F 01FF       MOV              R1,#0xFF
+   33 00000020 6029            STR              R1,[R5]
+   34 00000022 F7FF FFFE       BL               DELAY_1ms
+   35 00000026         
+   36 00000026         ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
+   37 00000026 F04F 047F       MOV              R4, #0x7F
+   38 0000002A F7FF FFFE       BL               DATA_WRITE
+   39 0000002E F04F 0440       MOV              r4,#0x40
+   40 00000032 F7FF FFFE       BL               DATA_WRITE
+   41 00000036 F04F 0440       MOV              R4, #0x40
+   42 0000003A F7FF FFFE       BL               DATA_WRITE
+   43 0000003E F04F 0440       MOV              R4, #0x40
+   44 00000042 F7FF FFFE       BL               DATA_WRITE
+   45 00000046 F04F 0440       MOV              R4, #0x40
+   46 0000004A F7FF FFFE       BL               DATA_WRITE
+   47 0000004E         
+   48 0000004E         
+   49 0000004E         ;0x3e, 0x41, 0x41, 0x41, 0x3e} // 4f O
+   50 0000004E         
+   51 0000004E F04F 043E       MOV              R4, #0x3E
+   52 00000052 F7FF FFFE       BL               DATA_WRITE
+   53 00000056 F04F 0441       MOV              r4,#0x41
+   54 0000005A F7FF FFFE       BL               DATA_WRITE
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   55 0000005E F04F 0441       MOV              R4, #0x41
+   56 00000062 F7FF FFFE       BL               DATA_WRITE
+   57 00000066 F04F 0441       MOV              R4, #0x41
+   58 0000006A F7FF FFFE       BL               DATA_WRITE
+   59 0000006E F04F 043E       MOV              R4, #0x3E
+   60 00000072 F7FF FFFE       BL               DATA_WRITE
+   61 00000076         ;  ,{0x46, 0x49, 0x49, 0x49, 0x31} // 53 S
+   62 00000076 F04F 0446       MOV              R4, #0x46
+   63 0000007A F7FF FFFE       BL               DATA_WRITE
+   64 0000007E F04F 0449       MOV              r4,#0x49
+   65 00000082 F7FF FFFE       BL               DATA_WRITE
+   66 00000086 F04F 0449       MOV              R4, #0x49
+   67 0000008A F7FF FFFE       BL               DATA_WRITE
+   68 0000008E F04F 0449       MOV              R4, #0x49
+   69 00000092 F7FF FFFE       BL               DATA_WRITE
+   70 00000096 F04F 0431       MOV              R4, #0x31
+   71 0000009A F7FF FFFE       BL               DATA_WRITE
+   72 0000009E         
+   73 0000009E         
+   74 0000009E         
+   75 0000009E         
+   76 0000009E         ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
+   77 0000009E F04F 047F       MOV              R4, #0x7F
+   78 000000A2 F7FF FFFE       BL               DATA_WRITE
+   79 000000A6 F04F 0449       MOV              r4,#0x49
+   80 000000AA F7FF FFFE       BL               DATA_WRITE
+   81 000000AE F04F 0449       MOV              R4, #0x49
+   82 000000B2 F7FF FFFE       BL               DATA_WRITE
+   83 000000B6 F04F 0449       MOV              R4, #0x49
+   84 000000BA F7FF FFFE       BL               DATA_WRITE
+   85 000000BE F04F 0441       MOV              R4, #0x41
+   86 000000C2 F7FF FFFE       BL               DATA_WRITE
+   87 000000C6         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R
+   88 000000C6         
+   89 000000C6 F04F 047F       MOV              R4, #0x7F
+   90 000000CA F7FF FFFE       BL               DATA_WRITE
+   91 000000CE F04F 0409       MOV              r4,#0x09
+   92 000000D2 F7FF FFFE       BL               DATA_WRITE
+   93 000000D6 F04F 0419       MOV              R4, #0x19
+   94 000000DA F7FF FFFE       BL               DATA_WRITE
+   95 000000DE F04F 0429       MOV              R4, #0x29
+   96 000000E2 F7FF FFFE       BL               DATA_WRITE
+   97 000000E6 F04F 0446       MOV              R4, #0x46
+   98 000000EA F7FF FFFE       BL               DATA_WRITE
+   99 000000EE         
+  100 000000EE         
+  101 000000EE         
+  102 000000EE         
+  103 000000EE         
+  104 000000EE F85D EB04       POP              {LR}
+  105 000000F2 4770            BX               LR
+  106 000000F4                 ENDP
+  107 000000F4                 ALIGN
+  108 000000F4                 END
+              40005008 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\loser.d -o.\objects\loser.o -I.\RTE\_Target_1 -IC:\Ke
+il_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSI
+S\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" 
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+--predefine="TM4C123GH6PM SETA 1" --list=.\listings\loser.lst LOSER.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+LOSER 00000000
+
+Symbol: LOSER
+   Definitions
+      At line 19 in file LOSER.s
+   Uses
+      At line 10 in file LOSER.s
+Comment: LOSER used once
+loop 00000006
+
+Symbol: loop
+   Definitions
+      At line 23 in file LOSER.s
+   Uses
+      At line 26 in file LOSER.s
+Comment: loop used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 3 in file LOSER.s
+   Uses
+      None
+Comment: routines unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 1 in file LOSER.s
+   Uses
+      At line 31 in file LOSER.s
+Comment: OUT_PORTB_DC used once
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 9 in file LOSER.s
+   Uses
+      At line 30 in file LOSER.s
+Comment: ADDRESS_CHANGE used once
+DATA_WRITE 00000000
+
+Symbol: DATA_WRITE
+   Definitions
+      At line 8 in file LOSER.s
+   Uses
+      At line 24 in file LOSER.s
+      At line 38 in file LOSER.s
+      At line 40 in file LOSER.s
+      At line 42 in file LOSER.s
+      At line 44 in file LOSER.s
+      At line 46 in file LOSER.s
+      At line 52 in file LOSER.s
+      At line 54 in file LOSER.s
+      At line 56 in file LOSER.s
+      At line 58 in file LOSER.s
+      At line 60 in file LOSER.s
+      At line 63 in file LOSER.s
+      At line 65 in file LOSER.s
+      At line 67 in file LOSER.s
+      At line 69 in file LOSER.s
+      At line 71 in file LOSER.s
+      At line 78 in file LOSER.s
+      At line 80 in file LOSER.s
+      At line 82 in file LOSER.s
+      At line 84 in file LOSER.s
+      At line 86 in file LOSER.s
+      At line 90 in file LOSER.s
+      At line 92 in file LOSER.s
+      At line 94 in file LOSER.s
+      At line 96 in file LOSER.s
+      At line 98 in file LOSER.s
+
+DELAY_100ms 00000000
+
+Symbol: DELAY_100ms
+   Definitions
+      At line 7 in file LOSER.s
+   Uses
+      None
+Comment: DELAY_100ms unused
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 6 in file LOSER.s
+   Uses
+      At line 34 in file LOSER.s
+Comment: DELAY_1ms used once
+4 symbols
+344 symbols in table

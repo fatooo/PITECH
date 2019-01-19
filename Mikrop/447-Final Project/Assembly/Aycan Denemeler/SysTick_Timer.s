@@ -34,12 +34,15 @@ INIT_SYSTICK PROC
 		LDR R1 , =NVIC_ST_CTRL
 		MOV R0 , #0x03
 		STR R0 , [ R1 ]
+		MOV R9, #21 ;
 		
 		BX LR
 		ENDP
 			
 			
 		EXPORT My_SYSTICK
+		EXTERN WINNER
+			EXTERN LOSER
 	
 My_SYSTICK PROC   
 			
@@ -48,7 +51,12 @@ My_SYSTICK PROC
 			MOV R11, #1 ;FLAG FOR SECOND DIGIT
 			CMP R9, #0 ; r9 keeps the value from 20 to 0
 			BNE cont ; if r9 is 0 clear the screen 
+			LDR R1 , =NVIC_ST_CTRL
+			MOV R0 , #0
+			STR R0 , [ R1 ]
 			MOV R9, #21 ; If R9 is 0 mov R9 =20 again and end the operation
+			BL LOSER
+			B FINISH
 			;B  winlose ;     goes to end of the moduke win or lose
 cont		SUB R9, #1 ; substract r9 
 			MOV R10, #10 ;
