@@ -108,7 +108,7 @@ ARM Macro Assembler    Page 2
    60 00000006                 EXTERN           ADC_READ_SHIP ; INCLUDE ADC REA
                                                             DING MODULES
    61 00000006                 EXTERN           ADC_READ_CURSOR
-   62 00000006         
+   62 00000006                 EXTERN           MINE_CURSOR
    63 00000006                 EXTERN           ADDRESS_CHANGE
    64 00000006                 EXTERN           WINORLOSE
    65 00000006                 EXPORT           PLAYER2_PUSHBUTTON
@@ -118,7 +118,7 @@ ARM Macro Assembler    Page 2
                                PROC
    69 00000006 B500            PUSH             {LR}
    70 00000008         loop
-   71 00000008 4811            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
+   71 00000008 4812            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
                                                             delay 0.2 second) 0
                                                             .1 DELAY
    72 0000000A F7FF FFFE       BL               delay2      ; delay at least (3
@@ -147,7 +147,7 @@ ARM Macro Assembler    Page 3
    81 00000022 D00D            BEQ              CONT        ;NO DEPLOYMENT 
    82 00000024 2800            CMP              R0, #0x00   ;
    83 00000026 D00B            BEQ              CONT        ; NO DEPLOYMENT
-   84 00000028 480A            LDR              R0, =CURSOR1
+   84 00000028 480B            LDR              R0, =CURSOR1
    85 0000002A 6801    nextlocation
                                LDR              R1, [R0]    ; R0 KEEPS THE SHIP
                                                              1 VALUE ADDRESS
@@ -157,30 +157,28 @@ ARM Macro Assembler    Page 3
    89 00000030 F000 05F0       AND              R5,R0, #0xF0 ;   AND IT R5 SHOW
                                                             S THE 2ND DIGIT 
    90 00000034 2D80            CMP              R5, #0x80   ; 
-   91 00000036 D004            BEQ              FINISH      ; end this push but
+   91 00000036 D006            BEQ              FINISH      ; end this push but
                                                             ton loop  4MINES DE
                                                             PLOYED    
    92 00000038 F100 0010       ADD              R0, #0x10
    93 0000003C E7F5            B                nextlocation
    94 0000003E 6004    MAPPING STR              R4, [R0]
-   95 00000040         CONT                                 ;BL MINE_CURSOR_   
-                                                            
-   96 00000040 E7E2            B                loop
-   97 00000042 F1B9 0F00 
+   95 00000040 F7FF FFFE 
+                       CONT    BL               MINE_CURSOR
+   96 00000044 E7E0            B                loop
+   97 00000046 F1B9 0F00 
                        FINISH  CMP              R9, #0
-   98 00000046         
-   99 00000046 D1FC            BNE              FINISH
-  100 00000048         
-  101 00000048         
-  102 00000048         
-  103 00000048 F85D EB04       POP{LR}
-  104 0000004C 4770            BX               LR
-  105 0000004E                 ENDP
-  106 0000004E         
-  107 0000004E         
-  108 0000004E         
-  109 0000004E 00 00           ALIGN                        ; 
-  110 00000050                 END                          ; end of file
+   98 0000004A D1FC            BNE              FINISH
+   99 0000004C         
+  100 0000004C         
+  101 0000004C F85D EB04       POP{LR}
+  102 00000050 4770            BX               LR
+  103 00000052                 ENDP
+  104 00000052         
+  105 00000052         
+  106 00000052         
+  107 00000052 00 00           ALIGN                        ; 
+  108 00000054                 END                          ; end of file
               001046AA 
               20001150 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
@@ -204,14 +202,14 @@ Symbol: CONT
       At line 81 in file PLAYER2_PUSHBUTTON.s
       At line 83 in file PLAYER2_PUSHBUTTON.s
 
-FINISH 00000042
+FINISH 00000046
 
 Symbol: FINISH
    Definitions
       At line 97 in file PLAYER2_PUSHBUTTON.s
    Uses
       At line 91 in file PLAYER2_PUSHBUTTON.s
-      At line 99 in file PLAYER2_PUSHBUTTON.s
+      At line 98 in file PLAYER2_PUSHBUTTON.s
 
 MAPPING 0000003E
 
@@ -417,6 +415,14 @@ Symbol: ADDRESS_CHANGE
    Uses
       None
 Comment: ADDRESS_CHANGE unused
+MINE_CURSOR 00000000
+
+Symbol: MINE_CURSOR
+   Definitions
+      At line 62 in file PLAYER2_PUSHBUTTON.s
+   Uses
+      At line 95 in file PLAYER2_PUSHBUTTON.s
+Comment: MINE_CURSOR used once
 PortF_Input 00000000
 
 Symbol: PortF_Input
@@ -433,5 +439,5 @@ Symbol: WINORLOSE
    Uses
       None
 Comment: WINORLOSE unused
-5 symbols
-362 symbols in table
+6 symbols
+363 symbols in table

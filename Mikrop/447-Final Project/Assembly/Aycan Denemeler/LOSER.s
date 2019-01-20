@@ -109,8 +109,8 @@ loop1		MOV			R4,#0x00
 			SUBS		R6,R6,#1
 			BNE			loop1
 			
-			LDR	R4,=0x0206
-			BL	ADDRESS_CHANGE
+		LDR	R4,=0x0206
+		BL	ADDRESS_CHANGE
 			
 			  ;{0x7f, 0x09, 0x09, 0x09, 0x06} // 50 P
 			

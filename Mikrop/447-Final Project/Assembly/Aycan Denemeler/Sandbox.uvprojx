@@ -482,6 +482,11 @@
               <FileType>2</FileType>
               <FilePath>.\PLAYER2_PUSHBUTTON.s</FilePath>
             </File>
+            <File>
+              <FileName>MINE_CURSOR.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\MINE_CURSOR.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
