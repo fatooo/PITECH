@@ -321,13 +321,13 @@ Cont1_CURSOR    LDR R0, [R3]
 
 COMPUTE_CURSOR  
 
-				LDR R3, =69 ; R3 IS THE DIVISOR
+				LDR R3, =67 ; R3 IS THE DIVISOR
 				UDIV R5, R5, R3 ; 
-				ADD R5, #9 ; R5 KEEPS THE X
+				ADD R5, #7 ; R5 KEEPS THE X
 	
-				LDR R3, =136 ;
+				LDR R3, =139 ;
 				UDIV R1, R1, R3;
-				ADD R1, #9 ;  ; R1 KEEPS THE Y DATA
+				ADD R1, #4 ;  ; R1 KEEPS THE Y DATA
 		
 		
 				LSL R1,R1,#8 ; SHIFT Y DATA

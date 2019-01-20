@@ -188,8 +188,7 @@ CONT 			BL SHIP_CURSOR
 				B   loop
 								
 
-FINISH		LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
-			BL  delay                       ; delay at least (3*R0) cycles
+FINISH		                      ; delay at least (3*R0) cycles
 			BL  PortF_Input                 ; read all of the switches on Port F
 			CMP R0, #0x00 ;  
 			BEQ FINISH

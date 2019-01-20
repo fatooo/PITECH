@@ -97,7 +97,7 @@ CONT 			BL MINE_CURSOR
 FINISH		   	CMP R9, #0
 				BNE 		FINISH			
 			
-
+  BL WINORLOSE
 			POP{LR}   
 			BX LR
 			ENDP

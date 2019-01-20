@@ -82,7 +82,9 @@ LOOP  		LDRB R4 ,[R5], #1
 			BL DATA_WRITE
 			SUBS R0, R0, #1
 			BNE LOOP		
-
+				
+				
+			;BL PLAYER2_PUSHBUTTON
 
 			BL	PUSHBUTTON
 			

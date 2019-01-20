@@ -118,7 +118,7 @@ ARM Macro Assembler    Page 2
                                PROC
    69 00000006 B500            PUSH             {LR}
    70 00000008         loop
-   71 00000008 4812            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
+   71 00000008 4813            LDR              R0, =FIFTHSEC ; R0 = FIFTHSEC (
                                                             delay 0.2 second) 0
                                                             .1 DELAY
    72 0000000A F7FF FFFE       BL               delay2      ; delay at least (3
@@ -147,7 +147,7 @@ ARM Macro Assembler    Page 3
    81 00000022 D00D            BEQ              CONT        ;NO DEPLOYMENT 
    82 00000024 2800            CMP              R0, #0x00   ;
    83 00000026 D00B            BEQ              CONT        ; NO DEPLOYMENT
-   84 00000028 480B            LDR              R0, =CURSOR1
+   84 00000028 480C            LDR              R0, =CURSOR1
    85 0000002A 6801    nextlocation
                                LDR              R1, [R0]    ; R0 KEEPS THE SHIP
                                                              1 VALUE ADDRESS
@@ -170,15 +170,15 @@ ARM Macro Assembler    Page 3
                        FINISH  CMP              R9, #0
    98 0000004A D1FC            BNE              FINISH
    99 0000004C         
-  100 0000004C         
-  101 0000004C F85D EB04       POP{LR}
-  102 00000050 4770            BX               LR
-  103 00000052                 ENDP
-  104 00000052         
-  105 00000052         
-  106 00000052         
-  107 00000052 00 00           ALIGN                        ; 
-  108 00000054                 END                          ; end of file
+  100 0000004C F7FF FFFE       BL               WINORLOSE
+  101 00000050 F85D EB04       POP{LR}
+  102 00000054 4770            BX               LR
+  103 00000056                 ENDP
+  104 00000056         
+  105 00000056         
+  106 00000056         
+  107 00000056 00 00           ALIGN                        ; 
+  108 00000058                 END                          ; end of file
               001046AA 
               20001150 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
@@ -437,7 +437,7 @@ Symbol: WINORLOSE
    Definitions
       At line 64 in file PLAYER2_PUSHBUTTON.s
    Uses
-      None
-Comment: WINORLOSE unused
+      At line 100 in file PLAYER2_PUSHBUTTON.s
+Comment: WINORLOSE used once
 6 symbols
 363 symbols in table

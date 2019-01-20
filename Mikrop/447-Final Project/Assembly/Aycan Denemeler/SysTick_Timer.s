@@ -87,7 +87,7 @@ My_SYSTICK PROC
 			LDR R1 , =NVIC_ST_CTRL  ;; AFTER 20 SECONDS DISABLE THE SYSTICK TIMER
 			MOV R0 , #0
 			STR R0 , [ R1 ]
-			;MOV R9, #21 ; If R9 is 0 mov R9 =20 again and end the operation
+			MOV R9, #21 ; If R9 is 0 mov R9 =20 again and end the operation
 			
 			BL WINORLOSE    ;;;; BRANCH TO THE DECISON SUBMODULE FOR WINLOSE CONDUTION 
 				

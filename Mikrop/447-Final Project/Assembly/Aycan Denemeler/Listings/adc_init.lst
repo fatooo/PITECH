@@ -531,14 +531,14 @@ ARM Macro Assembler    Page 9
   321 00000178         
   322 00000178         COMPUTE_CURSOR
   323 00000178         
-  324 00000178 F04F 0345       LDR              R3, =69     ; R3 IS THE DIVISOR
+  324 00000178 F04F 0343       LDR              R3, =67     ; R3 IS THE DIVISOR
                                                             
   325 0000017C FBB5 F5F3       UDIV             R5, R5, R3  ; 
-  326 00000180 F105 0509       ADD              R5, #9      ; R5 KEEPS THE X
+  326 00000180 F105 0507       ADD              R5, #7      ; R5 KEEPS THE X
   327 00000184         
-  328 00000184 F04F 0388       LDR              R3, =136    ;
+  328 00000184 F04F 038B       LDR              R3, =139    ;
   329 00000188 FBB1 F1F3       UDIV             R1, R1, R3  ;
-  330 0000018C F101 0109       ADD              R1, #9      ;  ; R1 KEEPS THE Y
+  330 0000018C F101 0104       ADD              R1, #4      ;  ; R1 KEEPS THE Y
                                                              DATA
   331 00000190         
   332 00000190         

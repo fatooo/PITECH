@@ -82,10 +82,10 @@ ARM Macro Assembler    Page 2
    46 0000000C 4B24            LDR              R3,= CURSOR1 ; R3 KEEPS CURSOR 
                                                             LOCATION FOR FIRST 
                                                             CURSOR
-   47 0000000E 2A02            CMP              R2, #2      ; CHECK IF IT IS BA
+   47 0000000E 2A10            CMP              R2, #0x10   ; CHECK IF IT IS BA
                                                             TTLESHIP 
    48 00000010 D001            BEQ              BATTLESHIP
-   49 00000012 2A01            CMP              R2, #1
+   49 00000012 2A01            CMP              R2, #0x01
    50 00000014 D018            BEQ              CIVILIAN
    51 00000016         ********
    52 00000016         ; R0 KEEPS THE SHIP LOCATION IN THE MOMORY
@@ -142,9 +142,9 @@ ARM Macro Assembler    Page 3
    80 0000003A         
    81 0000003A F003 05F0 
                        checknewcursor
-                               AND              R5,R3, #0xF0 ;   AND IT R5 SHOW
-                                                            S THE 2ND DIGIT 
-   82 0000003E 2D80            CMP              R5, #0x80   ; CURSOR SHOWS THE 
+                               AND              R5,R3,  #0xF0 ;   AND IT R5 SHO
+                                                            WS THE 2ND DIGIT 
+   82 0000003E 2D80            CMP              R5,   #0x80 ; CURSOR SHOWS THE 
                                                             LAST CURSOR LOCATIO
                                                             N
    83 00000040 D022            BEQ              LOSE
