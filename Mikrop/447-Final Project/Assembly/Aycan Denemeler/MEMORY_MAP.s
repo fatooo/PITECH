@@ -118,7 +118,7 @@ Cursor		LDR			R5,=CURSOR
 			
 			MOV			R0,#0x40
 			STRB		R0,[R5],#1
-			MOV			R0,#0xD0
+			MOV			R0,#0xE0
 			STRB		R0,[R5],#1
 			MOV			R0,#0x40
 			STRB		R0,[R5],#1
