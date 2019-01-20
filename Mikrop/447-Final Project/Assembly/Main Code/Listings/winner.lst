@@ -190,7 +190,7 @@ ARM Macro Assembler    Page 3
   165 000001B8 2811            CMP              R0, #0x11   ;
   166 000001BA D0F9            BEQ              wait
   167 000001BC         
-  168 000001BC F7FF BFFE       B                __main
+  168 000001BC F7FF FFFE       BL               __main
   169 000001C0         
   170 000001C0         
 

@@ -122,7 +122,7 @@ ARM Macro Assembler    Page 2
   101 000000F0 2811            CMP              R0, #0x11   ;
   102 000000F2 D0F9            BEQ              wait
   103 000000F4         
-  104 000000F4 F7FF BFFE       B                __main
+  104 000000F4 F7FF FFFE       BL               __main
   105 000000F8                 ENDP
   106 000000F8         ***********************
   107 000000F8         

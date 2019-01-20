@@ -165,7 +165,7 @@ wait		BL  		PortF_Input             ; read all of the switches on Port F
 			CMP 		R0, #0x11;
 			BEQ 		wait
 			
-			B __main 
+			BL __main 
 			
 			
 			;POP {LR}

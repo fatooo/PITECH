@@ -93,7 +93,7 @@ SCREEN		LDR 		R1,= OUT_PORTB_RESET
 			STR			R1,[R5]
 			
 			LDR			R5,=SSI0_DR
-			MOV			R1,#0x16
+			MOV			R1,#0x05
 			STR			R1,[R5]
 			
 			LDR			R5,=SSI0_DR
