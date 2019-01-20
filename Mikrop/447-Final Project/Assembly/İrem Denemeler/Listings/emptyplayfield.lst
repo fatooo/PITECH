@@ -1,0 +1,259 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000         
+    7 00000000         ;*******************************************************
+                       ********
+    8 00000000         ; Directives - This Data Section is part of the code
+    9 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   10 00000000         ;*******************************************************
+                       ******** 
+   11 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   12 00000000                 AREA             sdata, DATA, READONLY
+   13 00000000                 THUMB
+   14 00000000         
+   15 00000000         ;*******************************************************
+                       ********
+   16 00000000         ; Program section           
+   17 00000000         ;*******************************************************
+                       ********
+   18 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   19 00000000                 AREA             routines,READONLY,CODE
+   20 00000000                 THUMB
+   21 00000000                 ALIGN
+   22 00000000                 EXPORT           EMP_FIELD
+   23 00000000         
+   24 00000000         ;*******************************************************
+                       ********
+   25 00000000         ; Main Function
+   26 00000000         ; Generates memorymap for empty playfield
+   27 00000000         ;*******************************************************
+                       ******** 
+   28 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   29 00000000         EMP_FIELD
+                               PROC
+   30 00000000 B41F            PUSH             {R0-R4}
+   31 00000002         
+   32 00000002 F04F 0000       MOV              R0,#0x00
+   33 00000006 F04F 0105       MOV              R1,#0x05
+   34 0000000A         
+   35 0000000A F805 0B01 
+                       loop1   STRB             R0,[R5],#1
+   36 0000000E 1E49            SUBS             R1,R1,#1
+   37 00000010 D1FB            BNE              loop1
+   38 00000012         
+   39 00000012 F04F 0080       MOV              R0,#0x80
+   40 00000016 F04F 0142       MOV              R1,#0x42
+   41 0000001A         
+   42 0000001A F805 0B01 
+                       loop2   STRB             R0,[R5],#1
+   43 0000001E 1E49            SUBS             R1,R1,#1
+   44 00000020 D1FB            BNE              loop2
+   45 00000022         
+   46 00000022         
+   47 00000022 F04F 0204       MOV              R2,#0x4
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   48 00000026         grand_loop
+   49 00000026 F04F 0000       MOV              R0,#0x00
+   50 0000002A F04F 0112       MOV              R1,#0x12
+   51 0000002E         
+   52 0000002E F805 0B01 
+                       loop3   STRB             R0,[R5],#1
+   53 00000032 1E49            SUBS             R1,R1,#1
+   54 00000034 D1FB            BNE              loop3
+   55 00000036         
+   56 00000036 F04F 00FF       MOV              R0,#0xFF
+   57 0000003A F805 0B01       STRB             R0,[R5],#1
+   58 0000003E         
+   59 0000003E F04F 0000       MOV              R0,#0x00
+   60 00000042 F04F 0140       MOV              R1,#0x40
+   61 00000046         
+   62 00000046 F805 0B01 
+                       loop4   STRB             R0,[R5],#1
+   63 0000004A 1E49            SUBS             R1,R1,#1
+   64 0000004C D1FB            BNE              loop4
+   65 0000004E         
+   66 0000004E F04F 00FF       MOV              R0,#0xFF
+   67 00000052 F805 0B01       STRB             R0,[R5],#1
+   68 00000056         
+   69 00000056 1E52            SUBS             R2,R2,#1
+   70 00000058 D1E5            BNE              grand_loop
+   71 0000005A         
+   72 0000005A         
+   73 0000005A F04F 0000       MOV              R0,#0x00
+   74 0000005E F04F 0112       MOV              R1,#0x12
+   75 00000062         
+   76 00000062 F805 0B01 
+                       loop5   STRB             R0,[R5],#1
+   77 00000066 1E49            SUBS             R1,R1,#1
+   78 00000068 D1FB            BNE              loop5
+   79 0000006A         
+   80 0000006A F04F 0001       MOV              R0,#0x01
+   81 0000006E F04F 0142       MOV              R1,#0x42
+   82 00000072         
+   83 00000072 F805 0B01 
+                       loop6   STRB             R0,[R5],#1
+   84 00000076 1E49            SUBS             R1,R1,#1
+   85 00000078 D1FB            BNE              loop6
+   86 0000007A         
+   87 0000007A F04F 0000       MOV              R0,#0x00
+   88 0000007E F04F 010D       MOV              R1,#0x0D
+   89 00000082         
+   90 00000082 F805 0B01 
+                       loop7   STRB             R0,[R5],#1
+   91 00000086 1E49            SUBS             R1,R1,#1
+   92 00000088 D1FB            BNE              loop7
+   93 0000008A         
+   94 0000008A         
+   95 0000008A         
+   96 0000008A         
+   97 0000008A         
+   98 0000008A BC1F            POP              {R0-R4}
+   99 0000008C 4770            BX               LR
+  100 0000008E         ;*******************************************************
+                       ********
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+  101 0000008E         ; End of the program  section
+  102 0000008E         ;*******************************************************
+                       ********
+  103 0000008E         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+  104 0000008E                 ENDP
+  105 0000008E 00 00           ALIGN
+  106 00000090                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\emptyplayfield.d -o.\objects\emptyplayfield.o -I.\RTE
+\_Target_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\W
+ork\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSIO
+N SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\emptyplayfield.
+lst EmptyPlayfield.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 12 in file EmptyPlayfield.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+EMP_FIELD 00000000
+
+Symbol: EMP_FIELD
+   Definitions
+      At line 29 in file EmptyPlayfield.s
+   Uses
+      At line 22 in file EmptyPlayfield.s
+Comment: EMP_FIELD used once
+grand_loop 00000026
+
+Symbol: grand_loop
+   Definitions
+      At line 48 in file EmptyPlayfield.s
+   Uses
+      At line 70 in file EmptyPlayfield.s
+Comment: grand_loop used once
+loop1 0000000A
+
+Symbol: loop1
+   Definitions
+      At line 35 in file EmptyPlayfield.s
+   Uses
+      At line 37 in file EmptyPlayfield.s
+Comment: loop1 used once
+loop2 0000001A
+
+Symbol: loop2
+   Definitions
+      At line 42 in file EmptyPlayfield.s
+   Uses
+      At line 44 in file EmptyPlayfield.s
+Comment: loop2 used once
+loop3 0000002E
+
+Symbol: loop3
+   Definitions
+      At line 52 in file EmptyPlayfield.s
+   Uses
+      At line 54 in file EmptyPlayfield.s
+Comment: loop3 used once
+loop4 00000046
+
+Symbol: loop4
+   Definitions
+      At line 62 in file EmptyPlayfield.s
+   Uses
+      At line 64 in file EmptyPlayfield.s
+Comment: loop4 used once
+loop5 00000062
+
+Symbol: loop5
+   Definitions
+      At line 76 in file EmptyPlayfield.s
+   Uses
+      At line 78 in file EmptyPlayfield.s
+Comment: loop5 used once
+loop6 00000072
+
+Symbol: loop6
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 83 in file EmptyPlayfield.s
+   Uses
+      At line 85 in file EmptyPlayfield.s
+Comment: loop6 used once
+loop7 00000082
+
+Symbol: loop7
+   Definitions
+      At line 90 in file EmptyPlayfield.s
+   Uses
+      At line 92 in file EmptyPlayfield.s
+Comment: loop7 used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 19 in file EmptyPlayfield.s
+   Uses
+      None
+Comment: routines unused
+10 symbols
+345 symbols in table

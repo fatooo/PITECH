@@ -1,0 +1,192 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ; SHOWS THE MEMORY LOCATION TO POSTION AND TYPES OF SHIP
+                       S AND CURSORS
+    5 00000000         ;*******************************************************
+                       ********
+    6 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    7 00000000         
+    8 00000000 20001100 
+                       SHIP_MEMO
+                               EQU              0x20001100  ;1100-1149
+    9 00000000 20001150 
+                       MINE_MEMO
+                               EQU              0x20001150  ;1150-1199
+   10 00000000 20006010 
+                       GP_MEMORY_10
+                               EQU              0x20006010  ;6010-6020 Zero arr
+                                                            ay for random use
+   11 00000000         
+   12 00000000         ;*******************************************************
+                       ********
+   13 00000000         ; Directives - This Data Section is part of the code
+   14 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   15 00000000         ;*******************************************************
+                       ******** 
+   16 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   17 00000000                 AREA             sdata, DATA, READONLY
+   18 00000000                 THUMB
+   19 00000000         
+   20 00000000         ;*******************************************************
+                       ********
+   21 00000000         ; Program section           
+   22 00000000         ;*******************************************************
+                       ********
+   23 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   24 00000000                 AREA             routines, READONLY, CODE
+   25 00000000                 THUMB
+   26 00000000                 EXTERN           WINNER
+   27 00000000                 EXTERN           LOSER
+   28 00000000                 EXPORT           END_CASE
+   29 00000000         ;*******************************************************
+                       ********
+   30 00000000         ; WINORLOSE ROUTINE GIVES WINNER OR LOSER AS OUTPUT
+   31 00000000         ;  WINNING CONDITIONS ARE CHECKED 
+   32 00000000         ;*******************************************************
+                       ******** 
+   33 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   34 00000000         END_CASE
+                               PROC
+   35 00000000 B500            PUSH             {LR}
+   36 00000002 B47F            PUSH             {R0-R6}
+   37 00000004         
+   38 00000004 4D03            LDR              R5,=SHIP_MEMO
+   39 00000006 F105 0104       ADD              R1,R5,#4
+   40 0000000A         ;STR   R1
+   41 0000000A         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   42 0000000A         
+   43 0000000A         
+   44 0000000A         
+   45 0000000A         
+   46 0000000A         
+   47 0000000A         
+   48 0000000A         
+   49 0000000A         
+   50 0000000A         
+   51 0000000A         
+   52 0000000A         
+   53 0000000A BC7F            POP              {R0-R6}
+   54 0000000C F85D EB04       POP              {LR}
+   55 00000010 4770            BX               LR
+   56 00000012         ;*******************************************************
+                       ********
+   57 00000012         ; End of the program  section
+   58 00000012         ;*******************************************************
+                       ********
+   59 00000012                 ENDP
+   60 00000012 00 00           ALIGN
+   61 00000014                 END
+              20001100 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\end_case.d -o.\objects\end_case.o -I.\RTE\_Target_1 -
+ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSI
+S\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" 
+--predefine="TM4C123GH6PM SETA 1" --list=.\listings\end_case.lst END_CASE.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 17 in file END_CASE.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+END_CASE 00000000
+
+Symbol: END_CASE
+   Definitions
+      At line 34 in file END_CASE.s
+   Uses
+      At line 28 in file END_CASE.s
+Comment: END_CASE used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 24 in file END_CASE.s
+   Uses
+      None
+Comment: routines unused
+2 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GP_MEMORY_10 20006010
+
+Symbol: GP_MEMORY_10
+   Definitions
+      At line 10 in file END_CASE.s
+   Uses
+      None
+Comment: GP_MEMORY_10 unused
+MINE_MEMO 20001150
+
+Symbol: MINE_MEMO
+   Definitions
+      At line 9 in file END_CASE.s
+   Uses
+      None
+Comment: MINE_MEMO unused
+SHIP_MEMO 20001100
+
+Symbol: SHIP_MEMO
+   Definitions
+      At line 8 in file END_CASE.s
+   Uses
+      At line 38 in file END_CASE.s
+Comment: SHIP_MEMO used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+LOSER 00000000
+
+Symbol: LOSER
+   Definitions
+      At line 27 in file END_CASE.s
+   Uses
+      None
+Comment: LOSER unused
+WINNER 00000000
+
+Symbol: WINNER
+   Definitions
+      At line 26 in file END_CASE.s
+   Uses
+      None
+Comment: WINNER unused
+2 symbols
+344 symbols in table
