@@ -42,6 +42,9 @@ MINE_CURSOR	PROC
 			PUSH		{LR}
 			PUSH		{R0-R4}
 					
+			LDR			R5,=0x0101
+			SUB			R4,R4,R5
+			
 			
 			LDR			R5,=OLD_CURSOR_LOC_Y
 			LDRB		R0,[R5]
