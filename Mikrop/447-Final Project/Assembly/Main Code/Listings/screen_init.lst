@@ -143,7 +143,7 @@ ARM Macro Assembler    Page 3
    93 0000006A 6029            STR              R1,[R5]
    94 0000006C         
    95 0000006C 4D10            LDR              R5,=SSI0_DR
-   96 0000006E F04F 0116       MOV              R1,#0x16
+   96 0000006E F04F 0105       MOV              R1,#0x05
    97 00000072 6029            STR              R1,[R5]
    98 00000074         
    99 00000074 4D0E            LDR              R5,=SSI0_DR
@@ -181,10 +181,10 @@ ARM Macro Assembler    Page 3
               40008008 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\screen_init.d -o.\objects\screen_init.o -I.\RTE\_Targ
-et_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\AR
-M\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA
- 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\screen_init.lst SCREE
-N_INIT.s
+et_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil
+_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSIO
+N SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\screen_init.lst
+ SCREEN_INIT.s
 
 
 

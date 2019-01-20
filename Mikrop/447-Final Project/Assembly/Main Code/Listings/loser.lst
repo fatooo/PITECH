@@ -122,236 +122,21 @@ ARM Macro Assembler    Page 2
   101 000000F0 2811            CMP              R0, #0x11   ;
   102 000000F2 D0F9            BEQ              wait
   103 000000F4         
-  104 000000F4 F7FF FFFE       BL               __main
+  104 000000F4 F7FF BFFE       B                __main
   105 000000F8                 ENDP
-  106 000000F8         ***********************
-  107 000000F8         
-  108 000000F8         ; THIS CODE WRITES PLAYER2'S TURN ON SCREEN
-  109 000000F8         
+  106 000000F8                 ALIGN
+  107 000000F8                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\loser.d -o.\objects\loser.o -I.\RTE\_Target_1 -IC:\Ke
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-  110 000000F8         *********************
-  111 000000F8                 EXPORT           PLAYER2
-  112 000000F8         
-  113 000000F8         PLAYER2 PROC
-  114 000000F8         
-  115 000000F8 B500            PUSH             {LR}
-  116 000000FA         
-  117 000000FA F44F 7616       MOV              R6,#600
-  118 000000FE F04F 0400 
-                       loop1   MOV              R4,#0x00
-  119 00000102 F7FF FFFE       BL               DATA_WRITE
-  120 00000106 1E76            SUBS             R6,R6,#1
-  121 00000108 D1F9            BNE              loop1
-  122 0000010A         
-  123 0000010A F240 2406       LDR              R4,=0x0206
-  124 0000010E F7FF FFFE       BL               ADDRESS_CHANGE
-  125 00000112         
-  126 00000112         ;{0x7f, 0x09, 0x09, 0x09, 0x06} // 50 P
-  127 00000112         
-  128 00000112 F04F 047F       MOV              R4, #0x7F
-  129 00000116 F7FF FFFE       BL               DATA_WRITE
-  130 0000011A F04F 0409       MOV              r4,#0x09
-  131 0000011E F7FF FFFE       BL               DATA_WRITE
-  132 00000122 F04F 0409       MOV              R4, #0x09
-  133 00000126 F7FF FFFE       BL               DATA_WRITE
-  134 0000012A F04F 0409       MOV              R4, #0x09
-  135 0000012E F7FF FFFE       BL               DATA_WRITE
-  136 00000132 F04F 0406       MOV              R4, #0x06
-  137 00000136 F7FF FFFE       BL               DATA_WRITE
-  138 0000013A         
-  139 0000013A         ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
-  140 0000013A F04F 047F       MOV              R4, #0x7F
-  141 0000013E F7FF FFFE       BL               DATA_WRITE
-  142 00000142 F04F 0440       MOV              r4,#0x40
-  143 00000146 F7FF FFFE       BL               DATA_WRITE
-  144 0000014A F04F 0440       MOV              R4, #0x40
-  145 0000014E F7FF FFFE       BL               DATA_WRITE
-  146 00000152 F04F 0440       MOV              R4, #0x40
-  147 00000156 F7FF FFFE       BL               DATA_WRITE
-  148 0000015A F04F 0440       MOV              R4, #0x40
-  149 0000015E F7FF FFFE       BL               DATA_WRITE
-  150 00000162         ;{0x7e, 0x11, 0x11, 0x11, 0x7e} // 41 A
-  151 00000162         
-  152 00000162 F04F 047E       MOV              R4, #0x7E
-  153 00000166 F7FF FFFE       BL               DATA_WRITE
-  154 0000016A F04F 0411       MOV              r4,#0x11
-  155 0000016E F7FF FFFE       BL               DATA_WRITE
-  156 00000172 F04F 0411       MOV              R4, #0x11
-  157 00000176 F7FF FFFE       BL               DATA_WRITE
-  158 0000017A F04F 0411       MOV              R4, #0x11
-  159 0000017E F7FF FFFE       BL               DATA_WRITE
-  160 00000182 F04F 047E       MOV              R4, #0x7E
-  161 00000186 F7FF FFFE       BL               DATA_WRITE
-  162 0000018A         
-  163 0000018A         ;{0x07, 0x08, 0x70, 0x08, 0x07} // 59 Y
-  164 0000018A F04F 0407       MOV              R4, #0x07
-  165 0000018E F7FF FFFE       BL               DATA_WRITE
-  166 00000192 F04F 0408       MOV              r4,#0x08
-  167 00000196 F7FF FFFE       BL               DATA_WRITE
-
-
-
-ARM Macro Assembler    Page 4 
-
-
-  168 0000019A F04F 0470       MOV              R4, #0x70
-  169 0000019E F7FF FFFE       BL               DATA_WRITE
-  170 000001A2 F04F 0408       MOV              R4, #0x08
-  171 000001A6 F7FF FFFE       BL               DATA_WRITE
-  172 000001AA F04F 0407       MOV              R4, #0x07
-  173 000001AE F7FF FFFE       BL               DATA_WRITE
-  174 000001B2         
-  175 000001B2         ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
-  176 000001B2 F04F 047F       MOV              R4, #0x7F
-  177 000001B6 F7FF FFFE       BL               DATA_WRITE
-  178 000001BA F04F 0449       MOV              r4,#0x49
-  179 000001BE F7FF FFFE       BL               DATA_WRITE
-  180 000001C2 F04F 0449       MOV              R4, #0x49
-  181 000001C6 F7FF FFFE       BL               DATA_WRITE
-  182 000001CA F04F 0449       MOV              R4, #0x49
-  183 000001CE F7FF FFFE       BL               DATA_WRITE
-  184 000001D2 F04F 0441       MOV              R4, #0x41
-  185 000001D6 F7FF FFFE       BL               DATA_WRITE
-  186 000001DA         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R   
-  187 000001DA F04F 047F       MOV              R4, #0x7F
-  188 000001DE F7FF FFFE       BL               DATA_WRITE
-  189 000001E2 F04F 0409       MOV              r4,#0x09
-  190 000001E6 F7FF FFFE       BL               DATA_WRITE
-  191 000001EA F04F 0419       MOV              R4, #0x19
-  192 000001EE F7FF FFFE       BL               DATA_WRITE
-  193 000001F2 F04F 0429       MOV              R4, #0x29
-  194 000001F6 F7FF FFFE       BL               DATA_WRITE
-  195 000001FA F04F 0446       MOV              R4, #0x46
-  196 000001FE F7FF FFFE       BL               DATA_WRITE
-  197 00000202         
-  198 00000202         ;   ,{0x42, 0x61, 0x51, 0x49, 0x46} // 32 2
-  199 00000202 F04F 0442       MOV              R4, #0x42
-  200 00000206 F7FF FFFE       BL               DATA_WRITE
-  201 0000020A F04F 0461       MOV              r4,#0x61
-  202 0000020E F7FF FFFE       BL               DATA_WRITE
-  203 00000212 F04F 0451       MOV              R4, #0x51
-  204 00000216 F7FF FFFE       BL               DATA_WRITE
-  205 0000021A F04F 0449       MOV              R4, #0x49
-  206 0000021E F7FF FFFE       BL               DATA_WRITE
-  207 00000222 F04F 0446       MOV              R4, #0x46
-  208 00000226 F7FF FFFE       BL               DATA_WRITE
-  209 0000022A         ;{0x00, 0x05, 0x03, 0x00, 0x00} // 27 '
-  210 0000022A         
-  211 0000022A F04F 0400       MOV              R4, #0x00
-  212 0000022E F7FF FFFE       BL               DATA_WRITE
-  213 00000232 F04F 0405       MOV              r4,#0x05
-  214 00000236 F7FF FFFE       BL               DATA_WRITE
-  215 0000023A F04F 0403       MOV              R4, #0x03
-  216 0000023E F7FF FFFE       BL               DATA_WRITE
-  217 00000242 F04F 0400       MOV              R4, #0x00
-  218 00000246 F7FF FFFE       BL               DATA_WRITE
-  219 0000024A F04F 0400       MOV              R4, #0x00
-  220 0000024E F7FF FFFE       BL               DATA_WRITE
-  221 00000252         ;  ,{0x46, 0x49, 0x49, 0x49, 0x31} // 53 S
-  222 00000252 F04F 0446       MOV              R4, #0x46
-  223 00000256 F7FF FFFE       BL               DATA_WRITE
-  224 0000025A F04F 0449       MOV              r4,#0x49
-  225 0000025E F7FF FFFE       BL               DATA_WRITE
-  226 00000262 F04F 0449       MOV              R4, #0x49
-
-
-
-ARM Macro Assembler    Page 5 
-
-
-  227 00000266 F7FF FFFE       BL               DATA_WRITE
-  228 0000026A F04F 0449       MOV              R4, #0x49
-  229 0000026E F7FF FFFE       BL               DATA_WRITE
-  230 00000272 F04F 0431       MOV              R4, #0x31
-  231 00000276 F7FF FFFE       BL               DATA_WRITE
-  232 0000027A         ; SPACE
-  233 0000027A F04F 0400       MOV              R4, #0x00
-  234 0000027E F7FF FFFE       BL               DATA_WRITE
-  235 00000282 F04F 0400       MOV              r4,#0x00
-  236 00000286 F7FF FFFE       BL               DATA_WRITE
-  237 0000028A F04F 0400       MOV              R4, #0x00
-  238 0000028E F7FF FFFE       BL               DATA_WRITE
-  239 00000292 F04F 0400       MOV              R4, #0x00
-  240 00000296 F7FF FFFE       BL               DATA_WRITE
-  241 0000029A F04F 0400       MOV              R4, #0x00
-  242 0000029E F7FF FFFE       BL               DATA_WRITE
-  243 000002A2         
-  244 000002A2         ;{0x01, 0x01, 0x7f, 0x01, 0x01} // 54 T
-  245 000002A2         
-  246 000002A2 F04F 0401       MOV              R4, #0x01
-  247 000002A6 F7FF FFFE       BL               DATA_WRITE
-  248 000002AA F04F 0401       MOV              r4,#0x01
-  249 000002AE F7FF FFFE       BL               DATA_WRITE
-  250 000002B2 F04F 047F       MOV              R4, #0x7F
-  251 000002B6 F7FF FFFE       BL               DATA_WRITE
-  252 000002BA F04F 0401       MOV              R4, #0x01
-  253 000002BE F7FF FFFE       BL               DATA_WRITE
-  254 000002C2 F04F 0401       MOV              R4, #0x01
-  255 000002C6 F7FF FFFE       BL               DATA_WRITE
-  256 000002CA         
-  257 000002CA         ;{0x3f, 0x40, 0x40, 0x40, 0x3f} // 55 U
-  258 000002CA F04F 043F       MOV              R4, #0x3F
-  259 000002CE F7FF FFFE       BL               DATA_WRITE
-  260 000002D2 F04F 0440       MOV              r4,#0x40
-  261 000002D6 F7FF FFFE       BL               DATA_WRITE
-  262 000002DA F04F 0440       MOV              R4, #0x40
-  263 000002DE F7FF FFFE       BL               DATA_WRITE
-  264 000002E2 F04F 0440       MOV              R4, #0x40
-  265 000002E6 F7FF FFFE       BL               DATA_WRITE
-  266 000002EA F04F 043F       MOV              R4, #0x3F
-  267 000002EE F7FF FFFE       BL               DATA_WRITE
-  268 000002F2         
-  269 000002F2         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R   
-  270 000002F2 F04F 047F       MOV              R4, #0x7F
-  271 000002F6 F7FF FFFE       BL               DATA_WRITE
-  272 000002FA F04F 0409       MOV              r4,#0x09
-  273 000002FE F7FF FFFE       BL               DATA_WRITE
-  274 00000302 F04F 0419       MOV              R4, #0x19
-  275 00000306 F7FF FFFE       BL               DATA_WRITE
-  276 0000030A F04F 0429       MOV              R4, #0x29
-  277 0000030E F7FF FFFE       BL               DATA_WRITE
-  278 00000312 F04F 0446       MOV              R4, #0x46
-  279 00000316 F7FF FFFE       BL               DATA_WRITE
-  280 0000031A         
-  281 0000031A         ;   ,{0x7f, 0x04, 0x08, 0x10, 0x7f} // 4e N
-  282 0000031A F04F 047F       MOV              R4, #0x7F
-  283 0000031E F7FF FFFE       BL               DATA_WRITE
-  284 00000322 F04F 0404       MOV              r4,#0x04
-  285 00000326 F7FF FFFE       BL               DATA_WRITE
-
-
-
-ARM Macro Assembler    Page 6 
-
-
-  286 0000032A F04F 0408       MOV              R4, #0x08
-  287 0000032E F7FF FFFE       BL               DATA_WRITE
-  288 00000332 F04F 0410       MOV              R4, #0x10
-  289 00000336 F7FF FFFE       BL               DATA_WRITE
-  290 0000033A F04F 047F       MOV              R4, #0x7F
-  291 0000033E F7FF FFFE       BL               DATA_WRITE
-  292 00000342         
-  293 00000342         
-  294 00000342 F85D EB04       POP              {LR}
-  295 00000346         
-  296 00000346         
-  297 00000346 4770            BX               LR
-  298 00000348         
-  299 00000348         
-  300 00000348         ; B __main
-  301 00000348                 ENDP
-  302 00000348                 ALIGN
-  303 00000348                 END
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\loser.d -o.\objects\loser.o -I.\RTE\_Target_1 -ID:\Wo
-rk\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\Incl
-ude --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --pred
-efine="TM4C123GH6PM SETA 1" --list=.\listings\loser.lst LOSER.s
+il_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSI
+S\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" 
+--predefine="TM4C123GH6PM SETA 1" --list=.\listings\loser.lst LOSER.s
 
 
 
@@ -366,14 +151,6 @@ Symbol: LOSER
    Uses
       At line 14 in file LOSER.s
 Comment: LOSER used once
-PLAYER2 000000F8
-
-Symbol: PLAYER2
-   Definitions
-      At line 113 in file LOSER.s
-   Uses
-      At line 111 in file LOSER.s
-Comment: PLAYER2 used once
 loop 0000000C
 
 Symbol: loop
@@ -382,14 +159,6 @@ Symbol: loop
    Uses
       At line 31 in file LOSER.s
 Comment: loop used once
-loop1 000000FE
-
-Symbol: loop1
-   Definitions
-      At line 118 in file LOSER.s
-   Uses
-      At line 121 in file LOSER.s
-Comment: loop1 used once
 routines 00000000
 
 Symbol: routines
@@ -407,7 +176,7 @@ Symbol: wait
       At line 99 in file LOSER.s
       At line 102 in file LOSER.s
 
-6 symbols
+4 symbols
 
 
 
@@ -445,7 +214,6 @@ Symbol: ADDRESS_CHANGE
    Uses
       At line 25 in file LOSER.s
       At line 35 in file LOSER.s
-      At line 124 in file LOSER.s
 
 DATA_WRITE 00000000
 
@@ -479,94 +247,11 @@ Symbol: DATA_WRITE
       At line 90 in file LOSER.s
       At line 92 in file LOSER.s
       At line 94 in file LOSER.s
-      At line 119 in file LOSER.s
-      At line 129 in file LOSER.s
-      At line 131 in file LOSER.s
-      At line 133 in file LOSER.s
-      At line 135 in file LOSER.s
-      At line 137 in file LOSER.s
-      At line 141 in file LOSER.s
-      At line 143 in file LOSER.s
-      At line 145 in file LOSER.s
-      At line 147 in file LOSER.s
-      At line 149 in file LOSER.s
-      At line 153 in file LOSER.s
-      At line 155 in file LOSER.s
-      At line 157 in file LOSER.s
-      At line 159 in file LOSER.s
-      At line 161 in file LOSER.s
-      At line 165 in file LOSER.s
-
-
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
-External symbols
-
-      At line 167 in file LOSER.s
-      At line 169 in file LOSER.s
-      At line 171 in file LOSER.s
-      At line 173 in file LOSER.s
-      At line 177 in file LOSER.s
-      At line 179 in file LOSER.s
-      At line 181 in file LOSER.s
-      At line 183 in file LOSER.s
-      At line 185 in file LOSER.s
-      At line 188 in file LOSER.s
-      At line 190 in file LOSER.s
-      At line 192 in file LOSER.s
-      At line 194 in file LOSER.s
-      At line 196 in file LOSER.s
-      At line 200 in file LOSER.s
-      At line 202 in file LOSER.s
-      At line 204 in file LOSER.s
-      At line 206 in file LOSER.s
-      At line 208 in file LOSER.s
-      At line 212 in file LOSER.s
-      At line 214 in file LOSER.s
-      At line 216 in file LOSER.s
-      At line 218 in file LOSER.s
-      At line 220 in file LOSER.s
-      At line 223 in file LOSER.s
-      At line 225 in file LOSER.s
-      At line 227 in file LOSER.s
-      At line 229 in file LOSER.s
-      At line 231 in file LOSER.s
-      At line 234 in file LOSER.s
-      At line 236 in file LOSER.s
-      At line 238 in file LOSER.s
-      At line 240 in file LOSER.s
-      At line 242 in file LOSER.s
-      At line 247 in file LOSER.s
-      At line 249 in file LOSER.s
-      At line 251 in file LOSER.s
-      At line 253 in file LOSER.s
-      At line 255 in file LOSER.s
-      At line 259 in file LOSER.s
-      At line 261 in file LOSER.s
-      At line 263 in file LOSER.s
-      At line 265 in file LOSER.s
-      At line 267 in file LOSER.s
-      At line 271 in file LOSER.s
-      At line 273 in file LOSER.s
-      At line 275 in file LOSER.s
-      At line 277 in file LOSER.s
-      At line 279 in file LOSER.s
-      At line 283 in file LOSER.s
-      At line 285 in file LOSER.s
-      At line 287 in file LOSER.s
-      At line 289 in file LOSER.s
-      At line 291 in file LOSER.s
 
 DELAY_100ms 00000000
 
 Symbol: DELAY_100ms
    Definitions
-
-
-
-ARM Macro Assembler    Page 3 Alphabetic symbol ordering
-External symbols
-
       At line 9 in file LOSER.s
    Uses
       None
@@ -580,6 +265,12 @@ Symbol: DELAY_1ms
       None
 Comment: DELAY_1ms unused
 PortF_Input 00000000
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
 
 Symbol: PortF_Input
    Definitions
@@ -596,4 +287,4 @@ Symbol: __main
       At line 104 in file LOSER.s
 Comment: __main used once
 6 symbols
-348 symbols in table
+346 symbols in table

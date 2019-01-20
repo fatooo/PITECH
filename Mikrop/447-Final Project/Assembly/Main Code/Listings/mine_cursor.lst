@@ -410,10 +410,10 @@ ARM Macro Assembler    Page 7
               20000818 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\mine_cursor.d -o.\objects\mine_cursor.o -I.\RTE\_Targ
-et_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\AR
-M\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA
- 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\mine_cursor.lst MINE_
-CURSOR.s
+et_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil
+_v5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSIO
+N SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\mine_cursor.lst
+ MINE_CURSOR.s
 
 
 

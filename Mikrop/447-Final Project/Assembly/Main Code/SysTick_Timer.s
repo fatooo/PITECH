@@ -82,15 +82,11 @@ My_SYSTICK 	PROC
 			CMP			R9, #0 					; R9 keeps the value from 20 to 0
 			BNE 		cont 					; if R9 is 0 clear the screen 
 			LDR 		R1 , =NVIC_ST_CTRL  	; AFTER 20 SECONDS DISABLE THE SYSTICK TIMER
-			MOV 		R0 , #0
+			MOV			R0 , #0
 			STR 		R0 , [ R1 ]
-;			LDR 		R1,=NVIC_ST_RELOAD
-;			LDR 		R0,=RELOAD_0
-;			STR 		R0,[R1]
-;			LDR 		R1,=NVIC_ST_CURRENT
-;			STR 		R0,[R1]
-			MOV 		R9, #21 				; If R9 is 0 mov R9 =20 again and end the operation
-			
+			MOV 		R9, #21 				; If R9 is 0 mov R9 =20 again and end the operation	
+			POP 		{R0-R6}	
+			POP 		{LR}
 			BL 			END_CASE    			; BRANCH TO THE DECISON SUBMODULE FOR WINLOSE CONDUTION 
 				
 			B 			FINISH   				; TO END THIS SUBMODULE AFTER THE END OF THE OPERATION
@@ -266,10 +262,7 @@ writebosluk
 			CMP 		R0, #9;
 			BEQ 		write9
 			
-FINISH		;MOV			R4,R7
-			;BL			ADDRESS_CHANGE
-	
-
+FINISH		
 			POP 		{R0-R6}	
 			POP 		{LR}
 			BX 			LR 

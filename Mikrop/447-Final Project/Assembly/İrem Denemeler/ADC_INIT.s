@@ -80,6 +80,7 @@ ADC_INIT	PROC
 	; Enable alternate functions
 	LDR R1, =PORTE_AFSEL
 	LDR R0, [R1]
+	
 	ORR R0, R0, #0x06 ; set bit 3 to enable alt functions on PE3 AND SET BIT 2 TO ENABLE PE2
 	STR R0, [R1]
 	; PCTL does not have to be configured

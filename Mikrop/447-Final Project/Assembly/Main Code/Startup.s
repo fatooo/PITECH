@@ -487,15 +487,7 @@ Comp1_Handler
 Comp2_Handler
 SysCtl_Handler
 FlashCtl_Handler
-GPIOPortF_Handler  	PROC
-					LDR			R1,=0x4002541C		;
-					LDR			R0,[R1]
-					ORR			R0,R0,#0x10
-					STR			R0,[R1]
-	
-					BL WINNER
-					ENDP
-
+GPIOPortF_Handler  	
 GPIOPortG_Handler
 GPIOPortH_Handler
 UART2_Handler
