@@ -99,76 +99,73 @@ ARM Macro Assembler    Page 2
    56 00000000                 EXTERN           PLAYER_1
    57 00000000                 EXTERN           PLAYER_2
    58 00000000                 EXTERN           PLAYER2S_TURN
-   59 00000000                 EXPORT           __main      ; Make available
-   60 00000000         
-   61 00000000         ;*******************************************************
+   59 00000000                 EXTERN           PLAYER1S_TURN
+   60 00000000                 EXPORT           __main      ; Make available
+   61 00000000         
+   62 00000000         ;*******************************************************
                        ********
-   62 00000000         ; Main Function
-   63 00000000         ; CE - PA3
-   64 00000000         ; Din- PA5
-   65 00000000         ; CLK- PA2
-   66 00000000         ; RST- PB0
-   67 00000000         ; DC - PB1
-   68 00000000         ;   PE1- ADC XDATA POT
-   69 00000000         ;  PE2- ADC YDATA POT
-   70 00000000         ;*******************************************************
+   63 00000000         ; Main Function
+   64 00000000         ; CE - PA3
+   65 00000000         ; Din- PA5
+   66 00000000         ; CLK- PA2
+   67 00000000         ; RST- PB0
+   68 00000000         ; DC - PB1
+   69 00000000         ;   PE1- ADC XDATA POT
+   70 00000000         ;  PE2- ADC YDATA POT
+   71 00000000         ;*******************************************************
                        ******** 
-   71 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   72 00000000         __main  PROC
-   73 00000000 F7FF FFFE       BL               MEMORY_MAP
-   74 00000004 F7FF FFFE       BL               SPI_CONFIG
-   75 00000008 F7FF FFFE       BL               SCREEN_INIT
-   76 0000000C F7FF FFFE       BL               ADC_INIT
-   77 00000010 F7FF FFFE       BL               PORTF_INIT
-   78 00000014         
+   72 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   73 00000000         __main  PROC
+   74 00000000 F7FF FFFE       BL               MEMORY_MAP
+   75 00000004 F7FF FFFE       BL               SPI_CONFIG
+   76 00000008 F7FF FFFE       BL               SCREEN_INIT
+   77 0000000C F7FF FFFE       BL               ADC_INIT
+   78 00000010 F7FF FFFE       BL               PORTF_INIT
    79 00000014         
-   80 00000014 F04F 0400       LDR              R4, = 0x00
-   81 00000018 F7FF FFFE       BL               ADDRESS_CHANGE
-   82 0000001C         
-   83 0000001C F44F 70FC       LDR              R0,=0x1F8
-   84 00000020 4D07            LDR              R5,=EMPTY_FIELD
-   85 00000022 F815 4B01 
+   80 00000014         
+   81 00000014 F04F 0400       LDR              R4, = 0x00
+   82 00000018 F7FF FFFE       BL               ADDRESS_CHANGE
+   83 0000001C         
+   84 0000001C F44F 70FC       LDR              R0,=0x1F8
+   85 00000020 4D08            LDR              R5,=EMPTY_FIELD
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+   86 00000022 F815 4B01 
                        LOOP    LDRB             R4,[R5],#1
-   86 00000026 F7FF FFFE       BL               DATA_WRITE
-   87 0000002A 1E40            SUBS             R0,R0,#1
-   88 0000002C D1F9            BNE              LOOP
-   89 0000002E         
+   87 00000026 F7FF FFFE       BL               DATA_WRITE
+   88 0000002A 1E40            SUBS             R0,R0,#1
+   89 0000002C D1F9            BNE              LOOP
    90 0000002E         
-   91 0000002E F7FF FFFE       BL               PLAYER_1
-   92 00000032 F7FF FFFE       BL               PLAYER2S_TURN
-   93 00000036 F7FF FFFE       BL               PLAYER_2
-   94 0000003A F7FF FFFE       BL               WINORLOSE
-   95 0000003E         
-   96 0000003E         
-   97 0000003E         
-   98 0000003E         
-   99 0000003E         
-  100 0000003E         
-  101 0000003E         END_code
-  102 0000003E E7FE            B                __main
-  103 00000040         
-  104 00000040         ;*******************************************************
+   91 0000002E F7FF FFFE       BL               PLAYER1S_TURN
+   92 00000032 F7FF FFFE       BL               PLAYER_1
+   93 00000036 F7FF FFFE       BL               PLAYER2S_TURN
+   94 0000003A F7FF FFFE       BL               PLAYER_2
+   95 0000003E F7FF FFFE       BL               WINORLOSE
+   96 00000042         
+   97 00000042         
+   98 00000042         END_code
+   99 00000042 E7FE            B                __main
+  100 00000044         
+  101 00000044         ;*******************************************************
                        ********
-  105 00000040         ; End of the program  section
-  106 00000040         ;*******************************************************
+  102 00000044         ; End of the program  section
+  103 00000044         ;*******************************************************
                        ********
-  107 00000040         ;LABEL      DIRECTIVE       VALUE                       
+  104 00000044         ;LABEL      DIRECTIVE       VALUE                       
                            COMMENT
-  108 00000040                 ENDP
-  109 00000040                 ALIGN
-  110 00000040                 END
+  105 00000044                 ENDP
+  106 00000044                 ALIGN
+  107 00000044                 END
               20000400 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -ID:\Work
-\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSIS\Includ
-e --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --predef
-ine="TM4C123GH6PM SETA 1" --list=.\listings\main.lst Main.s
+erwork --depend=.\objects\main.d -o.\objects\main.o -I.\RTE\_Target_1 -IC:\Keil
+_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\ARM\CMSIS\
+Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" --
+predefine="TM4C123GH6PM SETA 1" --list=.\listings\main.lst Main.s
 
 
 
@@ -190,11 +187,11 @@ Comment: sdata unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-END_code 0000003E
+END_code 00000042
 
 Symbol: END_code
    Definitions
-      At line 101 in file Main.s
+      At line 98 in file Main.s
    Uses
       None
 Comment: END_code unused
@@ -202,18 +199,18 @@ LOOP 00000022
 
 Symbol: LOOP
    Definitions
-      At line 85 in file Main.s
+      At line 86 in file Main.s
    Uses
-      At line 88 in file Main.s
+      At line 89 in file Main.s
 Comment: LOOP used once
 __main 00000000
 
 Symbol: __main
    Definitions
-      At line 72 in file Main.s
+      At line 73 in file Main.s
    Uses
-      At line 59 in file Main.s
-      At line 102 in file Main.s
+      At line 60 in file Main.s
+      At line 99 in file Main.s
 
 main 00000000
 
@@ -244,7 +241,7 @@ Symbol: EMPTY_FIELD
    Definitions
       At line 13 in file Main.s
    Uses
-      At line 84 in file Main.s
+      At line 85 in file Main.s
 Comment: EMPTY_FIELD used once
 OLD_SHIP_LOC_X 20001000
 
@@ -353,7 +350,7 @@ Symbol: ADC_INIT
    Definitions
       At line 50 in file Main.s
    Uses
-      At line 76 in file Main.s
+      At line 77 in file Main.s
 Comment: ADC_INIT used once
 ADC_READ_SHIP 00000000
 
@@ -369,7 +366,7 @@ Symbol: ADDRESS_CHANGE
    Definitions
       At line 47 in file Main.s
    Uses
-      At line 81 in file Main.s
+      At line 82 in file Main.s
 Comment: ADDRESS_CHANGE used once
 DATA_WRITE 00000000
 
@@ -377,7 +374,7 @@ Symbol: DATA_WRITE
    Definitions
       At line 44 in file Main.s
    Uses
-      At line 86 in file Main.s
+      At line 87 in file Main.s
 Comment: DATA_WRITE used once
 DELAY_100ms 00000000
 
@@ -431,7 +428,7 @@ Symbol: MEMORY_MAP
    Definitions
       At line 54 in file Main.s
    Uses
-      At line 73 in file Main.s
+      At line 74 in file Main.s
 Comment: MEMORY_MAP used once
 My_SYSTICK 00000000
 
@@ -441,13 +438,21 @@ Symbol: My_SYSTICK
    Uses
       None
 Comment: My_SYSTICK unused
+PLAYER1S_TURN 00000000
+
+Symbol: PLAYER1S_TURN
+   Definitions
+      At line 59 in file Main.s
+   Uses
+      At line 91 in file Main.s
+Comment: PLAYER1S_TURN used once
 PLAYER2S_TURN 00000000
 
 Symbol: PLAYER2S_TURN
    Definitions
       At line 58 in file Main.s
    Uses
-      At line 92 in file Main.s
+      At line 93 in file Main.s
 Comment: PLAYER2S_TURN used once
 PLAYER2_PUSHBUTTON 00000000
 
@@ -463,7 +468,13 @@ Symbol: PLAYER_1
    Definitions
       At line 56 in file Main.s
    Uses
-      At line 91 in file Main.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+External symbols
+
+      At line 92 in file Main.s
 Comment: PLAYER_1 used once
 PLAYER_2 00000000
 
@@ -471,13 +482,7 @@ Symbol: PLAYER_2
    Definitions
       At line 57 in file Main.s
    Uses
-
-
-
-ARM Macro Assembler    Page 3 Alphabetic symbol ordering
-External symbols
-
-      At line 93 in file Main.s
+      At line 94 in file Main.s
 Comment: PLAYER_2 used once
 PORTF_INIT 00000000
 
@@ -485,7 +490,7 @@ Symbol: PORTF_INIT
    Definitions
       At line 49 in file Main.s
    Uses
-      At line 77 in file Main.s
+      At line 78 in file Main.s
 Comment: PORTF_INIT used once
 PUSHBUTTON 00000000
 
@@ -501,7 +506,7 @@ Symbol: SCREEN_INIT
    Definitions
       At line 40 in file Main.s
    Uses
-      At line 75 in file Main.s
+      At line 76 in file Main.s
 Comment: SCREEN_INIT used once
 SPI_CONFIG 00000000
 
@@ -509,7 +514,7 @@ Symbol: SPI_CONFIG
    Definitions
       At line 39 in file Main.s
    Uses
-      At line 74 in file Main.s
+      At line 75 in file Main.s
 Comment: SPI_CONFIG used once
 WINNER 00000000
 
@@ -525,7 +530,13 @@ Symbol: WINORLOSE
    Definitions
       At line 52 in file Main.s
    Uses
-      At line 94 in file Main.s
+      At line 95 in file Main.s
 Comment: WINORLOSE used once
-21 symbols
-375 symbols in table
+22 symbols
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+External symbols
+
+376 symbols in table

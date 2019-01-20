@@ -7,6 +7,8 @@ OUT_PORTB_DC		EQU			0x40005008		;00000010
 			EXTERN		DELAY_100ms
 			EXTERN		DATA_WRITE
 			EXTERN 		ADDRESS_CHANGE
+			EXTERN      PortF_Input
+			EXTERN 		__main
 			EXPORT		WINNER
 
 ;***************************************************************
@@ -18,7 +20,7 @@ OUT_PORTB_DC		EQU			0x40005008		;00000010
 
 WINNER	PROC
 			
-			PUSH		{LR}   
+		;	PUSH		{LR}   
 			MOV			R6,#600
 loop		MOV			R4,#0x00
 			BL			DATA_WRITE
@@ -154,11 +156,18 @@ loop		MOV			R4,#0x00
 		MOV R4, #0x00
 		BL DATA_WRITE
 		
-	
+wait		BL  		PortF_Input             ; read all of the switches on Port F
+			CMP 		R0, #0x00   
+			BEQ 		wait
+			
+			CMP 		R0, #0x11;
+			BEQ 		wait
+			
+			B __main 
 			
 			
-			POP {LR}
-			BX LR
+			;POP {LR}
+			;BX LR
 			ENDP
 			ALIGN
 			END	

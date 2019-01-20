@@ -37,7 +37,7 @@ GP_MEMORY			EQU			0x20006000		;6000-60FF Zero array for random use
 			EXTERN		DATA_WRITE
 			EXTERN		INIT_SYSTICK
 			EXPORT		PLAYER_2
-
+	
 ;***************************************************************
 ;	Main Function
 ;	PortF_Input reads button status to R0
@@ -132,6 +132,7 @@ FINISH		CMP 		R9, #0
 			
 			POP			{LR}
 			BX			LR
+			
 ;***************************************************************
 ; End of the program  section
 ;***************************************************************

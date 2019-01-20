@@ -9,6 +9,8 @@ EMPTY_FIELD			EQU			0x20000400		;400-5F7
 			EXTERN		DELAY_100ms
 			EXTERN		DATA_WRITE
 			EXTERN 		ADDRESS_CHANGE
+			EXTERN		__main
+			EXTERN 		PortF_Input
 			EXPORT		LOSER
 
 ;***************************************************************
@@ -20,7 +22,7 @@ EMPTY_FIELD			EQU			0x20000400		;400-5F7
 
 LOSER	PROC
 			
-			PUSH		{LR}   
+			;PUSH		{LR}   
 			MOV			R6,#600
 loop		MOV			R4,#0x00
 			BL			DATA_WRITE
@@ -89,8 +91,16 @@ loop		MOV			R4,#0x00
 		BL DATA_WRITE	
 		MOV R4, #0x46
 		BL DATA_WRITE			
-			POP {LR}
-			BX LR
+			;POP {LR}
+			;BX LR
+wait		BL  		PortF_Input             ; read all of the switches on Port F
+			CMP 		R0, #0x00   
+			BEQ 		wait
+			
+			CMP 		R0, #0x11;
+			BEQ 		wait
+			
+			B __main 
 			ENDP
 ***********************
 
@@ -281,6 +291,12 @@ loop1		MOV			R4,#0x00
 				
 			
 			POP {LR}
+			
+			
+			BX LR
+			
+			
+		;	B __main
 		ENDP
 			ALIGN
 			END	

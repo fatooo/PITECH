@@ -40,10 +40,10 @@ ARM Macro Assembler    Page 1
               001E8480 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
 erwork --depend=.\objects\delay_1sec.d -o.\objects\delay_1sec.o -I.\RTE\_Target
-_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\
-CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
-26" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\delay_1sec.lst DELAY_1s
-ec.s
+_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v
+5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION 
+SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\delay_1sec.lst DE
+LAY_1sec.s
 
 
 

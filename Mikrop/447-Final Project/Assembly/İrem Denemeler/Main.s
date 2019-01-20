@@ -56,6 +56,7 @@ CURSOR_MEMO			EQU			0x20001150		;1150-1199
 			EXTERN		PLAYER_1
 			EXTERN		PLAYER_2
 			EXTERN		PLAYER2S_TURN
+			EXTERN		PLAYER1S_TURN
 			EXPORT  	__main					; Make available
 
 ;***************************************************************
@@ -87,15 +88,11 @@ LOOP  		LDRB 		R4,[R5],#1
 			SUBS 		R0,R0,#1
 			BNE 		LOOP		
 				
-		
+			BL 			PLAYER1S_TURN
 			BL			PLAYER_1
 			BL 			PLAYER2S_TURN
 			BL			PLAYER_2
 			BL 			WINORLOSE
-			
-			
-			
-	
 
 
 END_code	

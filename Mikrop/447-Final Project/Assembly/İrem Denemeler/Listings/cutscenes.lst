@@ -252,19 +252,227 @@ ARM Macro Assembler    Page 4
   213 0000024A F85D EB04       POP              {LR}
   214 0000024E 4770            BX               LR
   215 00000250                 ENDP
-  216 00000250                 ALIGN
-  217 00000250                 END
-Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\cutscenes.d -o.\objects\cutscenes.o -I.\RTE\_Target_1
- -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CM
-SIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526
+  216 00000250         
+  217 00000250                 EXPORT           PLAYER1S_TURN
+  218 00000250         PLAYER1S_TURN
+                               PROC
+  219 00000250         
+  220 00000250 B500            PUSH             {LR}
 
 
 
 ARM Macro Assembler    Page 5 
 
 
-" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\cutscenes.lst CUTSCENES.s
+  221 00000252         
+  222 00000252 F44F 7616       MOV              R6,#600
+  223 00000256 F04F 0400 
+                       loop2   MOV              R4,#0x00
+  224 0000025A F7FF FFFE       BL               DATA_WRITE
+  225 0000025E 1E76            SUBS             R6,R6,#1
+  226 00000260 D1F9            BNE              loop2
+  227 00000262         
+  228 00000262 F240 2406       LDR              R4,=0x0206
+  229 00000266 F7FF FFFE       BL               ADDRESS_CHANGE
+  230 0000026A         
+  231 0000026A         ;{0x7f, 0x09, 0x09, 0x09, 0x06} // 50 P
+  232 0000026A         
+  233 0000026A F04F 047F       MOV              R4, #0x7F
+  234 0000026E F7FF FFFE       BL               DATA_WRITE
+  235 00000272 F04F 0409       MOV              r4,#0x09
+  236 00000276 F7FF FFFE       BL               DATA_WRITE
+  237 0000027A F04F 0409       MOV              R4, #0x09
+  238 0000027E F7FF FFFE       BL               DATA_WRITE
+  239 00000282 F04F 0409       MOV              R4, #0x09
+  240 00000286 F7FF FFFE       BL               DATA_WRITE
+  241 0000028A F04F 0406       MOV              R4, #0x06
+  242 0000028E F7FF FFFE       BL               DATA_WRITE
+  243 00000292         
+  244 00000292         ;  ,{0x7f, 0x40, 0x40, 0x40, 0x40} // 4c L
+  245 00000292 F04F 047F       MOV              R4, #0x7F
+  246 00000296 F7FF FFFE       BL               DATA_WRITE
+  247 0000029A F04F 0440       MOV              r4,#0x40
+  248 0000029E F7FF FFFE       BL               DATA_WRITE
+  249 000002A2 F04F 0440       MOV              R4, #0x40
+  250 000002A6 F7FF FFFE       BL               DATA_WRITE
+  251 000002AA F04F 0440       MOV              R4, #0x40
+  252 000002AE F7FF FFFE       BL               DATA_WRITE
+  253 000002B2 F04F 0440       MOV              R4, #0x40
+  254 000002B6 F7FF FFFE       BL               DATA_WRITE
+  255 000002BA         ;{0x7e, 0x11, 0x11, 0x11, 0x7e} // 41 A
+  256 000002BA         
+  257 000002BA F04F 047E       MOV              R4, #0x7E
+  258 000002BE F7FF FFFE       BL               DATA_WRITE
+  259 000002C2 F04F 0411       MOV              r4,#0x11
+  260 000002C6 F7FF FFFE       BL               DATA_WRITE
+  261 000002CA F04F 0411       MOV              R4, #0x11
+  262 000002CE F7FF FFFE       BL               DATA_WRITE
+  263 000002D2 F04F 0411       MOV              R4, #0x11
+  264 000002D6 F7FF FFFE       BL               DATA_WRITE
+  265 000002DA F04F 047E       MOV              R4, #0x7E
+  266 000002DE F7FF FFFE       BL               DATA_WRITE
+  267 000002E2         
+  268 000002E2         ;{0x07, 0x08, 0x70, 0x08, 0x07} // 59 Y
+  269 000002E2 F04F 0407       MOV              R4, #0x07
+  270 000002E6 F7FF FFFE       BL               DATA_WRITE
+  271 000002EA F04F 0408       MOV              r4,#0x08
+  272 000002EE F7FF FFFE       BL               DATA_WRITE
+  273 000002F2 F04F 0470       MOV              R4, #0x70
+  274 000002F6 F7FF FFFE       BL               DATA_WRITE
+  275 000002FA F04F 0408       MOV              R4, #0x08
+  276 000002FE F7FF FFFE       BL               DATA_WRITE
+  277 00000302 F04F 0407       MOV              R4, #0x07
+  278 00000306 F7FF FFFE       BL               DATA_WRITE
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  279 0000030A         
+  280 0000030A         ;  ,{0x7f, 0x49, 0x49, 0x49, 0x41} // 45 E
+  281 0000030A F04F 047F       MOV              R4, #0x7F
+  282 0000030E F7FF FFFE       BL               DATA_WRITE
+  283 00000312 F04F 0449       MOV              r4,#0x49
+  284 00000316 F7FF FFFE       BL               DATA_WRITE
+  285 0000031A F04F 0449       MOV              R4, #0x49
+  286 0000031E F7FF FFFE       BL               DATA_WRITE
+  287 00000322 F04F 0449       MOV              R4, #0x49
+  288 00000326 F7FF FFFE       BL               DATA_WRITE
+  289 0000032A F04F 0441       MOV              R4, #0x41
+  290 0000032E F7FF FFFE       BL               DATA_WRITE
+  291 00000332         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R   
+  292 00000332 F04F 047F       MOV              R4, #0x7F
+  293 00000336 F7FF FFFE       BL               DATA_WRITE
+  294 0000033A F04F 0409       MOV              r4,#0x09
+  295 0000033E F7FF FFFE       BL               DATA_WRITE
+  296 00000342 F04F 0419       MOV              R4, #0x19
+  297 00000346 F7FF FFFE       BL               DATA_WRITE
+  298 0000034A F04F 0429       MOV              R4, #0x29
+  299 0000034E F7FF FFFE       BL               DATA_WRITE
+  300 00000352 F04F 0446       MOV              R4, #0x46
+  301 00000356 F7FF FFFE       BL               DATA_WRITE
+  302 0000035A         ;{0x00, 0x42, 0x7f, 0x40, 0x00} // 31 1
+  303 0000035A         ;   ,{0x42, 0x61, 0x51, 0x49, 0x46} // 32 2
+  304 0000035A F04F 0400       MOV              R4, #0x00
+  305 0000035E F7FF FFFE       BL               DATA_WRITE
+  306 00000362 F04F 0442       MOV              r4,#0x42
+  307 00000366 F7FF FFFE       BL               DATA_WRITE
+  308 0000036A F04F 047F       MOV              R4, #0x7f
+  309 0000036E F7FF FFFE       BL               DATA_WRITE
+  310 00000372 F04F 0440       MOV              R4, #0x40
+  311 00000376 F7FF FFFE       BL               DATA_WRITE
+  312 0000037A F04F 0400       MOV              R4, #0x00
+  313 0000037E F7FF FFFE       BL               DATA_WRITE
+  314 00000382         ;{0x00, 0x05, 0x03, 0x00, 0x00} // 27 '
+  315 00000382         
+  316 00000382 F04F 0400       MOV              R4, #0x00
+  317 00000386 F7FF FFFE       BL               DATA_WRITE
+  318 0000038A F04F 0405       MOV              r4,#0x05
+  319 0000038E F7FF FFFE       BL               DATA_WRITE
+  320 00000392 F04F 0403       MOV              R4, #0x03
+  321 00000396 F7FF FFFE       BL               DATA_WRITE
+  322 0000039A F04F 0400       MOV              R4, #0x00
+  323 0000039E F7FF FFFE       BL               DATA_WRITE
+  324 000003A2 F04F 0400       MOV              R4, #0x00
+  325 000003A6 F7FF FFFE       BL               DATA_WRITE
+  326 000003AA         ;  ,{0x46, 0x49, 0x49, 0x49, 0x31} // 53 S
+  327 000003AA F04F 0446       MOV              R4, #0x46
+  328 000003AE F7FF FFFE       BL               DATA_WRITE
+  329 000003B2 F04F 0449       MOV              r4,#0x49
+  330 000003B6 F7FF FFFE       BL               DATA_WRITE
+  331 000003BA F04F 0449       MOV              R4, #0x49
+  332 000003BE F7FF FFFE       BL               DATA_WRITE
+  333 000003C2 F04F 0449       MOV              R4, #0x49
+  334 000003C6 F7FF FFFE       BL               DATA_WRITE
+  335 000003CA F04F 0431       MOV              R4, #0x31
+  336 000003CE F7FF FFFE       BL               DATA_WRITE
+  337 000003D2         ; SPACE
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  338 000003D2 F04F 0400       MOV              R4, #0x00
+  339 000003D6 F7FF FFFE       BL               DATA_WRITE
+  340 000003DA F04F 0400       MOV              r4,#0x00
+  341 000003DE F7FF FFFE       BL               DATA_WRITE
+  342 000003E2 F04F 0400       MOV              R4, #0x00
+  343 000003E6 F7FF FFFE       BL               DATA_WRITE
+  344 000003EA F04F 0400       MOV              R4, #0x00
+  345 000003EE F7FF FFFE       BL               DATA_WRITE
+  346 000003F2 F04F 0400       MOV              R4, #0x00
+  347 000003F6 F7FF FFFE       BL               DATA_WRITE
+  348 000003FA         
+  349 000003FA         ;{0x01, 0x01, 0x7f, 0x01, 0x01} // 54 T
+  350 000003FA         
+  351 000003FA F04F 0401       MOV              R4, #0x01
+  352 000003FE F7FF FFFE       BL               DATA_WRITE
+  353 00000402 F04F 0401       MOV              r4,#0x01
+  354 00000406 F7FF FFFE       BL               DATA_WRITE
+  355 0000040A F04F 047F       MOV              R4, #0x7F
+  356 0000040E F7FF FFFE       BL               DATA_WRITE
+  357 00000412 F04F 0401       MOV              R4, #0x01
+  358 00000416 F7FF FFFE       BL               DATA_WRITE
+  359 0000041A F04F 0401       MOV              R4, #0x01
+  360 0000041E F7FF FFFE       BL               DATA_WRITE
+  361 00000422         
+  362 00000422         ;{0x3f, 0x40, 0x40, 0x40, 0x3f} // 55 U
+  363 00000422 F04F 043F       MOV              R4, #0x3F
+  364 00000426 F7FF FFFE       BL               DATA_WRITE
+  365 0000042A F04F 0440       MOV              r4,#0x40
+  366 0000042E F7FF FFFE       BL               DATA_WRITE
+  367 00000432 F04F 0440       MOV              R4, #0x40
+  368 00000436 F7FF FFFE       BL               DATA_WRITE
+  369 0000043A F04F 0440       MOV              R4, #0x40
+  370 0000043E F7FF FFFE       BL               DATA_WRITE
+  371 00000442 F04F 043F       MOV              R4, #0x3F
+  372 00000446 F7FF FFFE       BL               DATA_WRITE
+  373 0000044A         
+  374 0000044A         ; ,{0x7f, 0x09, 0x19, 0x29, 0x46} // 52 R   
+  375 0000044A F04F 047F       MOV              R4, #0x7F
+  376 0000044E F7FF FFFE       BL               DATA_WRITE
+  377 00000452 F04F 0409       MOV              r4,#0x09
+  378 00000456 F7FF FFFE       BL               DATA_WRITE
+  379 0000045A F04F 0419       MOV              R4, #0x19
+  380 0000045E F7FF FFFE       BL               DATA_WRITE
+  381 00000462 F04F 0429       MOV              R4, #0x29
+  382 00000466 F7FF FFFE       BL               DATA_WRITE
+  383 0000046A F04F 0446       MOV              R4, #0x46
+  384 0000046E F7FF FFFE       BL               DATA_WRITE
+  385 00000472         
+  386 00000472         ;   ,{0x7f, 0x04, 0x08, 0x10, 0x7f} // 4e N
+  387 00000472 F04F 047F       MOV              R4, #0x7F
+  388 00000476 F7FF FFFE       BL               DATA_WRITE
+  389 0000047A F04F 0404       MOV              r4,#0x04
+  390 0000047E F7FF FFFE       BL               DATA_WRITE
+  391 00000482 F04F 0408       MOV              R4, #0x08
+  392 00000486 F7FF FFFE       BL               DATA_WRITE
+  393 0000048A F04F 0410       MOV              R4, #0x10
+  394 0000048E F7FF FFFE       BL               DATA_WRITE
+  395 00000492 F04F 047F       MOV              R4, #0x7F
+  396 00000496 F7FF FFFE       BL               DATA_WRITE
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  397 0000049A         
+  398 0000049A         
+  399 0000049A F85D EB04       POP              {LR}
+  400 0000049E 4770            BX               LR
+  401 000004A0                 ENDP
+  402 000004A0         
+  403 000004A0                 ALIGN
+  404 000004A0                 END
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\cutscenes.d -o.\objects\cutscenes.o -I.\RTE\_Target_1
+ -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\
+ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SE
+TA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\cutscenes.lst CUTSC
+ENES.s
 
 
 
@@ -286,6 +494,14 @@ Comment: sdata unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
+PLAYER1S_TURN 00000250
+
+Symbol: PLAYER1S_TURN
+   Definitions
+      At line 218 in file CUTSCENES.s
+   Uses
+      At line 217 in file CUTSCENES.s
+Comment: PLAYER1S_TURN used once
 PLAYER2S_TURN 00000000
 
 Symbol: PLAYER2S_TURN
@@ -302,6 +518,14 @@ Symbol: loop1
    Uses
       At line 40 in file CUTSCENES.s
 Comment: loop1 used once
+loop2 00000256
+
+Symbol: loop2
+   Definitions
+      At line 223 in file CUTSCENES.s
+   Uses
+      At line 226 in file CUTSCENES.s
+Comment: loop2 used once
 routines 00000000
 
 Symbol: routines
@@ -310,7 +534,7 @@ Symbol: routines
    Uses
       None
 Comment: routines unused
-3 symbols
+5 symbols
 
 
 
@@ -347,7 +571,8 @@ Symbol: ADDRESS_CHANGE
       At line 26 in file CUTSCENES.s
    Uses
       At line 43 in file CUTSCENES.s
-Comment: ADDRESS_CHANGE used once
+      At line 229 in file CUTSCENES.s
+
 DATA_WRITE 00000000
 
 Symbol: DATA_WRITE
@@ -398,13 +623,13 @@ Symbol: DATA_WRITE
       At line 142 in file CUTSCENES.s
       At line 144 in file CUTSCENES.s
       At line 146 in file CUTSCENES.s
-      At line 148 in file CUTSCENES.s
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
+      At line 148 in file CUTSCENES.s
       At line 150 in file CUTSCENES.s
       At line 153 in file CUTSCENES.s
       At line 155 in file CUTSCENES.s
@@ -431,6 +656,83 @@ External symbols
       At line 206 in file CUTSCENES.s
       At line 208 in file CUTSCENES.s
       At line 210 in file CUTSCENES.s
+      At line 224 in file CUTSCENES.s
+      At line 234 in file CUTSCENES.s
+      At line 236 in file CUTSCENES.s
+      At line 238 in file CUTSCENES.s
+      At line 240 in file CUTSCENES.s
+      At line 242 in file CUTSCENES.s
+      At line 246 in file CUTSCENES.s
+      At line 248 in file CUTSCENES.s
+      At line 250 in file CUTSCENES.s
+      At line 252 in file CUTSCENES.s
+      At line 254 in file CUTSCENES.s
+      At line 258 in file CUTSCENES.s
+      At line 260 in file CUTSCENES.s
+      At line 262 in file CUTSCENES.s
+      At line 264 in file CUTSCENES.s
+      At line 266 in file CUTSCENES.s
+      At line 270 in file CUTSCENES.s
+      At line 272 in file CUTSCENES.s
+      At line 274 in file CUTSCENES.s
+      At line 276 in file CUTSCENES.s
+      At line 278 in file CUTSCENES.s
+      At line 282 in file CUTSCENES.s
+      At line 284 in file CUTSCENES.s
+      At line 286 in file CUTSCENES.s
+      At line 288 in file CUTSCENES.s
+      At line 290 in file CUTSCENES.s
+      At line 293 in file CUTSCENES.s
+      At line 295 in file CUTSCENES.s
+      At line 297 in file CUTSCENES.s
+      At line 299 in file CUTSCENES.s
+      At line 301 in file CUTSCENES.s
+      At line 305 in file CUTSCENES.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+External symbols
+
+      At line 307 in file CUTSCENES.s
+      At line 309 in file CUTSCENES.s
+      At line 311 in file CUTSCENES.s
+      At line 313 in file CUTSCENES.s
+      At line 317 in file CUTSCENES.s
+      At line 319 in file CUTSCENES.s
+      At line 321 in file CUTSCENES.s
+      At line 323 in file CUTSCENES.s
+      At line 325 in file CUTSCENES.s
+      At line 328 in file CUTSCENES.s
+      At line 330 in file CUTSCENES.s
+      At line 332 in file CUTSCENES.s
+      At line 334 in file CUTSCENES.s
+      At line 336 in file CUTSCENES.s
+      At line 339 in file CUTSCENES.s
+      At line 341 in file CUTSCENES.s
+      At line 343 in file CUTSCENES.s
+      At line 345 in file CUTSCENES.s
+      At line 347 in file CUTSCENES.s
+      At line 352 in file CUTSCENES.s
+      At line 354 in file CUTSCENES.s
+      At line 356 in file CUTSCENES.s
+      At line 358 in file CUTSCENES.s
+      At line 360 in file CUTSCENES.s
+      At line 364 in file CUTSCENES.s
+      At line 366 in file CUTSCENES.s
+      At line 368 in file CUTSCENES.s
+      At line 370 in file CUTSCENES.s
+      At line 372 in file CUTSCENES.s
+      At line 376 in file CUTSCENES.s
+      At line 378 in file CUTSCENES.s
+      At line 380 in file CUTSCENES.s
+      At line 382 in file CUTSCENES.s
+      At line 384 in file CUTSCENES.s
+      At line 388 in file CUTSCENES.s
+      At line 390 in file CUTSCENES.s
+      At line 392 in file CUTSCENES.s
+      At line 394 in file CUTSCENES.s
+      At line 396 in file CUTSCENES.s
 
 2 symbols
-342 symbols in table
+344 symbols in table

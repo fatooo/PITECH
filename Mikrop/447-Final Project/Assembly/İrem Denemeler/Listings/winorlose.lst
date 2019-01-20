@@ -265,9 +265,10 @@ ARM Macro Assembler    Page 5
 
 
 erwork --depend=.\objects\winorlose.d -o.\objects\winorlose.o -I.\RTE\_Target_1
- -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CM
-SIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526
-" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\winorlose.lst WINORLOSE.s
+ -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\
+ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SE
+TA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\winorlose.lst WINOR
+LOSE.s
 
 
 

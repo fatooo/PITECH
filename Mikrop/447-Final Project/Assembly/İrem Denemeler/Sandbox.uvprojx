@@ -443,11 +443,6 @@
               <FilePath>.\LOSER.s</FilePath>
             </File>
             <File>
-              <FileName>PUSHBUTTON.s</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\PUSHBUTTON.s</FilePath>
-            </File>
-            <File>
               <FileName>ADC_INIT.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\ADC_INIT.s</FilePath>
@@ -506,6 +501,11 @@
               <FileName>END_CASE.s</FileName>
               <FileType>2</FileType>
               <FilePath>.\END_CASE.s</FilePath>
+            </File>
+            <File>
+              <FileName>PUSHBUTTON.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\PUSHBUTTON.s</FilePath>
             </File>
           </Files>
         </Group>
