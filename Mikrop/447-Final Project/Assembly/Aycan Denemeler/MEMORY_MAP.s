@@ -9,6 +9,7 @@ MINEFIELD			EQU			0x20002000		;2000-21F
 SHIP_EMPTY			EQU			0x20000800		;800-807
 SHIP_CIVIL			EQU			0x20000808		;808-80F
 SHIP_BATTLE			EQU			0x20000810		;810-817
+FLAG_BATTLE			EQU			0x20000810		;for fun
 CURSOR				EQU			0x20000818		;818-81A
 MINE				EQU			0x2000081B		;81B-81D
 OLD_SHIP_LOC_X		EQU			0x20001000		;1000
@@ -147,6 +148,28 @@ Clean_ship_cursor_memo
 loop2		STRB		R0,[R5],#1			
 			SUBS		R1,R1,#1
 			BNE			loop2
+	
+flagship
+			LDR			R5,=FLAG_BATTLE
+			
+			MOV			R0,#0x20
+			STRB		R0,[R5],#1
+			MOV			R0,#0x60
+			STRB		R0,[R5],#1
+			MOV			R0,#0xCC
+			STRB		R0,[R5],#1
+			MOV			R0,#0xDE
+			STRB		R0,[R5],#1
+			MOV			R0,#0xFF
+			STRB		R0,[R5],#1
+			MOV			R0,#0xD2
+			STRB		R0,[R5],#1
+			MOV			R0,#0xE0
+			STRB		R0,[R5],#1
+			MOV			R0,#0x60
+			STRB		R0,[R5],#1
+
+	
 	
 			POP			{LR}
 			BX			LR
