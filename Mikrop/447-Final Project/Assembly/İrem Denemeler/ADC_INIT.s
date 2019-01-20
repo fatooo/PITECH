@@ -16,6 +16,7 @@ ADC0_SSMUX3	EQU 0x400380A0 ; Input channel select
 ADC0_SSCTL3	EQU 0x400380A4 ; Sample sequence control
 ADC0_SSFIFO3	EQU 0x400380A8 ; Channel 3 results
 ADC0_PP		EQU 0x40038FC4 ; Sample rate
+ADC0_SAC		EQU 0x40038030 ; Sample rate
 ; GPIO Registers
 RCGCGPIO	EQU 0x400FE608 ; GPIO clock register
 ; PORT E base address EQU 0x40024000
@@ -39,6 +40,7 @@ ADC1_SSMUX3	EQU 0x400390A0 ; Input channel select
 ADC1_SSCTL3	EQU 0x400390A4 ; Sample sequence control
 ADC1_SSFIFO3	EQU 0x400390A8 ; Channel 3 results
 ADC1_PP		EQU 0x40039FC4 ; Sample rate	
+ADC1_SAC		EQU 0x40039030 ; Sample rate
 ; Start clocks for features to be used
 
 ;***************************************************************
@@ -131,6 +133,12 @@ ADC_INIT	PROC
 	LDR R0, [R1]
 	ORR R0, R0, #0x08 ; set bit 3 to enable seq 3
 	STR R0, [R1] ; sampling enabled but not initiated yet
+	
+	LDR R1, =ADC0_SAC
+	LDR R0, [R1]
+	ORR R0, R0, #0x02 ; set bit 3 to enable seq 3
+	STR R0, [R1] ; sampling enabled but not initiated yet
+
 
 		; ADC1 INITIALIZATION
 		
@@ -164,7 +172,11 @@ ADC_INIT	PROC
 	LDR R0, [R1]
 	ORR R0, R0, #0x08 ; set bit 3 to enable seq 3
 	STR R0, [R1] ; sampling enabled but not initiated yet
-	
+		
+	LDR R1, =ADC1_SAC
+	LDR R0, [R1]
+	ORR R0, R0, #0x02 ; set bit 3 to enable seq 3
+	STR R0, [R1] ; sampling enabled but not initiated yet
 	POP {LR}
 	BX LR
 	ENDP   ;; END OF INITIALIZATION

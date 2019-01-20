@@ -122,25 +122,25 @@ ARM Macro Assembler    Page 2
    77 0000000C F7FF FFFE       BL               ADC_INIT
    78 00000010 F7FF FFFE       BL               PORTF_INIT
    79 00000014         
-   80 00000014         
-   81 00000014 F04F 0400       LDR              R4, = 0x00
-   82 00000018 F7FF FFFE       BL               ADDRESS_CHANGE
-   83 0000001C         
-   84 0000001C F44F 70FC       LDR              R0,=0x1F8
-   85 00000020 4D08            LDR              R5,=EMPTY_FIELD
+   80 00000014 F7FF FFFE       BL               PLAYER1S_TURN
+   81 00000018 F04F 0400       LDR              R4, = 0x00
+   82 0000001C F7FF FFFE       BL               ADDRESS_CHANGE
+   83 00000020         
+   84 00000020 F44F 70FC       LDR              R0,=0x1F8
+   85 00000024 4D07            LDR              R5,=EMPTY_FIELD
 
 
 
 ARM Macro Assembler    Page 3 
 
 
-   86 00000022 F815 4B01 
+   86 00000026 F815 4B01 
                        LOOP    LDRB             R4,[R5],#1
-   87 00000026 F7FF FFFE       BL               DATA_WRITE
-   88 0000002A 1E40            SUBS             R0,R0,#1
-   89 0000002C D1F9            BNE              LOOP
-   90 0000002E         
-   91 0000002E F7FF FFFE       BL               PLAYER1S_TURN
+   87 0000002A F7FF FFFE       BL               DATA_WRITE
+   88 0000002E 1E40            SUBS             R0,R0,#1
+   89 00000030 D1F9            BNE              LOOP
+   90 00000032         
+   91 00000032         
    92 00000032 F7FF FFFE       BL               PLAYER_1
    93 00000036 F7FF FFFE       BL               PLAYER2S_TURN
    94 0000003A F7FF FFFE       BL               PLAYER_2
@@ -195,7 +195,7 @@ Symbol: END_code
    Uses
       None
 Comment: END_code unused
-LOOP 00000022
+LOOP 00000026
 
 Symbol: LOOP
    Definitions
@@ -444,7 +444,7 @@ Symbol: PLAYER1S_TURN
    Definitions
       At line 59 in file Main.s
    Uses
-      At line 91 in file Main.s
+      At line 80 in file Main.s
 Comment: PLAYER1S_TURN used once
 PLAYER2S_TURN 00000000
 

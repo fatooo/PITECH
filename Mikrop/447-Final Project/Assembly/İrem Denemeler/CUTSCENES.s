@@ -23,6 +23,7 @@ EMPTY_FIELD			EQU			0x20000400		;400-5F7
 			THUMB
 			ALIGN
 			EXTERN		DATA_WRITE
+			EXTERN 		PortF_Input
 			EXTERN		ADDRESS_CHANGE
 ;***************************************************************
 ;	PLAYER2'S TURN sign
@@ -32,7 +33,8 @@ EMPTY_FIELD			EQU			0x20000400		;400-5F7
 PLAYER2S_TURN  PROC
 					
 			PUSH		{LR}   
-
+			LDR	R4,=0x00
+			BL	ADDRESS_CHANGE
 			MOV			R6,#600
 loop1		MOV			R4,#0x00
 			BL			DATA_WRITE
@@ -219,6 +221,8 @@ PLAYER1S_TURN  PROC
 					
 			PUSH		{LR}   
 
+			LDR	R4,=0x00
+			BL	ADDRESS_CHANGE
 			MOV			R6,#600
 loop2		MOV			R4,#0x00
 			BL			DATA_WRITE
@@ -394,7 +398,13 @@ loop2		MOV			R4,#0x00
 			BL DATA_WRITE	
 			MOV R4, #0x7F
 			BL DATA_WRITE	
-				
+wait		BL  		PortF_Input             ; read all of the switches on Port F
+			CMP 		R0, #0x00   
+			BEQ 		wait
+			
+			CMP 		R0, #0x11;
+			BEQ 		wait
+			
 			
 			POP 		{LR}
 			BX			LR

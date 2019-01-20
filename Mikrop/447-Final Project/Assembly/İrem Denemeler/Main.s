@@ -77,7 +77,7 @@ __main		PROC
 			BL 			ADC_INIT
 			BL   		PORTF_INIT	
 			
-			
+			BL 			PLAYER1S_TURN
 			LDR 		R4, = 0x00 
 			BL 			ADDRESS_CHANGE 
 			
@@ -88,7 +88,7 @@ LOOP  		LDRB 		R4,[R5],#1
 			SUBS 		R0,R0,#1
 			BNE 		LOOP		
 				
-			BL 			PLAYER1S_TURN
+	
 			BL			PLAYER_1
 			BL 			PLAYER2S_TURN
 			BL			PLAYER_2

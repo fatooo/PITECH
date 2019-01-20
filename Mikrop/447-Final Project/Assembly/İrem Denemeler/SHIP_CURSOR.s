@@ -27,6 +27,7 @@ SHIP_BATTLE			EQU			0x20000810		;810-817
 			THUMB
 			ALIGN
 			EXTERN		DELAY_1ms
+			EXTERN		DELAY_10ms
 			EXTERN		ADDRESS_CHANGE
 			EXTERN		DATA_WRITE
 			EXPORT		SHIP_CURSOR
@@ -66,6 +67,7 @@ Clear
 			LDR			R5,=OLD_SHIP_LOC_X
 			LDRB		R1,[R5]		
 			ADD			R4,R4,R1				;create Yloc-Xloc structure for address change
+			BL 			DELAY_10ms
 			BL			ADDRESS_CHANGE
 			
 			MOV			R3,#0x54				
