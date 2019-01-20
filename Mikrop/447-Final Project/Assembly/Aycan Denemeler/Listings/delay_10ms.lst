@@ -5,21 +5,22 @@ ARM Macro Assembler    Page 1
 
 
     1 00000000         ;SYMBOL  DIRECTIVE VALUE   COMMENT
-    2 00000000 000007D0 
-                       Delay   EQU              0x7D0       ;number of loops ne
-                                                            ed for 1ms (=2000)
+    2 00000000 00004E20 
+                       Delay   EQU              0x4E20      ;number of loops ne
+                                                            ed for 100ms (=2000
+                                                            00)
     3 00000000         
     4 00000000         ;LABEL  DIRECTIVE VALUE   COMMENT
     5 00000000                 AREA             routines,READONLY,CODE
     6 00000000                 THUMB
-    7 00000000                 EXPORT           DELAY_1ms
+    7 00000000                 EXPORT           DELAY_10ms
     8 00000000         
     9 00000000         ;LABEL  DIRECTIVE VALUE   COMMENT
    10 00000000         
-   11 00000000         DELAY_1ms
+   11 00000000         DELAY_10ms
    12 00000000 B401            PUSH             {R0}
    13 00000002         
-   14 00000002 F44F 60FA       LDR              R0,=Delay
+   14 00000002 F644 6020       LDR              R0,=Delay
    15 00000006         loop                                 ;Each loop took 0.5
                                                             00 µs 
    16 00000006 1E40            SUBS             R0,R0,#1    ;0.083 µs
@@ -37,38 +38,38 @@ ARM Macro Assembler    Page 1
    28 00000018                 ALIGN
    29 00000018                 END
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
-erwork --depend=.\objects\delay_1ms.d -o.\objects\delay_1ms.o -I.\RTE\_Target_1
- -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v5\
-ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SE
-TA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\delay_1ms.lst DELAY
-_1ms.s
+erwork --depend=.\objects\delay_10ms.d -o.\objects\delay_10ms.o -I.\RTE\_Target
+_1 -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -IC:\Keil_v
+5\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION 
+SETA 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\delay_10ms.lst DE
+LAY_10ms.s
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Relocatable symbols
 
-DELAY_1ms 00000000
+DELAY_10ms 00000000
 
-Symbol: DELAY_1ms
+Symbol: DELAY_10ms
    Definitions
-      At line 11 in file DELAY_1ms.s
+      At line 11 in file DELAY_10ms.s
    Uses
-      At line 7 in file DELAY_1ms.s
-Comment: DELAY_1ms used once
+      At line 7 in file DELAY_10ms.s
+Comment: DELAY_10ms used once
 loop 00000006
 
 Symbol: loop
    Definitions
-      At line 15 in file DELAY_1ms.s
+      At line 15 in file DELAY_10ms.s
    Uses
-      At line 22 in file DELAY_1ms.s
+      At line 22 in file DELAY_10ms.s
 Comment: loop used once
 routines 00000000
 
 Symbol: routines
    Definitions
-      At line 5 in file DELAY_1ms.s
+      At line 5 in file DELAY_10ms.s
    Uses
       None
 Comment: routines unused
@@ -79,13 +80,13 @@ Comment: routines unused
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
-Delay 000007D0
+Delay 00004E20
 
 Symbol: Delay
    Definitions
-      At line 2 in file DELAY_1ms.s
+      At line 2 in file DELAY_10ms.s
    Uses
-      At line 14 in file DELAY_1ms.s
+      At line 14 in file DELAY_10ms.s
 Comment: Delay used once
 1 symbol
 338 symbols in table

@@ -12,32 +12,32 @@ ARM Macro Assembler    Page 1
                        ********
     5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
     6 00000000         
-    7 00000000         
-    8 00000000         ;*******************************************************
+    7 00000000         ;*******************************************************
                        ********
-    9 00000000         ; Directives - This Data Section is part of the code
-   10 00000000         ; It is in the read only section  so values cannot be ch
+    8 00000000         ; Directives - This Data Section is part of the code
+    9 00000000         ; It is in the read only section  so values cannot be ch
                        anged.
-   11 00000000         ;*******************************************************
+   10 00000000         ;*******************************************************
                        ******** 
-   12 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   13 00000000                 AREA             sdata, DATA, READONLY
-   14 00000000                 THUMB
-   15 00000000         
-   16 00000000         ;*******************************************************
+   11 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   12 00000000                 AREA             sdata, DATA, READONLY
+   13 00000000                 THUMB
+   14 00000000         
+   15 00000000         ;*******************************************************
                        ********
-   17 00000000         ; Program section           
-   18 00000000         ;*******************************************************
+   16 00000000         ; Program section           
+   17 00000000         ;*******************************************************
                        ********
-   19 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
-   20 00000000                 AREA             routines,READONLY,CODE
-   21 00000000                 THUMB
-   22 00000000                 ALIGN
-   23 00000000                 EXPORT           EMP_FIELD
-   24 00000000         
-   25 00000000         ;*******************************************************
+   18 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   19 00000000                 AREA             routines,READONLY,CODE
+   20 00000000                 THUMB
+   21 00000000                 ALIGN
+   22 00000000                 EXPORT           EMP_FIELD
+   23 00000000         
+   24 00000000         ;*******************************************************
                        ********
-   26 00000000         ; Main Function
+   25 00000000         ; Main Function
+   26 00000000         ; Generates memorymap for empty playfield
    27 00000000         ;*******************************************************
                        ******** 
    28 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
@@ -104,7 +104,7 @@ ARM Macro Assembler    Page 2
    77 00000066 1E49            SUBS             R1,R1,#1
    78 00000068 D1FB            BNE              loop5
    79 0000006A         
-   80 0000006A F04F 0080       MOV              R0,#0x80
+   80 0000006A F04F 0001       MOV              R0,#0x01
    81 0000006E F04F 0142       MOV              R1,#0x42
    82 00000072         
    83 00000072 F805 0B01 
@@ -158,7 +158,7 @@ sdata 00000000
 
 Symbol: sdata
    Definitions
-      At line 13 in file EmptyPlayfield.s
+      At line 12 in file EmptyPlayfield.s
    Uses
       None
 Comment: sdata unused
@@ -175,7 +175,7 @@ Symbol: EMP_FIELD
    Definitions
       At line 29 in file EmptyPlayfield.s
    Uses
-      At line 23 in file EmptyPlayfield.s
+      At line 22 in file EmptyPlayfield.s
 Comment: EMP_FIELD used once
 grand_loop 00000026
 
@@ -251,7 +251,7 @@ routines 00000000
 
 Symbol: routines
    Definitions
-      At line 20 in file EmptyPlayfield.s
+      At line 19 in file EmptyPlayfield.s
    Uses
       None
 Comment: routines unused

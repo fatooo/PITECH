@@ -23,13 +23,16 @@ SYSCTL_RCGCGPIO_R  EQU   0x400FE608
 SHIP1					EQU			0x20001100
 SHIP2					EQU			0x20001110
 SHIP3					EQU			0x20001120
+	
 SHIP4					EQU			0x20001130
 
 CURSOR1					EQU			0x20001150
 CURSOR2					EQU			0x20001160
 CURSOR3					EQU			0x20001170
 CURSOR4					EQU			0x20001180
-
+	
+EMPTY_FIELD			EQU			0x20000400		;400-5F7
+PLAYFIELD			EQU			0x20000600		;600-7F7
 
 
 ;***************************************************************
@@ -47,7 +50,7 @@ CURSOR4					EQU			0x20001180
 			EXTERN WINNER
 			EXTERN LOSER
 
-			;	EXTERN SHIP_CURSOR
+				EXTERN SHIP_CURSOR
 ;***************************************************************
 ;	PORTF INITIALIZATION
 ; INITIALIZE PF0 AND PF4 FOR PUSH BUTTONS ON THE BOARD
@@ -94,6 +97,7 @@ PORTF_INIT  PROC
 ; Input: R0  count
 ; Output: none
 ONESEC             EQU 5333333      ; approximately 1s delay at ~16 MHz clock
+HALFSEC			EQU 2666666
 QUARTERSEC         EQU 1333333      ; approximately 0.25s delay at ~16 MHz clock
 FIFTHSEC           EQU 1066666      ; approximately 0.2s delay at ~16 MHz clock
 TENTHSEC			EQU 533333	
@@ -135,53 +139,37 @@ PortF_Input PROC
 			EXTERN ADDRESS_CHANGE
 			EXTERN SHIP_CURSOR
 			EXTERN PLAYER2
+			EXTERN	DATA_WRITE
 			EXPORT PUSHBUTTON
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 
 PUSHBUTTON	PROC
 			PUSH {LR}
 loop
-	
-			LDR R0, =TENTHSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
+			LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
 			BL  delay                       ; delay at least (3*R0) cycles
 	
 			BL ADC_READ_SHIP               ;;; READ SHIP LOCATION 
 			BL  PortF_Input                 ; read all of the switches on Port F
-			
-			CMP R0, #0 ;  
-			BEQ CONT
-			
-			CMP R0, #3;
-			BEQ CONT
-			
-			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 
-			
+
+			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 		
 			;01 CIVILIAN
 			;10 BATLLESHIP
-			
-						
-
-
 			LSL R0,R0, #24; ;; SHIFT 24 TIMES
-			ADD R4, R4, R0 ;  R4 KEEPS STATUS OF PUSHBUTTONS AND XY DATA
-			
-			
+			ADD R4, R4, R0 ;  R4 KEEPS STATUS OF PUSHBUTTONS AND XY DATA		
 			LSR R0, #24 ; SHIFT RIGHT AGAIN
 			;;; CHECK STATUS FOR MAPPING CONDITION
 ;;;;; CHECK IF THE SHIP HAS A COLLISION WITH PREVIOUSLY DEPLOYED SHIP
-			CMP R0, #0 ;  
+			CMP R0, #0x11 ;  
 			BEQ CONT	;NO DEPLOYMENT	
-			CMP R0, #3;
+			CMP R0, #0x00;
 			BEQ CONT  ; NO DEPLOYMENT
-			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 
-			
+			;; IF R0 EITHER 01 OR 10 MEANS CIVILIAN OR BATTLESHIP 			
 			;01 CIVILIAN
 			;10 BATLLESHIP
-
 			LDR R0, =SHIP1					
 				
 nextlocation	
-				
 				LDR R1, [R0] ; R0 KEEPS THE SHIP 1 VALUE ADDRESS
 							; R1 KEEPS THE SHIP1 LOCATIONDATA
 				CMP R1, #0 ; IF EMPTY BLOCK 
@@ -190,60 +178,23 @@ nextlocation
 				CMP R5, #0x30 ; last ship location ss full so 4 ships demployed
 				BEQ FINISH  ; end this push button loop  4 SHIPS DEPLOYED
 				
-				AND R2, R1, #0x0F   ;; R2 SHOWS XDATA OFF NEW SHIP
-				AND R3, R4, #0x0F ; R3 SHOWS THE SHIP1S X DATA
-				CMP R3, R2
-				BGT GREATER
-				BLT LESSTHAN
-				BEQ  CONT   ; IF EQUAL SKIP THE MAPPING
-
-GREATER 		SUB R3, R2
-				CMP R3, #8
-				BLE CONT  ;; COLLISION CONDITON SKIP MAPPING
-				BGT YDATACHECK ; NO X COLLISION CHECK Y COLIISON 
-LESSTHAN		SUB R3,R2, R3
-				CMP R3, #8
-				BLE CONT  ;; THERE IS COLLISION CONDITON SKIP MAPPING
-				BGT YDATACHECK
-				
-			;; XDATA CHECK DOES NOT SHOW ANY COLLISON MOCE TO THE YDATA CHECK
-YDATACHECK		AND R2, R1, #0xF0   ;; R2 SHOWS YDATA OFF NEW SHIP
-				AND R3, R4, #0xF0 ; R3 SHOWS THE SHIP1S Y DATA
-				CMP R3, R2
-				BGT GREATER_Y
-				BLT LESSTHAN_Y
-				BEQ  CONT   ; IF EQUAL SKIP THE MAPPING
-
-GREATER_Y 		SUB R3, R2
-				CMP R3, #8
-				BLE CONT  ;; COLLISION CONDITON SKIP MAPPING
-				BGT NEXT
-LESSTHAN_Y		SUB R3,R2, R3
-				CMP R3, #8
-				BLE CONT  ;; COLLISION CONDITON SKIP MAPPING
-				BGT NEXT
-				
-
-NEXT			ADD R0, #0x10
+				ADD R0, #0x10
 				B	   nextlocation
 						
 MAPPING			STR R4, [R0] 
 			
 
- 
+CONT 			BL SHIP_CURSOR			
+				B   loop
+								
 
-CONT 		BL SHIP_CURSOR
-			
-				
-			B   loop
-			
-						
-
-FINISH		BL  PortF_Input                 ; read all of the switches on Port F
-			CMP R0, #0 ;  
+FINISH		LDR R0, =FIFTHSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
+			BL  delay                       ; delay at least (3*R0) cycles
+			BL  PortF_Input                 ; read all of the switches on Port F
+			CMP R0, #0x00 ;  
 			BEQ FINISH
 			
-			CMP R0, #3;
+			CMP R0, #0x11;
 			BEQ FINISH
 			
 			
@@ -251,6 +202,25 @@ FINISH		BL  PortF_Input                 ; read all of the switches on Port F
 			; PLAYER2'S TURN SHOWN ON SCREEN
 			
 			BL PLAYER2  
+wait		BL  PortF_Input                 ; read all of the switches on Port F
+			CMP R0, #0x00 ;  
+			BEQ wait
+			
+			CMP R0, #0x11;
+			BEQ wait
+			
+			LDR R4, = 0x0 
+			BL ADDRESS_CHANGE 
+			
+			LDR R0, =0x1F8
+			LDR R5,= PLAYFIELD
+LOOP  		LDRB R4 ,[R5], #1
+			BL DATA_WRITE
+			SUBS R0, R0, #1
+			BNE LOOP	
+			
+			LDR R0, =HALFSEC               ; R0 = FIFTHSEC (delay 0.2 second) 0.1 DELAY
+			BL  delay  
 			
 			;; SHOW SHIPS CHECK TUS CONDITION 
 			POP{LR}    ; EXIT THE SUBMODULE IF THERE ARE 4 SHIPS

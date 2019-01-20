@@ -23,6 +23,7 @@ SSI0_SR				EQU			0x4000800C
 			THUMB
 			ALIGN
 			EXTERN		DELAY_1ms
+			EXTERN		DELAY_10ms
 			EXTERN		DELAY_100ms
 			EXPORT		ADDRESS_CHANGE
 
@@ -45,7 +46,9 @@ ADDRESS_CHANGE	PROC
 			MOV			R1,#0x00
 			STR			R1,[R5]			
 			
-			BL			DELAY_100ms
+			BL			DELAY_10ms
+			BL			DELAY_10ms
+			
 			
 control		LDR			R5,=SSI0_SR
 			LDR			R0,[R5]
@@ -59,14 +62,14 @@ control		LDR			R5,=SSI0_SR
 			LDR			R5,=SSI0_DR
 			STR			R2,[R5]				;send Y coordinate
 			
-			BL			DELAY_100ms
+		
 			
 			AND			R1,R4,#0xFF			;X coordinate
 			ADD			R1,R1,#0x80
 			LDR			R5,=SSI0_DR				
 			STR			R1,[R5]				;Send X coordinate
 			
-			BL			DELAY_100ms
+			BL			DELAY_10ms
 			
 			LDR			R5,=OUT_PORTB_DC
 			MOV			R1,#0xFF

@@ -3,12 +3,22 @@
 ; These directives do not allocate memory
 ;***************************************************************
 ;SYMBOL				DIRECTIVE	VALUE			COMMENT
-Field_Address		EQU			0x20000400
+
 
 OUT_PORTB_DC		EQU			0x40005008		;00000010
 OUT_PORTB_RESET		EQU			0x40005004		;00000001
 SSI0_DR				EQU			0x40008008
 SSI0_SR				EQU			0x4000800C
+	
+EMPTY_FIELD			EQU			0x20000400		;400-5F7
+PLAYFIELD			EQU			0x20000600		;600-7F7
+SHIP_EMPTY			EQU			0x20000800		;800-807
+SHIP_CIVIL			EQU			0x20000808		;808-80F
+SHIP_BATTLE			EQU			0x20000810		;810-817
+OLD_SHIP_LOC_X		EQU			0x20001000		;1000
+OLD_SHIP_LOC_Y		EQU			0x20001001		;1001	
+SHIP_MEMO			EQU			0x20001100		;1100-1149
+CURSOR_MEMO			EQU			0x20001150		;1150-1199
 ;***************************************************************
 ; Directives - This Data Section is part of the code
 ; It is in the read only section  so values cannot be changed.
@@ -37,6 +47,10 @@ SSI0_SR				EQU			0x4000800C
 			EXTERN PORTF_INIT
 			EXTERN ADC_INIT
 			EXTERN WINNER
+			EXTERN WINORLOSE
+			EXTERN PLAYER2_PUSHBUTTON 
+		
+				EXTERN MEMORY_MAP
 				EXTERN ADC_READ_SHIP
 			EXPORT  	__main					; Make available
 
@@ -52,58 +66,46 @@ SSI0_SR				EQU			0x4000800C
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 __main		PROC
-			
-			LDR			R5,=Field_Address		
-			BL			EMP_FIELD
+			BL MEMORY_MAP
 			BL			SPI_CONFIG
 			BL 			SCREEN_INIT
-			MOV			R6,#600
-			LDR			R5,=OUT_PORTB_DC
-			MOV			R1,#0xFF
-			STR			R1,[R5]
-loop		MOV			R4,#0x00
-			BL			DATA_WRITE
-			SUBS		R6,R6,#1
-			BNE			loop
-			LDR			R5,=Field_Address
-						
 			BL 			ADC_INIT
-		;BL 			ADC_READ_SHIP
-			BL			EMP_FIELD
-		;	BL 			WINNER
-		;	BL			INIT_SYSTICK
 			BL   		PORTF_INIT	
+			LDR R4, = 0x0 
+			BL ADDRESS_CHANGE 
+			
+			LDR R0, =0x1F8
+			LDR R5,= EMPTY_FIELD
+LOOP  		LDRB R4 ,[R5], #1
+			BL DATA_WRITE
+			SUBS R0, R0, #1
+			BNE LOOP		
+
+
+
+	
+	
 			BL			PUSHBUTTON
 			
 			
+						LDR R4, = 0x0 
+			BL ADDRESS_CHANGE 
 			
-
+			LDR R0, =0x1F8
+			LDR R5,= EMPTY_FIELD
+LOOP2  		LDRB R4 ,[R5], #1
+			BL DATA_WRITE
+			SUBS R0, R0, #1
+			BNE LOOP2	
 			
-		
+			;;; player2sturn starts
 
-
-;			LDR			R1,=17					;x coordinate 
-;			LDR			R2,=00					;y coordinate
-;			LSL			R2,R2,#8
-;			ADD			R4,R1,R2
-;			BL			ADDRESS_CHANGE		
-
-;			MOV			R6,#600
-;			LDR			R5,=OUT_PORTB_DC
-;			MOV			R1,#0xFF
-;			STR			R1,[R5]
-;			BL			DELAY_1ms
-			
-;loop		MOV			R4,#0x01
-;			BL			DATA_WRITE
-;			SUBS		R6,R6,#1
-;			BNE			loop
-
-;			BL			IREM_CO
-			
-
-END_code	BL PUSHBUTTON
-				B			END_code
+			BL	INIT_SYSTICK
+	
+			 BL PLAYER2_PUSHBUTTON
+		; BL WINORLOSE
+END_code	
+				B			__main
 			
 ;***************************************************************
 ; End of the program  section

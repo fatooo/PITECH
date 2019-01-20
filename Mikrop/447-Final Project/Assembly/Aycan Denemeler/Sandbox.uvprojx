@@ -457,6 +457,31 @@
               <FileType>2</FileType>
               <FilePath>.\WINORLOSE.s</FilePath>
             </File>
+            <File>
+              <FileName>SHIP_CURSOR.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\SHIP_CURSOR.s</FilePath>
+            </File>
+            <File>
+              <FileName>MEMORY_MAP.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\MEMORY_MAP.s</FilePath>
+            </File>
+            <File>
+              <FileName>DELAY_1sec.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\DELAY_1sec.s</FilePath>
+            </File>
+            <File>
+              <FileName>DELAY_10ms.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\DELAY_10ms.s</FilePath>
+            </File>
+            <File>
+              <FileName>PLAYER2_PUSHBUTTON.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\PLAYER2_PUSHBUTTON.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

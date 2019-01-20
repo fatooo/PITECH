@@ -1,4 +1,6 @@
 OUT_PORTB_DC		EQU			0x40005008		;00000010
+	
+EMPTY_FIELD			EQU			0x20000400		;400-5F7
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 			AREA		routines,READONLY,CODE
 			THUMB
@@ -100,14 +102,14 @@ loop		MOV			R4,#0x00
 PLAYER2  PROC
 					
 			PUSH		{LR}   
+
 			MOV			R6,#600
-loop2		MOV			R4,#0x00
+loop1		MOV			R4,#0x00
 			BL			DATA_WRITE
 			SUBS		R6,R6,#1
-			BNE			loop2
-
+			BNE			loop1
 			
-			LDR	R4,=0x0210
+			LDR	R4,=0x0206
 			BL	ADDRESS_CHANGE
 			
 			  ;{0x7f, 0x09, 0x09, 0x09, 0x06} // 50 P

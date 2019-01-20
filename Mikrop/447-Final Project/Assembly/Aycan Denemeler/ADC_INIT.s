@@ -112,7 +112,9 @@ ADC_INIT	PROC
 	; Select input channel
 	LDR R1, =ADC0_SSMUX3
 	LDR R0, [R1]
-	BIC R0, R0, #0x000F ; clear bits 3:0 to select AIN0
+	;BIC R0, R0, #0x000F ; clear bits 3:0 to select AIN0
+	ORR R0, R0, #0x0002
+	BIC R0, R0, #0x000D
 	STR R0, [R1]
 	; Config sample sequence
 	LDR R1, =ADC0_SSCTL3
@@ -242,7 +244,7 @@ COMPUTE
 
 			LDR R3, =73 ; R3 IS THE DIVISOR
 			UDIV R5, R5, R3 ; 
-			ADD R5, #8 ; R5 KEEPS THE X
+			ADD R5, #6 ; R5 KEEPS THE X
 	
 			LDR R3, =170 ;
 			UDIV R1, R1, R3;

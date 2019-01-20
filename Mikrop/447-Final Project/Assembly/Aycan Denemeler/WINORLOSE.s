@@ -55,10 +55,9 @@ nextship		LDR R1, [R0]  ; LOAD SHIP1 VALUE
 ; R4 KEEPS THE CURSOR DATA
 ******
 
-BATTLESHIP  		
-					LDR R4, [R3] 
-					AND  R2, R1, #0x0F0  ; r2 now keeps y data of the ship
-					AND  R5, R4, #0x0F0 ; R5 KEEPS THE Y DATA OF CURSOR
+BATTLESHIP  		LDR R4, [R3] 
+					AND  R2, R1, #0x0FF00  ; r2 now keeps y data of the ship
+					AND  R5, R4, #0x0FF00 ; R5 KEEPS THE Y DATA OF CURSOR
 					
 					SUBS R5, R2  ;  if the cursor data on top of the other data check new
 					BLT checknewcursor;
@@ -66,8 +65,8 @@ BATTLESHIP
 					CMP R5, #8 ; COMPARE IF THE CURSOR IN THE SHIP AREA 
 					BGT checknewcursor
 					
-					AND  R2, R1, #0x00F  ; r2 now keeps x data of the ship
-					AND  R5, R4, #0x00F ; R5 KEEPS THE x DATA OF CURSOR
+					AND  R2, R1, #0x00FF  ; r2 now keeps x data of the ship
+					AND  R5, R4, #0x00FF ; R5 KEEPS THE x DATA OF CURSOR
 					
 					SUBS R5, R2  ;  if the cursor data on top of the other data check new
 					BLT checknewcursor;
@@ -88,8 +87,8 @@ checknewcursor   	AND R5,R3, #0xF0 ;   AND IT R5 SHOWS THE 2ND DIGIT
 
 
 CIVILIAN			LDR R4, [R3] 
-					AND  R2, R1, #0x0F0  ; r2 now keeps y data of the ship
-					AND  R5, R4, #0x0F0 ; R5 KEEPS THE Y DATA OF CURSOR
+					AND  R2, R1, #0x0Ff00  ; r2 now keeps y data of the ship
+					AND  R5, R4, #0x0Ff00 ; R5 KEEPS THE Y DATA OF CURSOR
 					
 					SUBS R5, R2  ;  if the cursor data on top of the other data check new
 					BLT checknewcursor_civil;
@@ -97,8 +96,8 @@ CIVILIAN			LDR R4, [R3]
 					CMP R5, #8 ; COMPARE IF THE CURSOR IN THE SHIP AREA 
 					BGT checknewcursor_civil
 					
-					AND  R2, R1, #0x00F  ; r2 now keeps x data of the ship
-					AND  R5, R4, #0x00F ; R5 KEEPS THE x DATA OF CURSOR
+					AND  R2, R1, #0x00Ff  ; r2 now keeps x data of the ship
+					AND  R5, R4, #0x00Ff ; R5 KEEPS THE x DATA OF CURSOR
 					
 					SUBS R5, R2  ;  if the cursor data on top of the other data check new
 					BLT checknewcursor_civil;
@@ -121,12 +120,10 @@ checknewcursor_civil   	AND R5,R3, #0xF0 ;   AND IT R5 SHOWS THE 2ND DIGIT
 
 
 checknewship    	AND R5,R0, #0xF0 ;   AND IT R5 SHOWS THE 2ND DIGIT 
-					CMP R5, #0x30 ; CURSOR SHOWS THE LAST CURSOR LOCATION
+					CMP R5, #0x30 ; SHIP SHOWS THE LAST SHIP LOCATION
 					BEQ WIN
 					ADD R0,R0, #0x10; INCREASE THE CURSOR LOCATION
-					B nextship
-	
-	
+					B nextship		
 	
 LOSE    BL LOSER 
 		B FINISH

@@ -53,38 +53,42 @@ ARM Macro Assembler    Page 1
    34 00000000         DATA_WRITE
                                PROC
    35 00000000 B500            PUSH             {LR}
-   36 00000002         
-   37 00000002 4D07    control LDR              R5,=SSI0_SR
-   38 00000004 6828            LDR              R0,[R5]
-   39 00000006 F000 0002       AND              R0,#0x02
-   40 0000000A 2802            CMP              R0,#0x02
-   41 0000000C D1F9            BNE              control
-   42 0000000E         
-   43 0000000E BF00            NOP
-   44 00000010         
-   45 00000010 4D04            LDR              R5,=SSI0_DR
+   36 00000002 B401            PUSH             {R0}
+   37 00000004 B420            PUSH             {R5}
+   38 00000006         
+   39 00000006 4D08    control LDR              R5,=SSI0_SR
+   40 00000008 6828            LDR              R0,[R5]
+   41 0000000A F000 0002       AND              R0,#0x02
+   42 0000000E 2802            CMP              R0,#0x02
+   43 00000010 D1F9            BNE              control
+   44 00000012         
+   45 00000012 BF00            NOP
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   46 00000012 602C            STR              R4,[R5]
-   47 00000014         
-   48 00000014 F7FF FFFE       BL               DELAY_1ms
+   46 00000014         
+   47 00000014 4D05            LDR              R5,=SSI0_DR
+   48 00000016 602C            STR              R4,[R5]
    49 00000018         
-   50 00000018 F85D EB04       POP              {LR}
-   51 0000001C 4770            BX               LR
-   52 0000001E         ;*******************************************************
+   50 00000018 F7FF FFFE       BL               DELAY_1ms
+   51 0000001C         
+   52 0000001C BC20            POP              {R5}
+   53 0000001E BC01            POP              {R0}
+   54 00000020 F85D EB04       POP              {LR}
+   55 00000024 4770            BX               LR
+   56 00000026         ;*******************************************************
                        ********
-   53 0000001E         ; End of the program  section
-   54 0000001E         ;*******************************************************
+   57 00000026         ; End of the program  section
+   58 00000026         ;*******************************************************
                        ********
-   55 0000001E         ;LABEL      DIRECTIVE       VALUE                       
+   59 00000026         ;LABEL      DIRECTIVE       VALUE                       
                            COMMENT
-   56 0000001E                 ENDP
-   57 0000001E 00 00           ALIGN
-   58 00000020                 END
+   60 00000026                 ENDP
+   61 00000026 00 00           ALIGN
+   62 00000028                 END
               4000800C 
               40008008 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
@@ -122,13 +126,13 @@ Symbol: DATA_WRITE
    Uses
       At line 26 in file Data_write.s
 Comment: DATA_WRITE used once
-control 00000002
+control 00000006
 
 Symbol: control
    Definitions
-      At line 37 in file Data_write.s
+      At line 39 in file Data_write.s
    Uses
-      At line 41 in file Data_write.s
+      At line 43 in file Data_write.s
 Comment: control used once
 routines 00000000
 
@@ -159,7 +163,7 @@ Symbol: SSI0_DR
    Definitions
       At line 8 in file Data_write.s
    Uses
-      At line 45 in file Data_write.s
+      At line 47 in file Data_write.s
 Comment: SSI0_DR used once
 SSI0_SR 4000800C
 
@@ -167,7 +171,7 @@ Symbol: SSI0_SR
    Definitions
       At line 9 in file Data_write.s
    Uses
-      At line 37 in file Data_write.s
+      At line 39 in file Data_write.s
 Comment: SSI0_SR used once
 3 symbols
 
@@ -182,7 +186,7 @@ Symbol: DELAY_1ms
    Definitions
       At line 25 in file Data_write.s
    Uses
-      At line 48 in file Data_write.s
+      At line 50 in file Data_write.s
 Comment: DELAY_1ms used once
 1 symbol
 344 symbols in table

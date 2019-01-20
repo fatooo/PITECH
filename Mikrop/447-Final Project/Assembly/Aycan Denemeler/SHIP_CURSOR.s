@@ -124,7 +124,7 @@ Skip_clear	POP			{R4}
 			
 			CMP			R3,#0x01
 			BEQ			civilian
-			CMP			R3,#0x02
+			CMP			R3,#0x10
 			BEQ			battleship
 			B			on_screen
 
