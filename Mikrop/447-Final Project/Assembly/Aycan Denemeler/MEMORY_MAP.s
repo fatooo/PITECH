@@ -10,6 +10,7 @@ SHIP_EMPTY			EQU			0x20000800		;800-807
 SHIP_CIVIL			EQU			0x20000808		;808-80F
 SHIP_BATTLE			EQU			0x20000810		;810-817
 FLAG_BATTLE			EQU			0x20000810		;for fun
+FLAG_CARRIER		EQU			0x20000808		;for fun
 CURSOR				EQU			0x20000818		;818-81A
 MINE				EQU			0x2000081B		;81B-81D
 OLD_SHIP_LOC_X		EQU			0x20001000		;1000
@@ -168,6 +169,27 @@ flagship
 			STRB		R0,[R5],#1
 			MOV			R0,#0x60
 			STRB		R0,[R5],#1
+
+Carrier
+			LDR			R5,=FLAG_CARRIER
+			
+			MOV			R0,#0x20
+			STRB		R0,[R5],#1
+			MOV			R0,#0x60
+			STRB		R0,[R5],#1
+			MOV			R0,#0xF8
+			STRB		R0,[R5],#1
+			MOV			R0,#0xE2
+			STRB		R0,[R5],#1
+			MOV			R0,#0xE1
+			STRB		R0,[R5],#1
+			MOV			R0,#0xF8
+			STRB		R0,[R5],#1
+			MOV			R0,#0x62
+			STRB		R0,[R5],#1
+			MOV			R0,#0x21
+			STRB		R0,[R5],#1
+
 
 	
 	
