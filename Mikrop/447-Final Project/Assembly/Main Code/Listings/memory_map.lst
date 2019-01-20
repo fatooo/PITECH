@@ -1,0 +1,707 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 20000400 
+                       EMPTY_FIELD
+                               EQU              0x20000400  ;400-5F7
+    7 00000000 20000600 
+                       PLAYFIELD
+                               EQU              0x20000600  ;600-7F7
+    8 00000000 20002000 
+                       MINEFIELD
+                               EQU              0x20002000  ;2000-21F
+    9 00000000 20000800 
+                       SHIP_EMPTY
+                               EQU              0x20000800  ;800-807
+   10 00000000 20000808 
+                       SHIP_CIVIL
+                               EQU              0x20000808  ;808-80F
+   11 00000000 20000810 
+                       SHIP_BATTLE
+                               EQU              0x20000810  ;810-817
+   12 00000000 20000810 
+                       FLAG_BATTLE
+                               EQU              0x20000810  ;for fun
+   13 00000000 20000808 
+                       FLAG_CARRIER
+                               EQU              0x20000808  ;for fun
+   14 00000000 20000818 
+                       CURSOR  EQU              0x20000818  ;818-81A
+   15 00000000 2000081B 
+                       MINE    EQU              0x2000081B  ;81B-81D
+   16 00000000 20001000 
+                       OLD_SHIP_LOC_X
+                               EQU              0x20001000  ;1000
+   17 00000000 20001001 
+                       OLD_SHIP_LOC_Y
+                               EQU              0x20001001  ;1001
+   18 00000000 20001002 
+                       OLD_CURSOR_LOC_X
+                               EQU              0x20001002  ;1002
+   19 00000000 20001003 
+                       OLD_CURSOR_LOC_Y
+                               EQU              0x20001003  ;1003
+   20 00000000 20001100 
+                       SHIP_MEMO
+                               EQU              0x20001100  ;1100-1149
+   21 00000000 20001150 
+                       MINE_MEMO
+                               EQU              0x20001150  ;1150-1199
+   22 00000000 20006000 
+                       GP_MEMORY
+                               EQU              0x20006000  ;6000-60FF Zero arr
+                                                            ay for random use
+   23 00000000         ;*******************************************************
+                       ********
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   24 00000000         ; Directives - This Data Section is part of the code
+   25 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   26 00000000         ;*******************************************************
+                       ******** 
+   27 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   28 00000000                 AREA             sdata, DATA, READONLY
+   29 00000000                 THUMB
+   30 00000000         
+   31 00000000         ;*******************************************************
+                       ********
+   32 00000000         ; Program section           
+   33 00000000         ;*******************************************************
+                       ********
+   34 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   35 00000000                 AREA             routines,READONLY,CODE
+   36 00000000                 THUMB
+   37 00000000                 ALIGN
+   38 00000000                 EXTERN           EMP_FIELD
+   39 00000000                 EXPORT           MEMORY_MAP
+   40 00000000         
+   41 00000000         ;*******************************************************
+                       ********
+   42 00000000         ; Main Function
+   43 00000000         ; Generates the pixel map of necessary objects in the me
+                       mory
+   44 00000000         ;*******************************************************
+                       ******** 
+   45 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   46 00000000         MEMORY_MAP
+                               PROC
+   47 00000000 B500            PUSH             {LR}
+   48 00000002         
+   49 00000002 4D77            LDR              R5,=EMPTY_FIELD
+   50 00000004 F7FF FFFE       BL               EMP_FIELD
+   51 00000008         
+   52 00000008 4D76            LDR              R5,=PLAYFIELD
+   53 0000000A F7FF FFFE       BL               EMP_FIELD
+   54 0000000E         
+   55 0000000E F04F 2520       LDR              R5,=MINEFIELD
+   56 00000012 F7FF FFFE       BL               EMP_FIELD
+   57 00000016         
+   58 00000016         ;*******************************************************
+                       ******** 
+   59 00000016         
+   60 00000016         empty_ship
+   61 00000016 4D74            LDR              R5,=SHIP_EMPTY
+   62 00000018         
+   63 00000018 F04F 00FF       MOV              R0,#0xFF
+   64 0000001C F805 0B01       STRB             R0,[R5],#1
+   65 00000020 F04F 0081       MOV              R0,#0x81
+   66 00000024 F805 0B01       STRB             R0,[R5],#1
+   67 00000028 F04F 0081       MOV              R0,#0x81
+   68 0000002C F805 0B01       STRB             R0,[R5],#1
+   69 00000030 F04F 0081       MOV              R0,#0x81
+   70 00000034 F805 0B01       STRB             R0,[R5],#1
+   71 00000038 F04F 0081       MOV              R0,#0x81
+   72 0000003C F805 0B01       STRB             R0,[R5],#1
+   73 00000040 F04F 0081       MOV              R0,#0x81
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   74 00000044 F805 0B01       STRB             R0,[R5],#1
+   75 00000048 F04F 0081       MOV              R0,#0x81
+   76 0000004C F805 0B01       STRB             R0,[R5],#1
+   77 00000050 F04F 00FF       MOV              R0,#0xFF
+   78 00000054 F805 0B01       STRB             R0,[R5],#1
+   79 00000058         
+   80 00000058         ;*******************************************************
+                       ******** 
+   81 00000058         
+   82 00000058         Civilian_ship
+   83 00000058 4D64            LDR              R5,=SHIP_CIVIL
+   84 0000005A         
+   85 0000005A F04F 00FF       MOV              R0,#0xFF
+   86 0000005E F805 0B01       STRB             R0,[R5],#1
+   87 00000062 F04F 0081       MOV              R0,#0x81
+   88 00000066 F805 0B01       STRB             R0,[R5],#1
+   89 0000006A F04F 0099       MOV              R0,#0x99
+   90 0000006E F805 0B01       STRB             R0,[R5],#1
+   91 00000072 F04F 00A5       MOV              R0,#0xA5
+   92 00000076 F805 0B01       STRB             R0,[R5],#1
+   93 0000007A F04F 00A5       MOV              R0,#0xA5
+   94 0000007E F805 0B01       STRB             R0,[R5],#1
+   95 00000082 F04F 0081       MOV              R0,#0x81
+   96 00000086 F805 0B01       STRB             R0,[R5],#1
+   97 0000008A F04F 0081       MOV              R0,#0x81
+   98 0000008E F805 0B01       STRB             R0,[R5],#1
+   99 00000092 F04F 00FF       MOV              R0,#0xFF
+  100 00000096 F805 0B01       STRB             R0,[R5],#1
+  101 0000009A         
+  102 0000009A         ;*******************************************************
+                       ******** 
+  103 0000009A         
+  104 0000009A         Battleship
+  105 0000009A 4D55            LDR              R5,=SHIP_BATTLE
+  106 0000009C         
+  107 0000009C F04F 00FF       MOV              R0,#0xFF
+  108 000000A0 F805 0B01       STRB             R0,[R5],#1
+  109 000000A4 F04F 00DB       MOV              R0,#0xDB
+  110 000000A8 F805 0B01       STRB             R0,[R5],#1
+  111 000000AC F04F 00A5       MOV              R0,#0xA5
+  112 000000B0 F805 0B01       STRB             R0,[R5],#1
+  113 000000B4 F04F 00DB       MOV              R0,#0xDB
+  114 000000B8 F805 0B01       STRB             R0,[R5],#1
+  115 000000BC F04F 00DB       MOV              R0,#0xDB
+  116 000000C0 F805 0B01       STRB             R0,[R5],#1
+  117 000000C4 F04F 00A5       MOV              R0,#0xA5
+  118 000000C8 F805 0B01       STRB             R0,[R5],#1
+  119 000000CC F04F 00DB       MOV              R0,#0xDB
+  120 000000D0 F805 0B01       STRB             R0,[R5],#1
+  121 000000D4 F04F 00FF       MOV              R0,#0xFF
+  122 000000D8 F805 0B01       STRB             R0,[R5],#1
+  123 000000DC         
+  124 000000DC         ;*******************************************************
+                       ******** 
+  125 000000DC         
+  126 000000DC 4D45    Cursor  LDR              R5,=CURSOR
+  127 000000DE         
+  128 000000DE F04F 0040       MOV              R0,#0x40
+  129 000000E2 F805 0B01       STRB             R0,[R5],#1
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  130 000000E6 F04F 00E0       MOV              R0,#0xE0
+  131 000000EA F805 0B01       STRB             R0,[R5],#1
+  132 000000EE F04F 0040       MOV              R0,#0x40
+  133 000000F2 F805 0B01       STRB             R0,[R5],#1
+  134 000000F6         
+  135 000000F6         ;*******************************************************
+                       ******** 
+  136 000000F6         
+  137 000000F6 4D40    Mine    LDR              R5,=MINE
+  138 000000F8         
+  139 000000F8 F04F 00A0       MOV              R0,#0xA0
+  140 000000FC F805 0B01       STRB             R0,[R5],#1
+  141 00000100 F04F 0040       MOV              R0,#0x40
+  142 00000104 F805 0B01       STRB             R0,[R5],#1
+  143 00000108 F04F 00A0       MOV              R0,#0xA0
+  144 0000010C F805 0B01       STRB             R0,[R5],#1
+  145 00000110         
+  146 00000110         ;*******************************************************
+                       ******** 
+  147 00000110         
+  148 00000110 F04F 0110 
+                       old_memo
+                               MOV              R1,#0x10
+  149 00000114 4D39            LDR              R5,=OLD_SHIP_LOC_X
+  150 00000116 F04F 0000       MOV              R0,#0x00
+  151 0000011A F805 0B01 
+                       loop_oldm
+                               STRB             R0,[R5],#1
+  152 0000011E 1E49            SUBS             R1,R1,#1
+  153 00000120 D1FB            BNE              loop_oldm
+  154 00000122         
+  155 00000122         ;*******************************************************
+                       ******** 
+  156 00000122         
+  157 00000122         Clean_ship_and_cursor_memo
+  158 00000122 F04F 01FF       MOV              R1,#0xFF
+  159 00000126 4D36            LDR              R5,=SHIP_MEMO
+  160 00000128 F04F 0000       MOV              R0,#0x00
+  161 0000012C F805 0B01 
+                       loop_sc STRB             R0,[R5],#1
+  162 00000130 1E49            SUBS             R1,R1,#1
+  163 00000132 D1FB            BNE              loop_sc
+  164 00000134         
+  165 00000134         ;*******************************************************
+                       ******** 
+  166 00000134         
+  167 00000134         Ship_location_pointer
+  168 00000134 4D32            LDR              R5,=SHIP_MEMO
+  169 00000136 F105 0104       ADD              R1,R5,#4
+  170 0000013A 6029            STR              R1,[R5]
+  171 0000013C         
+  172 0000013C         ;*******************************************************
+                       ******** 
+  173 0000013C         
+  174 0000013C         Mine_location_pointer
+  175 0000013C         
+  176 0000013C 4D31            LDR              R5,=MINE_MEMO
+  177 0000013E F105 0104       ADD              R1,R5,#4
+  178 00000142 6029            STR              R1,[R5]
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  179 00000144         
+  180 00000144         ;*******************************************************
+                       ******** 
+  181 00000144         
+  182 00000144         flagship
+  183 00000144 4D2A            LDR              R5,=FLAG_BATTLE
+  184 00000146         
+  185 00000146 F04F 0020       MOV              R0,#0x20
+  186 0000014A F805 0B01       STRB             R0,[R5],#1
+  187 0000014E F04F 0060       MOV              R0,#0x60
+  188 00000152 F805 0B01       STRB             R0,[R5],#1
+  189 00000156 F04F 00CC       MOV              R0,#0xCC
+  190 0000015A F805 0B01       STRB             R0,[R5],#1
+  191 0000015E F04F 00DE       MOV              R0,#0xDE
+  192 00000162 F805 0B01       STRB             R0,[R5],#1
+  193 00000166 F04F 00FF       MOV              R0,#0xFF
+  194 0000016A F805 0B01       STRB             R0,[R5],#1
+  195 0000016E F04F 00D2       MOV              R0,#0xD2
+  196 00000172 F805 0B01       STRB             R0,[R5],#1
+  197 00000176 F04F 00E0       MOV              R0,#0xE0
+  198 0000017A F805 0B01       STRB             R0,[R5],#1
+  199 0000017E F04F 0060       MOV              R0,#0x60
+  200 00000182 F805 0B01       STRB             R0,[R5],#1
+  201 00000186         
+  202 00000186         ;*******************************************************
+                       ******** 
+  203 00000186         
+  204 00000186         Carrier
+  205 00000186 4D19            LDR              R5,=FLAG_CARRIER
+  206 00000188         
+  207 00000188 F04F 0020       MOV              R0,#0x20
+  208 0000018C F805 0B01       STRB             R0,[R5],#1
+  209 00000190 F04F 0060       MOV              R0,#0x60
+  210 00000194 F805 0B01       STRB             R0,[R5],#1
+  211 00000198 F04F 00F8       MOV              R0,#0xF8
+  212 0000019C F805 0B01       STRB             R0,[R5],#1
+  213 000001A0 F04F 00E2       MOV              R0,#0xE2
+  214 000001A4 F805 0B01       STRB             R0,[R5],#1
+  215 000001A8 F04F 00E1       MOV              R0,#0xE1
+  216 000001AC F805 0B01       STRB             R0,[R5],#1
+  217 000001B0 F04F 00F8       MOV              R0,#0xF8
+  218 000001B4 F805 0B01       STRB             R0,[R5],#1
+  219 000001B8 F04F 0062       MOV              R0,#0x62
+  220 000001BC F805 0B01       STRB             R0,[R5],#1
+  221 000001C0 F04F 0021       MOV              R0,#0x21
+  222 000001C4 F805 0B01       STRB             R0,[R5],#1
+  223 000001C8         
+  224 000001C8         ;*******************************************************
+                       ******** 
+  225 000001C8         
+  226 000001C8 4D0F    GP_mem  LDR              R5,=GP_MEMORY
+  227 000001CA F04F 01FF       MOV              R1,#0xFF
+  228 000001CE F04F 0000       MOV              R0,#0x00
+  229 000001D2 F805 0B01 
+                       loop_gpm
+                               STRB             R0,[R5],#1
+  230 000001D6 1E49            SUBS             R1,R1,#1
+  231 000001D8 D1FB            BNE              loop_gpm
+  232 000001DA         
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  233 000001DA         ;*******************************************************
+                       ********
+  234 000001DA         
+  235 000001DA F85D EB04       POP              {LR}
+  236 000001DE 4770            BX               LR
+  237 000001E0         ;*******************************************************
+                       ********
+  238 000001E0         ; End of the program  section
+  239 000001E0         ;*******************************************************
+                       ********
+  240 000001E0         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+  241 000001E0                 ENDP
+  242 000001E0                 ALIGN
+  243 000001E0                 END
+              20000400 
+              20000600 
+              20000800 
+              20000808 
+              20000810 
+              20000818 
+              2000081B 
+              20001000 
+              20001100 
+              20001150 
+              20006000 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\memory_map.d -o.\objects\memory_map.o -I.\RTE\_Target
+_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\
+CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
+26" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\memory_map.lst MEMORY_M
+AP.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 28 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Battleship 0000009A
+
+Symbol: Battleship
+   Definitions
+      At line 104 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Battleship unused
+Carrier 00000186
+
+Symbol: Carrier
+   Definitions
+      At line 204 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Carrier unused
+Civilian_ship 00000058
+
+Symbol: Civilian_ship
+   Definitions
+      At line 82 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Civilian_ship unused
+Clean_ship_and_cursor_memo 00000122
+
+Symbol: Clean_ship_and_cursor_memo
+   Definitions
+      At line 157 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Clean_ship_and_cursor_memo unused
+Cursor 000000DC
+
+Symbol: Cursor
+   Definitions
+      At line 126 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Cursor unused
+GP_mem 000001C8
+
+Symbol: GP_mem
+   Definitions
+      At line 226 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: GP_mem unused
+MEMORY_MAP 00000000
+
+Symbol: MEMORY_MAP
+   Definitions
+      At line 46 in file MEMORY_MAP.s
+   Uses
+      At line 39 in file MEMORY_MAP.s
+Comment: MEMORY_MAP used once
+Mine 000000F6
+
+Symbol: Mine
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 137 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Mine unused
+Mine_location_pointer 0000013C
+
+Symbol: Mine_location_pointer
+   Definitions
+      At line 174 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Mine_location_pointer unused
+Ship_location_pointer 00000134
+
+Symbol: Ship_location_pointer
+   Definitions
+      At line 167 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: Ship_location_pointer unused
+empty_ship 00000016
+
+Symbol: empty_ship
+   Definitions
+      At line 60 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: empty_ship unused
+flagship 00000144
+
+Symbol: flagship
+   Definitions
+      At line 182 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: flagship unused
+loop_gpm 000001D2
+
+Symbol: loop_gpm
+   Definitions
+      At line 229 in file MEMORY_MAP.s
+   Uses
+      At line 231 in file MEMORY_MAP.s
+Comment: loop_gpm used once
+loop_oldm 0000011A
+
+Symbol: loop_oldm
+   Definitions
+      At line 151 in file MEMORY_MAP.s
+   Uses
+      At line 153 in file MEMORY_MAP.s
+Comment: loop_oldm used once
+loop_sc 0000012C
+
+Symbol: loop_sc
+   Definitions
+      At line 161 in file MEMORY_MAP.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 163 in file MEMORY_MAP.s
+Comment: loop_sc used once
+old_memo 00000110
+
+Symbol: old_memo
+   Definitions
+      At line 148 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: old_memo unused
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 35 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: routines unused
+17 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+CURSOR 20000818
+
+Symbol: CURSOR
+   Definitions
+      At line 14 in file MEMORY_MAP.s
+   Uses
+      At line 126 in file MEMORY_MAP.s
+Comment: CURSOR used once
+EMPTY_FIELD 20000400
+
+Symbol: EMPTY_FIELD
+   Definitions
+      At line 6 in file MEMORY_MAP.s
+   Uses
+      At line 49 in file MEMORY_MAP.s
+Comment: EMPTY_FIELD used once
+FLAG_BATTLE 20000810
+
+Symbol: FLAG_BATTLE
+   Definitions
+      At line 12 in file MEMORY_MAP.s
+   Uses
+      At line 183 in file MEMORY_MAP.s
+Comment: FLAG_BATTLE used once
+FLAG_CARRIER 20000808
+
+Symbol: FLAG_CARRIER
+   Definitions
+      At line 13 in file MEMORY_MAP.s
+   Uses
+      At line 205 in file MEMORY_MAP.s
+Comment: FLAG_CARRIER used once
+GP_MEMORY 20006000
+
+Symbol: GP_MEMORY
+   Definitions
+      At line 22 in file MEMORY_MAP.s
+   Uses
+      At line 226 in file MEMORY_MAP.s
+Comment: GP_MEMORY used once
+MINE 2000081B
+
+Symbol: MINE
+   Definitions
+      At line 15 in file MEMORY_MAP.s
+   Uses
+      At line 137 in file MEMORY_MAP.s
+Comment: MINE used once
+MINEFIELD 20002000
+
+Symbol: MINEFIELD
+   Definitions
+      At line 8 in file MEMORY_MAP.s
+   Uses
+      At line 55 in file MEMORY_MAP.s
+Comment: MINEFIELD used once
+MINE_MEMO 20001150
+
+Symbol: MINE_MEMO
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 21 in file MEMORY_MAP.s
+   Uses
+      At line 176 in file MEMORY_MAP.s
+Comment: MINE_MEMO used once
+OLD_CURSOR_LOC_X 20001002
+
+Symbol: OLD_CURSOR_LOC_X
+   Definitions
+      At line 18 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: OLD_CURSOR_LOC_X unused
+OLD_CURSOR_LOC_Y 20001003
+
+Symbol: OLD_CURSOR_LOC_Y
+   Definitions
+      At line 19 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: OLD_CURSOR_LOC_Y unused
+OLD_SHIP_LOC_X 20001000
+
+Symbol: OLD_SHIP_LOC_X
+   Definitions
+      At line 16 in file MEMORY_MAP.s
+   Uses
+      At line 149 in file MEMORY_MAP.s
+Comment: OLD_SHIP_LOC_X used once
+OLD_SHIP_LOC_Y 20001001
+
+Symbol: OLD_SHIP_LOC_Y
+   Definitions
+      At line 17 in file MEMORY_MAP.s
+   Uses
+      None
+Comment: OLD_SHIP_LOC_Y unused
+PLAYFIELD 20000600
+
+Symbol: PLAYFIELD
+   Definitions
+      At line 7 in file MEMORY_MAP.s
+   Uses
+      At line 52 in file MEMORY_MAP.s
+Comment: PLAYFIELD used once
+SHIP_BATTLE 20000810
+
+Symbol: SHIP_BATTLE
+   Definitions
+      At line 11 in file MEMORY_MAP.s
+   Uses
+      At line 105 in file MEMORY_MAP.s
+Comment: SHIP_BATTLE used once
+SHIP_CIVIL 20000808
+
+Symbol: SHIP_CIVIL
+   Definitions
+      At line 10 in file MEMORY_MAP.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 83 in file MEMORY_MAP.s
+Comment: SHIP_CIVIL used once
+SHIP_EMPTY 20000800
+
+Symbol: SHIP_EMPTY
+   Definitions
+      At line 9 in file MEMORY_MAP.s
+   Uses
+      At line 61 in file MEMORY_MAP.s
+Comment: SHIP_EMPTY used once
+SHIP_MEMO 20001100
+
+Symbol: SHIP_MEMO
+   Definitions
+      At line 20 in file MEMORY_MAP.s
+   Uses
+      At line 159 in file MEMORY_MAP.s
+      At line 168 in file MEMORY_MAP.s
+
+17 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+EMP_FIELD 00000000
+
+Symbol: EMP_FIELD
+   Definitions
+      At line 38 in file MEMORY_MAP.s
+   Uses
+      At line 50 in file MEMORY_MAP.s
+      At line 53 in file MEMORY_MAP.s
+      At line 56 in file MEMORY_MAP.s
+
+1 symbol
+372 symbols in table

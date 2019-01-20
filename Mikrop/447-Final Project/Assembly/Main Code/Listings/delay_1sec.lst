@@ -1,0 +1,93 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;SYMBOL  DIRECTIVE VALUE   COMMENT
+    2 00000000 001E8480 
+                       Delay   EQU              0x1E8480    ;number of loops ne
+                                                            ed for 1sec (=20000
+                                                            00)
+    3 00000000         
+    4 00000000         ;LABEL  DIRECTIVE VALUE   COMMENT
+    5 00000000                 AREA             routines,READONLY,CODE
+    6 00000000                 THUMB
+    7 00000000                 EXPORT           DELAY_1sec
+    8 00000000         
+    9 00000000         ;LABEL  DIRECTIVE VALUE   COMMENT
+   10 00000000         
+   11 00000000         DELAY_1sec
+   12 00000000 B401            PUSH             {R0}
+   13 00000002         
+   14 00000002 4805            LDR              R0,=Delay
+   15 00000004         loop                                 ;Each loop took 0.5
+                                                            00 탎 
+   16 00000004 1E40            SUBS             R0,R0,#1    ;0.083 탎
+   17 00000006 BF00            NOP                          ;0.083 탎
+   18 00000008 BF00            NOP                          ;0.083 탎
+   19 0000000A BF00            NOP                          ;0.083 탎
+   20 0000000C BF00            NOP                          ;0.083 탎
+   21 0000000E BF00            NOP                          ;0.083 탎
+   22 00000010 D1F8            BNE              loop        ;0.250 탎
+   23 00000012         
+   24 00000012 BC01            POP              {R0}
+   25 00000014         
+   26 00000014 4770            BX               LR
+   27 00000016         
+   28 00000016 00 00           ALIGN
+   29 00000018                 END
+              001E8480 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\delay_1sec.d -o.\objects\delay_1sec.o -I.\RTE\_Target
+_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\
+CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
+26" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\delay_1sec.lst DELAY_1s
+ec.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DELAY_1sec 00000000
+
+Symbol: DELAY_1sec
+   Definitions
+      At line 11 in file DELAY_1sec.s
+   Uses
+      At line 7 in file DELAY_1sec.s
+Comment: DELAY_1sec used once
+loop 00000004
+
+Symbol: loop
+   Definitions
+      At line 15 in file DELAY_1sec.s
+   Uses
+      At line 22 in file DELAY_1sec.s
+Comment: loop used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 5 in file DELAY_1sec.s
+   Uses
+      None
+Comment: routines unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+Delay 001E8480
+
+Symbol: Delay
+   Definitions
+      At line 2 in file DELAY_1sec.s
+   Uses
+      At line 14 in file DELAY_1sec.s
+Comment: Delay used once
+1 symbol
+340 symbols in table

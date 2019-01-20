@@ -1,0 +1,192 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    7 00000000         
+    8 00000000 40008008 
+                       SSI0_DR EQU              0x40008008
+    9 00000000 4000800C 
+                       SSI0_SR EQU              0x4000800C
+   10 00000000         ;*******************************************************
+                       ********
+   11 00000000         ; Directives - This Data Section is part of the code
+   12 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   13 00000000         ;*******************************************************
+                       ******** 
+   14 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   15 00000000                 AREA             sdata, DATA, READONLY
+   16 00000000                 THUMB
+   17 00000000         
+   18 00000000         ;*******************************************************
+                       ********
+   19 00000000         ; Program section           
+   20 00000000         ;*******************************************************
+                       ********
+   21 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   22 00000000                 AREA             routines,READONLY,CODE
+   23 00000000                 THUMB
+   24 00000000                 ALIGN
+   25 00000000                 EXTERN           DELAY_1ms
+   26 00000000                 EXPORT           DATA_WRITE
+   27 00000000         
+   28 00000000         ;*******************************************************
+                       ********
+   29 00000000         ; Main Function
+   30 00000000         ; Takes Data in R4 and sends it to screen
+   31 00000000         ;*******************************************************
+                       ******** 
+   32 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   33 00000000         
+   34 00000000         DATA_WRITE
+                               PROC
+   35 00000000 B500            PUSH             {LR}
+   36 00000002 B401            PUSH             {R0}
+   37 00000004 B420            PUSH             {R5}
+   38 00000006         
+   39 00000006 4D08    control LDR              R5,=SSI0_SR
+   40 00000008 6828            LDR              R0,[R5]
+   41 0000000A F000 0002       AND              R0,#0x02
+   42 0000000E 2802            CMP              R0,#0x02
+   43 00000010 D1F9            BNE              control
+   44 00000012         
+   45 00000012 BF00            NOP
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   46 00000014         
+   47 00000014 4D05            LDR              R5,=SSI0_DR
+   48 00000016 602C            STR              R4,[R5]
+   49 00000018         
+   50 00000018 F7FF FFFE       BL               DELAY_1ms
+   51 0000001C         
+   52 0000001C BC20            POP              {R5}
+   53 0000001E BC01            POP              {R0}
+   54 00000020 F85D EB04       POP              {LR}
+   55 00000024 4770            BX               LR
+   56 00000026         ;*******************************************************
+                       ********
+   57 00000026         ; End of the program  section
+   58 00000026         ;*******************************************************
+                       ********
+   59 00000026         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+   60 00000026                 ENDP
+   61 00000026 00 00           ALIGN
+   62 00000028                 END
+              4000800C 
+              40008008 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\data_write.d -o.\objects\data_write.o -I.\RTE\_Target
+_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\
+CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 5
+26" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\data_write.lst Data_wri
+te.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 15 in file Data_write.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA_WRITE 00000000
+
+Symbol: DATA_WRITE
+   Definitions
+      At line 34 in file Data_write.s
+   Uses
+      At line 26 in file Data_write.s
+Comment: DATA_WRITE used once
+control 00000006
+
+Symbol: control
+   Definitions
+      At line 39 in file Data_write.s
+   Uses
+      At line 43 in file Data_write.s
+Comment: control used once
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 22 in file Data_write.s
+   Uses
+      None
+Comment: routines unused
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 6 in file Data_write.s
+   Uses
+      None
+Comment: OUT_PORTB_DC unused
+SSI0_DR 40008008
+
+Symbol: SSI0_DR
+   Definitions
+      At line 8 in file Data_write.s
+   Uses
+      At line 47 in file Data_write.s
+Comment: SSI0_DR used once
+SSI0_SR 4000800C
+
+Symbol: SSI0_SR
+   Definitions
+      At line 9 in file Data_write.s
+   Uses
+      At line 39 in file Data_write.s
+Comment: SSI0_SR used once
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 25 in file Data_write.s
+   Uses
+      At line 50 in file Data_write.s
+Comment: DELAY_1ms used once
+1 symbol
+344 symbols in table

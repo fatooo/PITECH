@@ -1,0 +1,784 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ;*******************************************************
+                       ********
+    5 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    6 00000000 40005008 
+                       OUT_PORTB_DC
+                               EQU              0x40005008  ;00000010
+    7 00000000         
+    8 00000000 20001000 
+                       OLD_SHIP_LOC_X
+                               EQU              0x20001000  ;1000
+    9 00000000 20001001 
+                       OLD_SHIP_LOC_Y
+                               EQU              0x20001001  ;1001
+   10 00000000 20000600 
+                       PLAYFIELD
+                               EQU              0x20000600  ;600-7F7
+   11 00000000 20000800 
+                       SHIP_EMPTY
+                               EQU              0x20000800  ;800-807
+   12 00000000 20000808 
+                       SHIP_CIVIL
+                               EQU              0x20000808  ;808-80F
+   13 00000000 20000810 
+                       SHIP_BATTLE
+                               EQU              0x20000810  ;810-817
+   14 00000000         ;*******************************************************
+                       ********
+   15 00000000         ; Directives - This Data Section is part of the code
+   16 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   17 00000000         ;*******************************************************
+                       ******** 
+   18 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   19 00000000                 AREA             sdata, DATA, READONLY
+   20 00000000                 THUMB
+   21 00000000         
+   22 00000000         ;*******************************************************
+                       ********
+   23 00000000         ; Program section           
+   24 00000000         ;*******************************************************
+                       ********
+   25 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   26 00000000                 AREA             routines,READONLY,CODE
+   27 00000000                 THUMB
+   28 00000000                 ALIGN
+   29 00000000                 EXTERN           DELAY_1ms
+   30 00000000                 EXTERN           DELAY_10ms
+   31 00000000                 EXTERN           ADDRESS_CHANGE
+   32 00000000                 EXTERN           DATA_WRITE
+   33 00000000                 EXPORT           SHIP_CURSOR
+   34 00000000         
+   35 00000000         ;*******************************************************
+                       ********
+   36 00000000         ; Main Function
+   37 00000000         ; Takes Op mode, y location and x location
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   38 00000000         ; Data format M = 
+   39 00000000         ; 0000.00MM.0000.0000.YYYY.YYYY.XXXX.XXXX
+   40 00000000         ;*******************************************************
+                       ******** 
+   41 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   42 00000000         
+   43 00000000         SHIP_CURSOR
+                               PROC
+   44 00000000 B500            PUSH             {LR}
+   45 00000002 B41F            PUSH             {R0-R4}
+   46 00000004         
+   47 00000004 4D87            LDR              R5,=OLD_SHIP_LOC_Y
+   48 00000006 7828            LDRB             R0,[R5]
+   49 00000008 EA4F 2000       LSL              R0,R0,#8
+   50 0000000C 4D86            LDR              R5,=OLD_SHIP_LOC_X
+   51 0000000E 7829            LDRB             R1,[R5]
+   52 00000010 4408            ADD              R0,R0,R1
+   53 00000012 F64F 72FF       LDR              R2,=0xFFFF
+   54 00000016 EA04 0102       AND              R1,R4,R2    ;Compare new locati
+                                                            on with old one
+   55 0000001A B410            PUSH             {R4}        ;Save R4 
+   56 0000001C 4281            CMP              R1,R0
+   57 0000001E D037            BEQ              Skip_clear  ;if they are same s
+                                                            kip clear phase
+   58 00000020         ;*******************************************************
+                       ********
+   59 00000020         ;clear screen stage
+   60 00000020         ;*******************************************************
+                       ********
+   61 00000020         Clear
+   62 00000020 4D80            LDR              R5,=OLD_SHIP_LOC_Y
+   63 00000022 7828            LDRB             R0,[R5]
+   64 00000024 EA4F 00D0       LSR              R0,R0,#3    ;Extract the fracti
+                                                            onal part
+   65 00000028 EA4F 2400       LSL              R4,R0,#8
+   66 0000002C         
+   67 0000002C 4D7E            LDR              R5,=OLD_SHIP_LOC_X
+   68 0000002E 7829            LDRB             R1,[R5]
+   69 00000030 440C            ADD              R4,R4,R1    ;create Yloc-Xloc s
+                                                            tructure for addres
+                                                            s change
+   70 00000032 F7FF FFFE       BL               DELAY_10ms
+   71 00000036 F7FF FFFE       BL               ADDRESS_CHANGE
+   72 0000003A         
+   73 0000003A F04F 0354       MOV              R3,#0x54
+   74 0000003E FB00 F203       MUL              R2,R0,R3    ;multiply Y coordin
+                                                            ate with 84
+   75 00000042 440A            ADD              R2,R2,R1    ;find vertical mode
+                                                             address of pixel
+   76 00000044         
+   77 00000044 4D79            LDR              R5,=PLAYFIELD
+   78 00000046 4415            ADD              R5,R5,R2    ;find corresponding
+                                                             address of R5
+   79 00000048 F04F 0308       MOV              R3,#8       ;write 8 byte of da
+                                                            ta
+   80 0000004C         
+   81 0000004C F815 4B01 
+                       playfield
+                               LDRB             R4,[R5],#1
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   82 00000050 F7FF FFFE       BL               DATA_WRITE
+   83 00000054 1E5B            SUBS             R3,R3,#1
+   84 00000056 D1F9            BNE              playfield
+   85 00000058         
+   86 00000058         
+   87 00000058 4B72            LDR              R3,=OLD_SHIP_LOC_Y
+   88 0000005A 7818            LDRB             R0,[R3]
+   89 0000005C F010 0107       ANDS             R1,R0,#0x07 ;control fractional
+                                                             part
+   90 00000060 D016            BEQ              Skip_clear
+   91 00000062         
+   92 00000062 4B70            LDR              R3,=OLD_SHIP_LOC_Y
+   93 00000064 7818            LDRB             R0,[R3]
+   94 00000066 EA4F 00D0       LSR              R0,R0,#3    ;Extract the fracti
+                                                            onal part
+   95 0000006A EA4F 2400       LSL              R4,R0,#8
+   96 0000006E         
+   97 0000006E 4B6E            LDR              R3,=OLD_SHIP_LOC_X
+   98 00000070 7819            LDRB             R1,[R3]
+   99 00000072 440C            ADD              R4,R4,R1    ;create Yloc-Xloc s
+                                                            tructure for addres
+                                                            s change
+  100 00000074 F504 7480       ADD              R4,R4,#0x100 ;jump to next line
+                                                            
+  101 00000078 F7FF FFFE       BL               ADDRESS_CHANGE
+  102 0000007C         
+  103 0000007C F105 054C       ADD              R5,R5,#0x4C
+  104 00000080 F04F 0308       MOV              R3,#8
+  105 00000084         
+  106 00000084 F815 4B01 
+                       playfield2
+                               LDRB             R4,[R5],#1
+  107 00000088 F7FF FFFE       BL               DATA_WRITE
+  108 0000008C 1E5B            SUBS             R3,R3,#1
+  109 0000008E D1F9            BNE              playfield2
+  110 00000090         
+  111 00000090         ;*******************************************************
+                       ********
+  112 00000090         ; case determine stage
+  113 00000090         ;*******************************************************
+                       ********
+  114 00000090         
+  115 00000090 BC10    Skip_clear
+                               POP              {R4}
+  116 00000092 EA4F 6314       LSR              R3,R4,#0x18 ;extact operation f
+                                                            rom coordinates
+  117 00000096         
+  118 00000096 4D64            LDR              R5,=OLD_SHIP_LOC_X
+  119 00000098 F004 00FF       AND              R0,R4,#0xFF
+  120 0000009C 7028            STRB             R0,[R5]
+  121 0000009E 4D61            LDR              R5,=OLD_SHIP_LOC_Y
+  122 000000A0 F404 407F       AND              R0,R4,#0xFF00
+  123 000000A4 EA4F 2010       LSR              R0,R0,#8
+  124 000000A8 7028            STRB             R0,[R5]
+  125 000000AA         
+  126 000000AA         
+  127 000000AA 2B01            CMP              R3,#0x01
+  128 000000AC D002            BEQ              civilian
+  129 000000AE 2B10            CMP              R3,#0x10
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  130 000000B0 D035            BEQ              battleship
+  131 000000B2 E069            B                on_screen
+  132 000000B4         
+  133 000000B4         ;*******************************************************
+                       ********
+  134 000000B4         ;Civilian ship stage
+  135 000000B4         ;*******************************************************
+                       ********
+  136 000000B4         
+  137 000000B4 4D5C    civilian
+                               LDR              R5,=OLD_SHIP_LOC_X ;extract X c
+                                                            oordinate
+  138 000000B6 7828            LDRB             R0,[R5]
+  139 000000B8 4D5A            LDR              R5,=OLD_SHIP_LOC_Y ;extract Y c
+                                                            oordinate
+  140 000000BA 7829            LDRB             R1,[R5]
+  141 000000BC F001 0207       AND              R2,R1,#0x07 ;extract fractional
+                                                             Y coordinate
+  142 000000C0 EA4F 01D1       LSR              R1,R1,#0x03 ;extract whole part
+                                                            
+  143 000000C4         
+  144 000000C4 F04F 0354       MOV              R3,#0x54
+  145 000000C8 FB01 F303       MUL              R3,R1,R3    ;multiply Y coordin
+                                                            ate with 84
+  146 000000CC 4403            ADD              R3,R3,R0    ;find vertical mode
+                                                             address of pixel
+  147 000000CE         
+  148 000000CE 4D57            LDR              R5,=PLAYFIELD ;take playfield a
+                                                            ddress for writing 
+                                                            op
+  149 000000D0 441D            ADD              R5,R5,R3    ;adjust to ship loc
+                                                            ation
+  150 000000D2 4E57            LDR              R6,=SHIP_CIVIL ;take civilian s
+                                                            hip pattern
+  151 000000D4 F04F 0308       MOV              R3,#8
+  152 000000D8         
+  153 000000D8 7828    civ_memo
+                               LDRB             R0,[R5]
+  154 000000DA F816 1B01       LDRB             R1,[R6],#1
+  155 000000DE FA01 F102       LSL              R1,R1,R2    ;shift with fractio
+                                                            nal part to adjust 
+                                                            ship
+  156 000000E2 F001 01FF       AND              R1,R1,#0xFF
+  157 000000E6 EA41 0100       ORR              R1,R1,R0    ;combine field data
+                                                             with ship data
+  158 000000EA F805 1B01       STRB             R1,[R5],#1  ;write into the mem
+                                                            ory
+  159 000000EE 1E5B            SUBS             R3,R3,#1
+  160 000000F0 D1F2            BNE              civ_memo
+  161 000000F2         
+  162 000000F2 2A00            CMP              R2,#0x00    ;if data is divided
+                                                             repeat same step f
+                                                            or
+  163 000000F4 D048            BEQ              on_screen   ;lower byte frames
+  164 000000F6 F04F 0308       MOV              R3,#8
+  165 000000FA         
+  166 000000FA F105 054C       ADD              R5,R5,#0x4C
+  167 000000FE F1A6 0608       SUB              R6,R6,#0x08
+  168 00000102 F816 1B01 
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+                       civ_memo2
+                               LDRB             R1,[R6],#1
+  169 00000106 FA01 F102       LSL              R1,R1,R2
+  170 0000010A EA4F 2111       LSR              R1,R1,#8
+  171 0000010E 7828            LDRB             R0,[R5]
+  172 00000110 EA41 0100       ORR              R1,R1,R0
+  173 00000114 F805 1B01       STRB             R1,[R5],#1
+  174 00000118 1E5B            SUBS             R3,R3,#1
+  175 0000011A D1F2            BNE              civ_memo2
+  176 0000011C         
+  177 0000011C E034            B                on_screen
+  178 0000011E         
+  179 0000011E         ;*******************************************************
+                       ********
+  180 0000011E         ;Battleship stage
+  181 0000011E         ;*******************************************************
+                       ********
+  182 0000011E         
+  183 0000011E 4D42    battleship
+                               LDR              R5,=OLD_SHIP_LOC_X ;extract X c
+                                                            oordinate
+  184 00000120 7828            LDRB             R0,[R5]
+  185 00000122 4D40            LDR              R5,=OLD_SHIP_LOC_Y ;extract Y c
+                                                            oordinate
+  186 00000124 7829            LDRB             R1,[R5]
+  187 00000126 F001 0207       AND              R2,R1,#0x07 ;extract fractional
+                                                             Y coordinate
+  188 0000012A EA4F 01D1       LSR              R1,R1,#0x03 ;extract whole part
+                                                            
+  189 0000012E         
+  190 0000012E F04F 0354       MOV              R3,#0x54
+  191 00000132 FB01 F303       MUL              R3,R1,R3    ;multiply Y coordin
+                                                            ate with 84
+  192 00000136 4403            ADD              R3,R3,R0    ;find vertical mode
+                                                             address of pixel
+  193 00000138         
+  194 00000138 4D3C            LDR              R5,=PLAYFIELD ;take playfield a
+                                                            ddress for writing 
+                                                            op
+  195 0000013A 441D            ADD              R5,R5,R3    ;adjust to ship loc
+                                                            ation
+  196 0000013C 4E3D            LDR              R6,=SHIP_BATTLE ;take battle sh
+                                                            ip pattern
+  197 0000013E F04F 0308       MOV              R3,#8
+  198 00000142         
+  199 00000142 7828    bat_memo
+                               LDRB             R0,[R5]
+  200 00000144 F816 1B01       LDRB             R1,[R6],#1
+  201 00000148 FA01 F102       LSL              R1,R1,R2    ;shift with fractio
+                                                            nal part to adjust 
+                                                            ship
+  202 0000014C F001 01FF       AND              R1,R1,#0xFF
+  203 00000150 EA41 0100       ORR              R1,R1,R0    ;combine field data
+                                                             with ship data
+  204 00000154 F805 1B01       STRB             R1,[R5],#1  ;write into the mem
+                                                            ory
+  205 00000158 1E5B            SUBS             R3,R3,#1
+  206 0000015A D1F2            BNE              bat_memo
+  207 0000015C         
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  208 0000015C 2A00            CMP              R2,#0x00    ;if data is divided
+                                                             repeat same step f
+                                                            or
+  209 0000015E D013            BEQ              on_screen   ;lower byte frames
+  210 00000160 F04F 0308       MOV              R3,#8
+  211 00000164         
+  212 00000164 F105 054C       ADD              R5,R5,#0x4C
+  213 00000168 F1A6 0608       SUB              R6,R6,#0x08
+  214 0000016C F816 1B01 
+                       bat_memo2
+                               LDRB             R1,[R6],#1
+  215 00000170 FA01 F102       LSL              R1,R1,R2
+  216 00000174 EA4F 2111       LSR              R1,R1,#8
+  217 00000178 7828            LDRB             R0,[R5]
+  218 0000017A EA41 0100       ORR              R1,R1,R0
+  219 0000017E F805 1B01       STRB             R1,[R5],#1
+  220 00000182 1E5B            SUBS             R3,R3,#1
+  221 00000184 D1F2            BNE              bat_memo2
+  222 00000186         
+  223 00000186 E7FF            B                on_screen
+  224 00000188         
+  225 00000188         ;*******************************************************
+                       ********
+  226 00000188         ;write screen stage
+  227 00000188         ;*******************************************************
+                       ********   
+  228 00000188         
+  229 00000188 4D27    on_screen
+                               LDR              R5,=OLD_SHIP_LOC_X ;extract X c
+                                                            oordinate
+  230 0000018A 7828            LDRB             R0,[R5]
+  231 0000018C 4D25            LDR              R5,=OLD_SHIP_LOC_Y ;extract Y c
+                                                            oordinate
+  232 0000018E 7829            LDRB             R1,[R5]
+  233 00000190 F001 0207       AND              R2,R1,#0x07 ;extract fractional
+                                                             Y coordinate
+  234 00000194 EA4F 01D1       LSR              R1,R1,#0x03 ;extract whole part
+                                                            
+  235 00000198         
+  236 00000198 EA4F 2401       LSL              R4,R1,#8
+  237 0000019C 4404            ADD              R4,R4,R0
+  238 0000019E F7FF FFFE       BL               ADDRESS_CHANGE
+  239 000001A2         
+  240 000001A2 F04F 0354       MOV              R3,#0x54
+  241 000001A6 FB01 F303       MUL              R3,R1,R3    ;multiply Y coordin
+                                                            ate with 84
+  242 000001AA 4403            ADD              R3,R3,R0    ;find vertical mode
+                                                             address of pixel
+  243 000001AC         
+  244 000001AC 4D1F            LDR              R5,=PLAYFIELD ;take playfield a
+                                                            ddress for writing 
+                                                            op
+  245 000001AE 441D            ADD              R5,R5,R3    ;adjust to ship loc
+                                                            ation
+  246 000001B0 4E21            LDR              R6,=SHIP_EMPTY ;take empty ship
+                                                             pattern
+  247 000001B2 F04F 0308       MOV              R3,#8
+  248 000001B6         
+  249 000001B6 F815 0B01 
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+                       first_line
+                               LDRB             R0,[R5],#1
+  250 000001BA F816 1B01       LDRB             R1,[R6],#1
+  251 000001BE FA01 F102       LSL              R1,R1,R2    ;shift with fractio
+                                                            nal part to adjust 
+                                                            ship
+  252 000001C2 F001 01FF       AND              R1,R1,#0xFF
+  253 000001C6 EA41 0400       ORR              R4,R1,R0    ;combine field data
+                                                             with ship data
+  254 000001CA F7FF FFFE       BL               DATA_WRITE  ;write to screen
+  255 000001CE 1E5B            SUBS             R3,R3,#1
+  256 000001D0 D1F1            BNE              first_line
+  257 000001D2         
+  258 000001D2         
+  259 000001D2 2A00            CMP              R2,#0x00    ;if data is divided
+                                                             repeat same step f
+                                                            or
+  260 000001D4 D021            BEQ              endline     ;lower byte frames
+  261 000001D6 F04F 0308       MOV              R3,#8
+  262 000001DA         
+  263 000001DA 4B13            LDR              R3,=OLD_SHIP_LOC_X ;extract X c
+                                                            oordinate from newl
+                                                            y written memory
+  264 000001DC 7818            LDRB             R0,[R3]
+  265 000001DE 4B11            LDR              R3,=OLD_SHIP_LOC_Y ;extract Y c
+                                                            oordinate from newl
+                                                            y written memory
+  266 000001E0 7819            LDRB             R1,[R3]
+  267 000001E2 EA4F 01D1       LSR              R1,R1,#0x03 ;extract whole part
+                                                            
+  268 000001E6 F101 0101       ADD              R1,R1,#0x01 ;increment Y locati
+                                                            on
+  269 000001EA EA4F 2101       LSL              R1,R1,#0x08
+  270 000001EE EB01 0400       ADD              R4,R1,R0
+  271 000001F2 F7FF FFFE       BL               ADDRESS_CHANGE
+  272 000001F6         
+  273 000001F6 F04F 0308       MOV              R3,#8
+  274 000001FA 4E0F            LDR              R6,=SHIP_EMPTY ;take empty ship
+                                                             pattern   
+  275 000001FC F105 054C       ADD              R5,R5,#0x4C
+  276 00000200 F816 1B01 
+                       second_line
+                               LDRB             R1,[R6],#1
+  277 00000204 FA01 F102       LSL              R1,R1,R2    ;shift with fractio
+                                                            nal part to adjust 
+                                                            ship
+  278 00000208 EA4F 2111       LSR              R1,R1,#8
+  279 0000020C 7828            LDRB             R0,[R5]
+  280 0000020E EA41 0400       ORR              R4,R1,R0    ;combine field data
+                                                             with ship data
+  281 00000212 F7FF FFFE       BL               DATA_WRITE  ;write to screen
+  282 00000216 1E5B            SUBS             R3,R3,#1
+  283 00000218 D1F2            BNE              second_line
+  284 0000021A         
+  285 0000021A         endline
+  286 0000021A         
+  287 0000021A BC1F            POP              {R0-R4}
+  288 0000021C F85D EB04       POP              {LR}
+  289 00000220 4770            BX               LR
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  290 00000222         ;*******************************************************
+                       ********
+  291 00000222         ; End of the program  section
+  292 00000222         ;*******************************************************
+                       ********
+  293 00000222         ;LABEL      DIRECTIVE       VALUE                       
+                           COMMENT
+  294 00000222                 ENDP
+  295 00000222 00 00           ALIGN
+  296 00000224                 END
+              20001001 
+              20001000 
+              20000600 
+              20000808 
+              20000810 
+              20000800 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\ship_cursor.d -o.\objects\ship_cursor.o -I.\RTE\_Targ
+et_1 -ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\AR
+M\CMSIS\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA
+ 526" --predefine="TM4C123GH6PM SETA 1" --list=.\listings\ship_cursor.lst SHIP_
+CURSOR.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 19 in file SHIP_CURSOR.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Clear 00000020
+
+Symbol: Clear
+   Definitions
+      At line 61 in file SHIP_CURSOR.s
+   Uses
+      None
+Comment: Clear unused
+SHIP_CURSOR 00000000
+
+Symbol: SHIP_CURSOR
+   Definitions
+      At line 43 in file SHIP_CURSOR.s
+   Uses
+      At line 33 in file SHIP_CURSOR.s
+Comment: SHIP_CURSOR used once
+Skip_clear 00000090
+
+Symbol: Skip_clear
+   Definitions
+      At line 115 in file SHIP_CURSOR.s
+   Uses
+      At line 57 in file SHIP_CURSOR.s
+      At line 90 in file SHIP_CURSOR.s
+
+bat_memo 00000142
+
+Symbol: bat_memo
+   Definitions
+      At line 199 in file SHIP_CURSOR.s
+   Uses
+      At line 206 in file SHIP_CURSOR.s
+Comment: bat_memo used once
+bat_memo2 0000016C
+
+Symbol: bat_memo2
+   Definitions
+      At line 214 in file SHIP_CURSOR.s
+   Uses
+      At line 221 in file SHIP_CURSOR.s
+Comment: bat_memo2 used once
+battleship 0000011E
+
+Symbol: battleship
+   Definitions
+      At line 183 in file SHIP_CURSOR.s
+   Uses
+      At line 130 in file SHIP_CURSOR.s
+Comment: battleship used once
+civ_memo 000000D8
+
+Symbol: civ_memo
+   Definitions
+      At line 153 in file SHIP_CURSOR.s
+   Uses
+      At line 160 in file SHIP_CURSOR.s
+Comment: civ_memo used once
+civ_memo2 00000102
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: civ_memo2
+   Definitions
+      At line 168 in file SHIP_CURSOR.s
+   Uses
+      At line 175 in file SHIP_CURSOR.s
+Comment: civ_memo2 used once
+civilian 000000B4
+
+Symbol: civilian
+   Definitions
+      At line 137 in file SHIP_CURSOR.s
+   Uses
+      At line 128 in file SHIP_CURSOR.s
+Comment: civilian used once
+endline 0000021A
+
+Symbol: endline
+   Definitions
+      At line 285 in file SHIP_CURSOR.s
+   Uses
+      At line 260 in file SHIP_CURSOR.s
+Comment: endline used once
+first_line 000001B6
+
+Symbol: first_line
+   Definitions
+      At line 249 in file SHIP_CURSOR.s
+   Uses
+      At line 256 in file SHIP_CURSOR.s
+Comment: first_line used once
+on_screen 00000188
+
+Symbol: on_screen
+   Definitions
+      At line 229 in file SHIP_CURSOR.s
+   Uses
+      At line 131 in file SHIP_CURSOR.s
+      At line 163 in file SHIP_CURSOR.s
+      At line 177 in file SHIP_CURSOR.s
+      At line 209 in file SHIP_CURSOR.s
+      At line 223 in file SHIP_CURSOR.s
+
+playfield 0000004C
+
+Symbol: playfield
+   Definitions
+      At line 81 in file SHIP_CURSOR.s
+   Uses
+      At line 84 in file SHIP_CURSOR.s
+Comment: playfield used once
+playfield2 00000084
+
+Symbol: playfield2
+   Definitions
+      At line 106 in file SHIP_CURSOR.s
+   Uses
+      At line 109 in file SHIP_CURSOR.s
+Comment: playfield2 used once
+routines 00000000
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: routines
+   Definitions
+      At line 26 in file SHIP_CURSOR.s
+   Uses
+      None
+Comment: routines unused
+second_line 00000200
+
+Symbol: second_line
+   Definitions
+      At line 276 in file SHIP_CURSOR.s
+   Uses
+      At line 283 in file SHIP_CURSOR.s
+Comment: second_line used once
+16 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+OLD_SHIP_LOC_X 20001000
+
+Symbol: OLD_SHIP_LOC_X
+   Definitions
+      At line 8 in file SHIP_CURSOR.s
+   Uses
+      At line 50 in file SHIP_CURSOR.s
+      At line 67 in file SHIP_CURSOR.s
+      At line 97 in file SHIP_CURSOR.s
+      At line 118 in file SHIP_CURSOR.s
+      At line 137 in file SHIP_CURSOR.s
+      At line 183 in file SHIP_CURSOR.s
+      At line 229 in file SHIP_CURSOR.s
+      At line 263 in file SHIP_CURSOR.s
+
+OLD_SHIP_LOC_Y 20001001
+
+Symbol: OLD_SHIP_LOC_Y
+   Definitions
+      At line 9 in file SHIP_CURSOR.s
+   Uses
+      At line 47 in file SHIP_CURSOR.s
+      At line 62 in file SHIP_CURSOR.s
+      At line 87 in file SHIP_CURSOR.s
+      At line 92 in file SHIP_CURSOR.s
+      At line 121 in file SHIP_CURSOR.s
+      At line 139 in file SHIP_CURSOR.s
+      At line 185 in file SHIP_CURSOR.s
+      At line 231 in file SHIP_CURSOR.s
+      At line 265 in file SHIP_CURSOR.s
+
+OUT_PORTB_DC 40005008
+
+Symbol: OUT_PORTB_DC
+   Definitions
+      At line 6 in file SHIP_CURSOR.s
+   Uses
+      None
+Comment: OUT_PORTB_DC unused
+PLAYFIELD 20000600
+
+Symbol: PLAYFIELD
+   Definitions
+      At line 10 in file SHIP_CURSOR.s
+   Uses
+      At line 77 in file SHIP_CURSOR.s
+      At line 148 in file SHIP_CURSOR.s
+      At line 194 in file SHIP_CURSOR.s
+      At line 244 in file SHIP_CURSOR.s
+
+SHIP_BATTLE 20000810
+
+Symbol: SHIP_BATTLE
+   Definitions
+      At line 13 in file SHIP_CURSOR.s
+   Uses
+      At line 196 in file SHIP_CURSOR.s
+Comment: SHIP_BATTLE used once
+SHIP_CIVIL 20000808
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+
+Symbol: SHIP_CIVIL
+   Definitions
+      At line 12 in file SHIP_CURSOR.s
+   Uses
+      At line 150 in file SHIP_CURSOR.s
+Comment: SHIP_CIVIL used once
+SHIP_EMPTY 20000800
+
+Symbol: SHIP_EMPTY
+   Definitions
+      At line 11 in file SHIP_CURSOR.s
+   Uses
+      At line 246 in file SHIP_CURSOR.s
+      At line 274 in file SHIP_CURSOR.s
+
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+ADDRESS_CHANGE 00000000
+
+Symbol: ADDRESS_CHANGE
+   Definitions
+      At line 31 in file SHIP_CURSOR.s
+   Uses
+      At line 71 in file SHIP_CURSOR.s
+      At line 101 in file SHIP_CURSOR.s
+      At line 238 in file SHIP_CURSOR.s
+      At line 271 in file SHIP_CURSOR.s
+
+DATA_WRITE 00000000
+
+Symbol: DATA_WRITE
+   Definitions
+      At line 32 in file SHIP_CURSOR.s
+   Uses
+      At line 82 in file SHIP_CURSOR.s
+      At line 107 in file SHIP_CURSOR.s
+      At line 254 in file SHIP_CURSOR.s
+      At line 281 in file SHIP_CURSOR.s
+
+DELAY_10ms 00000000
+
+Symbol: DELAY_10ms
+   Definitions
+      At line 30 in file SHIP_CURSOR.s
+   Uses
+      At line 70 in file SHIP_CURSOR.s
+Comment: DELAY_10ms used once
+DELAY_1ms 00000000
+
+Symbol: DELAY_1ms
+   Definitions
+      At line 29 in file SHIP_CURSOR.s
+   Uses
+      None
+Comment: DELAY_1ms unused
+4 symbols
+364 symbols in table

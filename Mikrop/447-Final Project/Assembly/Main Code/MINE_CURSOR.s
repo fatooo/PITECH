@@ -5,12 +5,12 @@
 ;SYMBOL				DIRECTIVE	VALUE			COMMENT
 OUT_PORTB_DC		EQU			0x40005008		;00000010
 
-OLD_SHIP_LOC_X		EQU			0x20001000		;1000
-OLD_SHIP_LOC_Y		EQU			0x20001001		;1001
-PLAYFIELD			EQU			0x20000600		;600-7F7
-SHIP_EMPTY			EQU			0x20000800		;800-807
-SHIP_CIVIL			EQU			0x20000808		;808-80F
-SHIP_BATTLE			EQU			0x20000810		;810-817
+OLD_CURSOR_LOC_X	EQU			0x20001000		;1000
+OLD_CURSOR_LOC_Y	EQU			0x20001001		;1001
+MINEFIELD			EQU			0x20002000		;2000-21F
+CURSOR				EQU			0x20000818		;818-81A
+MINE				EQU			0x2000081B		;81B-81D
+
 ;***************************************************************
 ; Directives - This Data Section is part of the code
 ; It is in the read only section  so values cannot be changed.
@@ -27,10 +27,9 @@ SHIP_BATTLE			EQU			0x20000810		;810-817
 			THUMB
 			ALIGN
 			EXTERN		DELAY_1ms
-			EXTERN		DELAY_10ms
 			EXTERN		ADDRESS_CHANGE
 			EXTERN		DATA_WRITE
-			EXPORT		SHIP_CURSOR
+			EXPORT		MINE_CURSOR
 
 ;***************************************************************
 ;	Main Function
@@ -39,15 +38,18 @@ SHIP_BATTLE			EQU			0x20000810		;810-817
 ;	0000.00MM.0000.0000.YYYY.YYYY.XXXX.XXXX
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
-
-SHIP_CURSOR	PROC
+MINE_CURSOR	PROC
 			PUSH		{LR}
 			PUSH		{R0-R4}
+					
+			LDR			R5,=0x0601
+			SUB			R4,R4,R5
 			
-			LDR			R5,=OLD_SHIP_LOC_Y
+			
+			LDR			R5,=OLD_CURSOR_LOC_Y
 			LDRB		R0,[R5]
 			LSL			R0,R0,#8
-			LDR			R5,=OLD_SHIP_LOC_X
+			LDR			R5,=OLD_CURSOR_LOC_X
 			LDRB		R1,[R5]
 			ADD			R0,R0,R1
 			LDR			R2,=0xFFFF
@@ -55,88 +57,95 @@ SHIP_CURSOR	PROC
 			PUSH		{R4}					;Save R4 
 			CMP			R1,R0
 			BEQ			Skip_clear				;if they are same skip clear phase
+			
 ;***************************************************************
 ;clear screen stage
-;***************************************************************
+;***************************************************************		
+			
 Clear			
-			LDR			R5,=OLD_SHIP_LOC_Y
+			LDR			R5,=OLD_CURSOR_LOC_Y
 			LDRB		R0,[R5]
 			LSR			R0,R0,#3				;Extract the fractional part
 			LSL			R4,R0,#8								
 			
-			LDR			R5,=OLD_SHIP_LOC_X
+			LDR			R5,=OLD_CURSOR_LOC_X
 			LDRB		R1,[R5]		
 			ADD			R4,R4,R1				;create Yloc-Xloc structure for address change
-			BL 			DELAY_10ms
+			MOV			R7,R4					;preserve last written address in R7
 			BL			ADDRESS_CHANGE
 			
 			MOV			R3,#0x54				
 			MUL			R2,R0,R3				;multiply Y coordinate with 84
 			ADD			R2,R2,R1				;find vertical mode address of pixel
 						
-			LDR			R5,=PLAYFIELD
+			LDR			R5,=MINEFIELD
 			ADD			R5,R5,R2				;find corresponding address of R5
-			MOV			R3,#8					;write 8 byte of data
+			MOV			R3,#3					;write 3 byte of data
 			
-playfield	LDRB		R4,[R5],#1
+minefield	LDRB		R4,[R5],#1
 			BL			DATA_WRITE
+			ADD			R7,R7,#1
 			SUBS		R3,R3,#1
-			BNE			playfield
+			BNE			minefield
 			
 			
-			LDR			R3,=OLD_SHIP_LOC_Y
+			LDR			R3,=OLD_CURSOR_LOC_Y
 			LDRB		R0,[R3]
 			ANDS		R1,R0,#0x07				;control fractional part
 			BEQ			Skip_clear
 			
-			LDR			R3,=OLD_SHIP_LOC_Y
+			LDR			R3,=OLD_CURSOR_LOC_Y
 			LDRB		R0,[R3]
 			LSR			R0,R0,#3				;Extract the fractional part
 			LSL			R4,R0,#8								
 			
-			LDR			R3,=OLD_SHIP_LOC_X
+			LDR			R3,=OLD_CURSOR_LOC_X
 			LDRB		R1,[R3]		
 			ADD			R4,R4,R1				;create Yloc-Xloc structure for address change
 			ADD			R4,R4,#0x100			;jump to next line
+			MOV			R7,R4
 			BL			ADDRESS_CHANGE
 			
-			ADD			R5,R5,#0x4C
-			MOV			R3,#8
+			ADD			R5,R5,#0x51
+			MOV			R3,#3
 
-playfield2	LDRB		R4,[R5],#1
+minefield2	LDRB		R4,[R5],#1
 			BL			DATA_WRITE
+			ADD			R7,R7,#1
 			SUBS		R3,R3,#1
-			BNE			playfield2
+			BNE			minefield2
+
 
 ;***************************************************************
 ; case determine stage
 ;***************************************************************
 
+
 Skip_clear	POP			{R4}
 			LSR			R3,R4,#0x18				;extact operation from coordinates
 			
-			LDR			R5,=OLD_SHIP_LOC_X
+			LDR			R5,=OLD_CURSOR_LOC_X
 			AND			R0,R4,#0xFF
 			STRB		R0,[R5]
-			LDR			R5,=OLD_SHIP_LOC_Y
+			LDR			R5,=OLD_CURSOR_LOC_Y
 			AND			R0,R4,#0xFF00
 			LSR			R0,R0,#8
 			STRB		R0,[R5]
 			
 			
 			CMP			R3,#0x01
-			BEQ			civilian
+			BEQ			mine
 			CMP			R3,#0x10
-			BEQ			battleship
+			BEQ			mine
 			B			on_screen
-
+			
 ;***************************************************************
-;Civilian ship stage
+;mine placement stage
 ;***************************************************************
 
-civilian	LDR			R5,=OLD_SHIP_LOC_X		;extract X coordinate
+mine		LDR			R5,=OLD_CURSOR_LOC_X	;extract X coordinate
 			LDRB		R0,[R5]
-			LDR			R5,=OLD_SHIP_LOC_Y		;extract Y coordinate
+			LDR			R5,=OLD_CURSOR_LOC_Y	;extract Y coordinate
 			LDRB		R1,[R5]
 			AND			R2,R1,#0x07				;extract fractional Y coordinate
 			LSR			R1,R1,#0x03				;extract whole part
@@ -145,106 +154,61 @@ civilian	LDR			R5,=OLD_SHIP_LOC_X		;extract X coordinate
 			MUL			R3,R1,R3				;multiply Y coordinate with 84
 			ADD			R3,R3,R0				;find vertical mode address of pixel
 			
-			LDR			R5,=PLAYFIELD			;take playfield address for writing op
-			ADD			R5,R5,R3				;adjust to ship location
-			LDR			R6,=SHIP_CIVIL			;take civilian ship pattern
-			MOV			R3,#8	
+			LDR			R5,=MINEFIELD			;take minefield address for writing op
+			ADD			R5,R5,R3				;adjust to mine location
+			LDR			R6,=MINE				;take mine pattern
+			MOV			R3,#3	
 			
-civ_memo	LDRB		R0,[R5]					
+mine_memo	LDRB		R0,[R5]					
 			LDRB		R1,[R6],#1
-			LSL			R1,R1,R2				;shift with fractional part to adjust ship
+			LSL			R1,R1,R2				;shift with fractional part to adjust mine
 			AND			R1,R1,#0xFF
-			ORR			R1,R1,R0				;combine field data with ship data
+			ORR			R1,R1,R0				;combine field data with mine data
 			STRB		R1,[R5],#1				;write into the memory
 			SUBS		R3,R3,#1
-			BNE			civ_memo
+			BNE			mine_memo
 			
 			CMP			R2,#0x00				;if data is divided	repeat same step for
 			BEQ			on_screen				;lower byte frames
-			MOV			R3,#8
+			MOV			R3,#3
 			
-			ADD			R5,R5,#0x4C
-			SUB			R6,R6,#0x08
-civ_memo2	LDRB		R1,[R6],#1
+			ADD			R5,R5,#0x51
+			SUB			R6,R6,#0x03
+mine_memo2	LDRB		R1,[R6],#1
 			LSL			R1,R1,R2
 			LSR			R1,R1,#8
 			LDRB		R0,[R5]
 			ORR			R1,R1,R0
 			STRB		R1,[R5],#1
 			SUBS		R3,R3,#1
-			BNE			civ_memo2
+			BNE			mine_memo2
 			
-			B			on_screen
+			B			on_screen		
 			
-;***************************************************************
-;Battleship stage
-;***************************************************************
-
-battleship	LDR			R5,=OLD_SHIP_LOC_X		;extract X coordinate
-			LDRB		R0,[R5]
-			LDR			R5,=OLD_SHIP_LOC_Y		;extract Y coordinate
-			LDRB		R1,[R5]
-			AND			R2,R1,#0x07				;extract fractional Y coordinate
-			LSR			R1,R1,#0x03				;extract whole part
-			
-			MOV			R3,#0x54				
-			MUL			R3,R1,R3				;multiply Y coordinate with 84
-			ADD			R3,R3,R0				;find vertical mode address of pixel
-			
-			LDR			R5,=PLAYFIELD			;take playfield address for writing op
-			ADD			R5,R5,R3				;adjust to ship location
-			LDR			R6,=SHIP_BATTLE			;take battle ship pattern
-			MOV			R3,#8	
-			
-bat_memo	LDRB		R0,[R5]					
-			LDRB		R1,[R6],#1
-			LSL			R1,R1,R2				;shift with fractional part to adjust ship
-			AND			R1,R1,#0xFF
-			ORR			R1,R1,R0				;combine field data with ship data
-			STRB		R1,[R5],#1				;write into the memory
-			SUBS		R3,R3,#1
-			BNE			bat_memo
-			
-			CMP			R2,#0x00				;if data is divided	repeat same step for
-			BEQ			on_screen				;lower byte frames
-			MOV			R3,#8
-			
-			ADD			R5,R5,#0x4C
-			SUB			R6,R6,#0x08
-bat_memo2	LDRB		R1,[R6],#1
-			LSL			R1,R1,R2
-			LSR			R1,R1,#8
-			LDRB		R0,[R5]
-			ORR			R1,R1,R0
-			STRB		R1,[R5],#1
-			SUBS		R3,R3,#1
-			BNE			bat_memo2	
-
-			B			on_screen
-		
 ;***************************************************************
 ;write screen stage
 ;***************************************************************			
 			
-on_screen	LDR			R5,=OLD_SHIP_LOC_X		;extract X coordinate
+on_screen	LDR			R5,=OLD_CURSOR_LOC_X	;extract X coordinate
 			LDRB		R0,[R5]
-			LDR			R5,=OLD_SHIP_LOC_Y		;extract Y coordinate
+			LDR			R5,=OLD_CURSOR_LOC_Y	;extract Y coordinate
 			LDRB		R1,[R5]
 			AND			R2,R1,#0x07				;extract fractional Y coordinate
 			LSR			R1,R1,#0x03				;extract whole part
 			
 			LSL			R4,R1,#8
 			ADD			R4,R4,R0
+			MOV			R7,R4
 			BL			ADDRESS_CHANGE
 			
 			MOV			R3,#0x54				
 			MUL			R3,R1,R3				;multiply Y coordinate with 84
 			ADD			R3,R3,R0				;find vertical mode address of pixel
 
-			LDR			R5,=PLAYFIELD			;take playfield address for writing op
+			LDR			R5,=MINEFIELD			;take playfield address for writing op
 			ADD			R5,R5,R3				;adjust to ship location
-			LDR			R6,=SHIP_EMPTY			;take empty ship pattern
-			MOV			R3,#8	
+			LDR			R6,=CURSOR				;take empty ship pattern
+			MOV			R3,#3	
 
 first_line	LDRB		R0,[R5],#1		
 			LDRB		R1,[R6],#1
@@ -252,33 +216,37 @@ first_line	LDRB		R0,[R5],#1
 			AND			R1,R1,#0xFF		
 			ORR			R4,R1,R0				;combine field data with ship data
 			BL			DATA_WRITE				;write to screen
+			ADD			R7,R7,#1
 			SUBS		R3,R3,#1
 			BNE			first_line
 			
 			
 			CMP			R2,#0x00				;if data is divided	repeat same step for
 			BEQ			endline					;lower byte frames
-			MOV			R3,#8
 			
-			LDR			R3,=OLD_SHIP_LOC_X		;extract X coordinate from newly written memory
+			
+			LDR			R3,=OLD_CURSOR_LOC_X	;extract X coordinate from newly written memory
 			LDRB		R0,[R3]
-			LDR			R3,=OLD_SHIP_LOC_Y		;extract Y coordinate from newly written memory
+			LDR			R3,=OLD_CURSOR_LOC_Y	;extract Y coordinate from newly written memory
 			LDRB		R1,[R3]
 			LSR			R1,R1,#0x03				;extract whole part
 			ADD			R1,R1,#0x01				;increment	Y location
 			LSL			R1,R1,#0x08
 			ADD			R4,R1,R0
+			MOV			R7,R4
 			BL			ADDRESS_CHANGE
 			
-			MOV			R3,#8
-			LDR			R6,=SHIP_EMPTY			;take empty ship pattern			
-			ADD			R5,R5,#0x4C
+			MOV			R3,#3
+			LDR			R6,=CURSOR				;take cursor pattern			
+			ADD			R5,R5,#0x51
 second_line	LDRB		R1,[R6],#1
-			LSL			R1,R1,R2				;shift with fractional part to adjust ship
+			LSL			R1,R1,R2				;shift with fractional part to adjust cursor
 			LSR			R1,R1,#8
+			AND			R1,R1,#0xFF
 			LDRB		R0,[R5]
-			ORR			R4,R1,R0				;combine field data with ship data
+			ORR			R4,R1,R0				;combine field data with mine data
 			BL			DATA_WRITE				;write to screen
+			ADD			R7,R7,#1
 			SUBS		R3,R3,#1
 			BNE			second_line	
 
@@ -294,3 +262,16 @@ endline
 			ENDP
 			ALIGN
 			END	
+		
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			

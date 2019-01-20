@@ -1,0 +1,478 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ;*******************************************************
+                       ******** 
+    2 00000000         ; EQU Directives
+    3 00000000         ; These directives do not allocate memory
+    4 00000000         ; SHOWS THE MEMORY LOCATION TO POSTION AND TYPES OF SHIP
+                       S AND CURSORS
+    5 00000000         ;*******************************************************
+                       ********
+    6 00000000         ;SYMBOL    DIRECTIVE VALUE   COMMENT
+    7 00000000         
+    8 00000000 20001100 
+                       SHIP_MEMO
+                               EQU              0x20001100  ;1100-1149
+    9 00000000 20001150 
+                       MINE_MEMO
+                               EQU              0x20001150  ;1150-1199
+   10 00000000 20006010 
+                       GP_MEMORY_10
+                               EQU              0x20006010  ;6010-6020 Zero arr
+                                                            ay for random use
+   11 00000000         
+   12 00000000         ;*******************************************************
+                       ********
+   13 00000000         ; Directives - This Data Section is part of the code
+   14 00000000         ; It is in the read only section  so values cannot be ch
+                       anged.
+   15 00000000         ;*******************************************************
+                       ******** 
+   16 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   17 00000000                 AREA             sdata, DATA, READONLY
+   18 00000000                 THUMB
+   19 00000000         
+   20 00000000         ;*******************************************************
+                       ********
+   21 00000000         ; Program section           
+   22 00000000         ;*******************************************************
+                       ********
+   23 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   24 00000000                 AREA             routines, READONLY, CODE
+   25 00000000                 THUMB
+   26 00000000                 EXTERN           WINNER
+   27 00000000                 EXTERN           LOSER
+   28 00000000                 EXTERN           __main
+   29 00000000                 EXPORT           END_CASE
+   30 00000000         ;*******************************************************
+                       ********
+   31 00000000         ; WINORLOSE ROUTINE GIVES WINNER OR LOSER AS OUTPUT
+   32 00000000         ;  WINNING CONDITIONS ARE CHECKED 
+   33 00000000         ;*******************************************************
+                       ******** 
+   34 00000000         ;LABEL  DIRECTIVE VALUE     COMMENT
+   35 00000000         END_CASE
+                               PROC
+   36 00000000         
+   37 00000000 4D39            LDR              R5,=SHIP_MEMO ;re-adjust pointe
+                                                            r to starting point
+                                                            
+   38 00000002 F105 0104       ADD              R1,R5,#4
+   39 00000006 6029            STR              R1,[R5]
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   40 00000008         
+   41 00000008 4D38            LDR              R5,=MINE_MEMO ;re-adjust pointe
+                                                            r to starting point
+                                                            
+   42 0000000A F105 0104       ADD              R1,R5,#4
+   43 0000000E 6029            STR              R1,[R5]
+   44 00000010         
+   45 00000010 4D37            LDR              R5,=GP_MEMORY_10 ;set the win c
+                                                            ondition. At the en
+                                                            d if
+   46 00000012 F04F 01FF       MOV              R1,#0xFF    ;this byte is FF th
+                                                            en Player 2 wins
+   47 00000016 7029            STRB             R1,[R5]     ;or else Player 1 w
+                                                            ins
+   48 00000018         
+   49 00000018         
+   50 00000018 4D33    ship_sel
+                               LDR              R5,=SHIP_MEMO ;take ship data
+   51 0000001A 682E            LDR              R6,[R5]
+   52 0000001C 6830            LDR              R0,[R6]
+   53 0000001E EA4F 6110       LSR              R1,R0,#24   ;find ship type
+   54 00000022 2901            CMP              R1,#0x01
+   55 00000024 D025            BEQ              civilian
+   56 00000026         
+   57 00000026         ;*******************************************************
+                       ******** 
+   58 00000026         
+   59 00000026 4D31    battleship
+                               LDR              R5,=MINE_MEMO ;take mine data
+   60 00000028 682E            LDR              R6,[R5]
+   61 0000002A 6831            LDR              R1,[R6]
+   62 0000002C         
+   63 0000002C F000 02FF 
+                       x_comp_b
+                               AND              R2,R0,#0xFF ;take x dimension o
+                                                            f ship   
+   64 00000030 F001 03FF       AND              R3,R1,#0xFF ;take x dimension o
+                                                            f mine
+   65 00000034         
+   66 00000034 4293            CMP              R3,R2
+   67 00000036 D412            BMI              no_hit_batt
+   68 00000038 F102 0208       ADD              R2,R2,#8
+   69 0000003C 4293            CMP              R3,R2
+   70 0000003E D50E            BPL              no_hit_batt
+   71 00000040         
+   72 00000040 F400 427F 
+                       y_comp_b
+                               AND              R2,R0,#0xFF00 ;take y dimension
+                                                             of ship
+   73 00000044 EA4F 2212       LSR              R2,R2,#8
+   74 00000048 F401 437F       AND              R3,R1,#0xFF00 ;take y dimension
+                                                             of mine
+   75 0000004C EA4F 2313       LSR              R3,R3,#8
+   76 00000050         
+   77 00000050 4293            CMP              R3,R2
+   78 00000052 D404            BMI              no_hit_batt
+   79 00000054 F102 0208       ADD              R2,R2,#8
+   80 00000058 4293            CMP              R3,R2
+   81 0000005A D500            BPL              no_hit_batt
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   82 0000005C         
+   83 0000005C E02F            B                incr_ship
+   84 0000005E         
+   85 0000005E 4D23    no_hit_batt
+                               LDR              R5,=MINE_MEMO ;take ship addres
+                                                            s data
+   86 00000060 6828            LDR              R0,[R5]
+   87 00000062 EBA0 0105       SUB              R1,R0,R5
+   88 00000066 2910            CMP              R1,#0x10    ;if the 4th mine fa
+                                                            iled P1 wins
+   89 00000068 D037            BEQ              Win_P1
+   90 0000006A F100 0004       ADD              R0,R0,#4
+   91 0000006E 6028            STR              R0,[R5]
+   92 00000070 E7D9            B                battleship
+   93 00000072         
+   94 00000072         ;*******************************************************
+                       ********  
+   95 00000072         
+   96 00000072 4D1E    civilian
+                               LDR              R5,=MINE_MEMO ;take mine data
+   97 00000074 682E            LDR              R6,[R5]
+   98 00000076 6831            LDR              R1,[R6]
+   99 00000078         
+  100 00000078 F000 02FF 
+                       x_comp_c
+                               AND              R2,R0,#0xFF ;take x dimension o
+                                                            f ship   
+  101 0000007C F001 03FF       AND              R3,R1,#0xFF ;take x dimension o
+                                                            f mine
+  102 00000080         
+  103 00000080 4293            CMP              R3,R2
+  104 00000082 D412            BMI              no_hit_civ
+  105 00000084 F102 0208       ADD              R2,R2,#8
+  106 00000088 4293            CMP              R3,R2
+  107 0000008A D50E            BPL              no_hit_civ
+  108 0000008C         
+  109 0000008C F400 427F 
+                       y_comp_c
+                               AND              R2,R0,#0xFF00 ;take y dimension
+                                                             of ship
+  110 00000090 EA4F 2212       LSR              R2,R2,#8
+  111 00000094 F401 437F       AND              R3,R1,#0xFF00 ;take y dimension
+                                                             of mine
+  112 00000098 EA4F 2313       LSR              R3,R3,#8
+  113 0000009C         
+  114 0000009C 4293            CMP              R3,R2
+  115 0000009E D404            BMI              no_hit_civ
+  116 000000A0 F102 0208       ADD              R2,R2,#8
+  117 000000A4 4293            CMP              R3,R2
+  118 000000A6 D500            BPL              no_hit_civ
+  119 000000A8         
+  120 000000A8 E017            B                Win_P1
+  121 000000AA         
+  122 000000AA 4D10    no_hit_civ
+                               LDR              R5,=MINE_MEMO ;take ship addres
+                                                            s data
+  123 000000AC 6828            LDR              R0,[R5]
+  124 000000AE EBA0 0105       SUB              R1,R0,R5
+  125 000000B2 2910            CMP              R1,#0x10    ;if is there a hit 
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+                                                            P1 wins
+  126 000000B4 D003            BEQ              incr_ship
+  127 000000B6 F100 0004       ADD              R0,R0,#4
+  128 000000BA 6028            STR              R0,[R5]
+  129 000000BC E7D9            B                civilian
+  130 000000BE         
+  131 000000BE         ;*******************************************************
+                       ******** 
+  132 000000BE         
+  133 000000BE         incr_ship
+  134 000000BE 4D0A            LDR              R5,=SHIP_MEMO ;take ship addres
+                                                            s data
+  135 000000C0 6829            LDR              R1,[R5]
+  136 000000C2 EBA1 0005       SUB              R0,R1,R5
+  137 000000C6 2810            CMP              R0,#0x10
+  138 000000C8 D009            BEQ              Win_P2
+  139 000000CA F101 0104       ADD              R1,R1,#4
+  140 000000CE 6029            STR              R1,[R5]
+  141 000000D0 4D06            LDR              R5,=MINE_MEMO 
+                                                            ;reset mine pointer
+                                                            
+  142 000000D2 F105 0104       ADD              R1,R5,#4
+  143 000000D6 6029            STR              R1,[R5]
+  144 000000D8 E79E            B                ship_sel
+  145 000000DA         
+  146 000000DA         ;*******************************************************
+                       ******** 
+  147 000000DA         
+  148 000000DA F7FF FFFE 
+                       Win_P1  BL               LOSER
+  149 000000DE F7FF FFFE 
+                       Win_P2  BL               WINNER
+  150 000000E2         
+  151 000000E2 F7FF FFFE       BL               __main
+  152 000000E6         
+  153 000000E6 4770            BX               LR
+  154 000000E8         ;*******************************************************
+                       ********
+  155 000000E8         ; End of the program  section
+  156 000000E8         ;*******************************************************
+                       ********
+  157 000000E8                 ENDP
+  158 000000E8                 ALIGN
+  159 000000E8                 END
+              20001100 
+              20001150 
+              20006010 
+Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4.fp --apcs=int
+erwork --depend=.\objects\end_case.d -o.\objects\end_case.o -I.\RTE\_Target_1 -
+ID:\Work\ARM\PACK\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123 -ID:\Work\ARM\CMSI
+S\Include --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSION SETA 526" 
+--predefine="TM4C123GH6PM SETA 1" --list=.\listings\end_case.lst END_CASE.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+sdata 00000000
+
+Symbol: sdata
+   Definitions
+      At line 17 in file END_CASE.s
+   Uses
+      None
+Comment: sdata unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+END_CASE 00000000
+
+Symbol: END_CASE
+   Definitions
+      At line 35 in file END_CASE.s
+   Uses
+      At line 29 in file END_CASE.s
+Comment: END_CASE used once
+Win_P1 000000DA
+
+Symbol: Win_P1
+   Definitions
+      At line 148 in file END_CASE.s
+   Uses
+      At line 89 in file END_CASE.s
+      At line 120 in file END_CASE.s
+
+Win_P2 000000DE
+
+Symbol: Win_P2
+   Definitions
+      At line 149 in file END_CASE.s
+   Uses
+      At line 138 in file END_CASE.s
+Comment: Win_P2 used once
+battleship 00000026
+
+Symbol: battleship
+   Definitions
+      At line 59 in file END_CASE.s
+   Uses
+      At line 92 in file END_CASE.s
+Comment: battleship used once
+civilian 00000072
+
+Symbol: civilian
+   Definitions
+      At line 96 in file END_CASE.s
+   Uses
+      At line 55 in file END_CASE.s
+      At line 129 in file END_CASE.s
+
+incr_ship 000000BE
+
+Symbol: incr_ship
+   Definitions
+      At line 133 in file END_CASE.s
+   Uses
+      At line 83 in file END_CASE.s
+      At line 126 in file END_CASE.s
+
+no_hit_batt 0000005E
+
+Symbol: no_hit_batt
+   Definitions
+      At line 85 in file END_CASE.s
+   Uses
+      At line 67 in file END_CASE.s
+      At line 70 in file END_CASE.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 78 in file END_CASE.s
+      At line 81 in file END_CASE.s
+
+no_hit_civ 000000AA
+
+Symbol: no_hit_civ
+   Definitions
+      At line 122 in file END_CASE.s
+   Uses
+      At line 104 in file END_CASE.s
+      At line 107 in file END_CASE.s
+      At line 115 in file END_CASE.s
+      At line 118 in file END_CASE.s
+
+routines 00000000
+
+Symbol: routines
+   Definitions
+      At line 24 in file END_CASE.s
+   Uses
+      None
+Comment: routines unused
+ship_sel 00000018
+
+Symbol: ship_sel
+   Definitions
+      At line 50 in file END_CASE.s
+   Uses
+      At line 144 in file END_CASE.s
+Comment: ship_sel used once
+x_comp_b 0000002C
+
+Symbol: x_comp_b
+   Definitions
+      At line 63 in file END_CASE.s
+   Uses
+      None
+Comment: x_comp_b unused
+x_comp_c 00000078
+
+Symbol: x_comp_c
+   Definitions
+      At line 100 in file END_CASE.s
+   Uses
+      None
+Comment: x_comp_c unused
+y_comp_b 00000040
+
+Symbol: y_comp_b
+   Definitions
+      At line 72 in file END_CASE.s
+   Uses
+      None
+Comment: y_comp_b unused
+y_comp_c 0000008C
+
+Symbol: y_comp_c
+   Definitions
+      At line 109 in file END_CASE.s
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+   Uses
+      None
+Comment: y_comp_c unused
+14 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+GP_MEMORY_10 20006010
+
+Symbol: GP_MEMORY_10
+   Definitions
+      At line 10 in file END_CASE.s
+   Uses
+      At line 45 in file END_CASE.s
+Comment: GP_MEMORY_10 used once
+MINE_MEMO 20001150
+
+Symbol: MINE_MEMO
+   Definitions
+      At line 9 in file END_CASE.s
+   Uses
+      At line 41 in file END_CASE.s
+      At line 59 in file END_CASE.s
+      At line 85 in file END_CASE.s
+      At line 96 in file END_CASE.s
+      At line 122 in file END_CASE.s
+      At line 141 in file END_CASE.s
+
+SHIP_MEMO 20001100
+
+Symbol: SHIP_MEMO
+   Definitions
+      At line 8 in file END_CASE.s
+   Uses
+      At line 37 in file END_CASE.s
+      At line 50 in file END_CASE.s
+      At line 134 in file END_CASE.s
+
+3 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+LOSER 00000000
+
+Symbol: LOSER
+   Definitions
+      At line 27 in file END_CASE.s
+   Uses
+      At line 148 in file END_CASE.s
+Comment: LOSER used once
+WINNER 00000000
+
+Symbol: WINNER
+   Definitions
+      At line 26 in file END_CASE.s
+   Uses
+      At line 149 in file END_CASE.s
+Comment: WINNER used once
+__main 00000000
+
+Symbol: __main
+   Definitions
+      At line 28 in file END_CASE.s
+   Uses
+      At line 151 in file END_CASE.s
+Comment: __main used once
+3 symbols
+357 symbols in table
