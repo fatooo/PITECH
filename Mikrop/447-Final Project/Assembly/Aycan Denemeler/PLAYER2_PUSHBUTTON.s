@@ -59,7 +59,7 @@ delay2		PROC
 ;***************************************************************	
 			EXTERN ADC_READ_SHIP  ; INCLUDE ADC READING MODULES
 			EXTERN ADC_READ_CURSOR
-
+			EXTERN MINE_CURSOR
 			EXTERN ADDRESS_CHANGE	
 			EXTERN WINORLOSE
 			EXPORT PLAYER2_PUSHBUTTON
@@ -92,12 +92,10 @@ nextlocation	LDR R1, [R0] ; R0 KEEPS THE SHIP 1 VALUE ADDRESS
 				ADD R0, #0x10
 				B	   nextlocation						
 MAPPING			STR R4, [R0] 			
-CONT 			;BL MINE_CURSOR_			
+CONT 			BL MINE_CURSOR			
 				B   loop								
 FINISH		   	CMP R9, #0
-
-				BNE 		FINISH
-			
+				BNE 		FINISH			
 			
 
 			POP{LR}   

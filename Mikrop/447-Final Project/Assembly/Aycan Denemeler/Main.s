@@ -66,11 +66,13 @@ CURSOR_MEMO			EQU			0x20001150		;1150-1199
 ;***************************************************************	
 ;LABEL		DIRECTIVE	VALUE					COMMENT
 __main		PROC
-			BL MEMORY_MAP
+			BL 			MEMORY_MAP
 			BL			SPI_CONFIG
 			BL 			SCREEN_INIT
 			BL 			ADC_INIT
 			BL   		PORTF_INIT	
+			
+			
 			LDR R4, = 0x0 
 			BL ADDRESS_CHANGE 
 			
@@ -82,13 +84,10 @@ LOOP  		LDRB R4 ,[R5], #1
 			BNE LOOP		
 
 
-
-	
-	
-			BL			PUSHBUTTON
+			BL	PUSHBUTTON
 			
 			
-						LDR R4, = 0x0 
+			LDR R4, = 0x0 
 			BL ADDRESS_CHANGE 
 			
 			LDR R0, =0x1F8
@@ -101,9 +100,8 @@ LOOP2  		LDRB R4 ,[R5], #1
 			;;; player2sturn starts
 
 			BL	INIT_SYSTICK
-	
-			 BL PLAYER2_PUSHBUTTON
-		; BL WINORLOSE
+			BL PLAYER2_PUSHBUTTON
+
 END_code	
 				B			__main
 			
