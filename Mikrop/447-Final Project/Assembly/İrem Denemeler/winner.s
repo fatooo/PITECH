@@ -20,7 +20,9 @@ OUT_PORTB_DC		EQU			0x40005008		;00000010
 
 WINNER	PROC
 			
-		;	PUSH		{LR}   
+		;	PUSH		{LR}  
+			LDR	R4,=0x00
+			BL	ADDRESS_CHANGE
 			MOV			R6,#600
 loop		MOV			R4,#0x00
 			BL			DATA_WRITE
