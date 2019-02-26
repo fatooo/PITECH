@@ -57,6 +57,7 @@ CURSOR_MEMO			EQU			0x20001150		;1150-1199
 			EXTERN		PLAYER_2
 			EXTERN		PLAYER2S_TURN
 			EXTERN		PLAYER1S_TURN
+			EXTERN     Battleship
 			EXPORT  	__main					; Make available
 
 ;***************************************************************
@@ -76,19 +77,16 @@ __main		PROC
 			BL 			SCREEN_INIT
 			BL 			ADC_INIT
 			BL   		PORTF_INIT	
-			
+			BL          Battleship
 			BL 			PLAYER1S_TURN
 			LDR 		R4, = 0x00 
 			BL 			ADDRESS_CHANGE 
-			
 			LDR 		R0,=0x1F8
 			LDR 		R5,=EMPTY_FIELD
 LOOP  		LDRB 		R4,[R5],#1
 			BL 			DATA_WRITE
 			SUBS 		R0,R0,#1
-			BNE 		LOOP		
-				
-	
+			BNE 		LOOP			
 			BL			PLAYER_1
 			BL 			PLAYER2S_TURN
 			BL			PLAYER_2

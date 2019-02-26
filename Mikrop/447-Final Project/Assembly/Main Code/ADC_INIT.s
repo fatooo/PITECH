@@ -26,7 +26,6 @@ PORTE_AFSEL	EQU 0x40024420 ; Alternate function select
 PORTE_AMSEL	EQU 0x40024528 ; Enable analog
 data		EQU 0x20004000
 	
-	
 ***************************
 ;ADC1 FOR SAMPLING AIN1
 ***********************

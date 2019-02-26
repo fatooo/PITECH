@@ -51,8 +51,6 @@ INIT_SYSTICK PROC
 			STR 		R0,[R1]
 			MOV 		R9,#21 ;
 			
-		
-			
 			POP			{LR}
 			BX 			LR
 			ENDP
@@ -219,7 +217,6 @@ write8  	MOV 		R4, #0x36
 			MOV 		R4, #0x36
 			BL			DATA_WRITE
 			B			writebosluk
-
 
 write9   	MOV 		R4, #0x06 
 			BL 			DATA_WRITE		
