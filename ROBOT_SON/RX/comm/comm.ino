@@ -4,8 +4,8 @@
 #include "RF24.h"  
 
 
-#define enA 22
-#define enB 23
+#define enA 2
+#define enB 3
 #define in1 24
 #define in2 26
 #define in3 28
@@ -25,7 +25,7 @@ bool ileri = false;
 bool geri = false;
 bool shoot = false;
 String karar ;
-
+int i;
 
 
 
@@ -43,7 +43,7 @@ void setup(void){
   pinMode(in2, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
-   pinMode(in5, OUTPUT);
+  pinMode(in5, OUTPUT);
   pinMode(in6, OUTPUT);
 
 
@@ -54,39 +54,10 @@ void loop(void){
  {
    bool done = false;    
    
-     done = alici.read(mesaj, 1);   
+     done = alici.read(mesaj, 1);  
 
-        if(mesaj[0]==16){
-          
-          karar = "shoot";
-
-           digitalWrite(in1, LOW);
-            digitalWrite(in2, LOW);
-             digitalWrite(in3, LOW);
-             digitalWrite(in4, LOW);
-            digitalWrite(in5, HIGH);
-             digitalWrite(in6, LOW);
-         
-                 
-          
-        }
-        if(mesaj[0]==8){
-          
-         karar =  "ileri";
-            digitalWrite(enA, HIGH);
-            digitalWrite(enB, HIGH);
-             digitalWrite(in1, LOW);
-             digitalWrite(in2, HIGH);
-             digitalWrite(in3, LOW);
-             digitalWrite(in4, HIGH);
-             digitalWrite(in5, LOW);
-             digitalWrite(in6, LOW);
-         
-        }
-        if (mesaj[0]==4){
-         karar = "geri";
-            digitalWrite(enA, HIGH);
-            digitalWrite(enB, HIGH);
+       if (mesaj[0]==5){
+         karar = "yavaş geri";
 
              digitalWrite(in1, HIGH);
              digitalWrite(in2, LOW);
@@ -95,11 +66,111 @@ void loop(void){
              digitalWrite(in5, LOW);
              digitalWrite(in6, LOW);
 
+             analogWrite(enA, i);
+             analogWrite(enB, i);
+                 
+        }
+
+     if(mesaj[0]==9){
+          
+         karar =  "yavaş ileri";
+
+             digitalWrite(in1, LOW);
+             digitalWrite(in2, HIGH);
+             digitalWrite(in3, LOW);
+             digitalWrite(in4, HIGH);
+             digitalWrite(in5, LOW);
+             digitalWrite(in6, LOW);
+             
+             analogWrite(enA, i);
+             analogWrite(enB, i);
+              
+                    
+        }
+
+        if(mesaj[0]==64){
+          
+          karar = "yavaş sol";
+
+           digitalWrite(in1, HIGH);
+           digitalWrite(in2, LOW);
+           digitalWrite(in3, LOW);
+           digitalWrite(in4, HIGH);
+           digitalWrite(in5, LOW);
+           digitalWrite(in6, LOW);
+
+           analogWrite(enA, i);
+           analogWrite(enB, i);      
+          
+        }
+
+        
+        if(mesaj[0]==32){
+          
+          karar = "yavaş sağ";
+
+             digitalWrite(in1, LOW);
+             digitalWrite(in2, HIGH);
+             digitalWrite(in3, HIGH);
+             digitalWrite(in4, LOW);
+             digitalWrite(in5, LOW);
+             digitalWrite(in6, LOW);
+
+             analogWrite(enA, i);
+             analogWrite(enB, i);
+                                    
+        }
+
+        if(mesaj[0]==16){
+          
+          karar = "shoot";
+
+           digitalWrite(in1, LOW);
+           digitalWrite(in2, LOW);
+           digitalWrite(in3, LOW);
+           digitalWrite(in4, LOW);
+           digitalWrite(in5, HIGH);
+           digitalWrite(in6, LOW);
+         
+                 
+          
+        }
+        if(mesaj[0]==8){
+          
+         karar =  "ileri";
+
+             digitalWrite(in1, LOW);
+             digitalWrite(in2, HIGH);
+             digitalWrite(in3, LOW);
+             digitalWrite(in4, HIGH);
+             digitalWrite(in5, LOW);
+             digitalWrite(in6, LOW);
+             
+             digitalWrite(enA, HIGH);
+             digitalWrite(enB, HIGH);
+              
+                    
+        }
+        if (mesaj[0]==4){
+         karar = "geri";
+
+             digitalWrite(in1, HIGH);
+             digitalWrite(in2, LOW);
+             digitalWrite(in3, HIGH);
+             digitalWrite(in4, LOW);
+             digitalWrite(in5, LOW);
+             digitalWrite(in6, LOW);
+
+             digitalWrite(enA, HIGH);
+             digitalWrite(enB, HIGH);
+              
+
          
         }
         if(mesaj[0]==2){
           karar="sag";
-                      digitalWrite(enA, HIGH);
+            
+            digitalWrite(enA, HIGH);
             digitalWrite(enB, HIGH);
 
              digitalWrite(in1, LOW);
@@ -111,8 +182,8 @@ void loop(void){
         }
         if(mesaj[0]==1){
           karar="sol";
-                      digitalWrite(enA, HIGH);
-            digitalWrite(enB, HIGH);
+             digitalWrite(enA, HIGH);
+             digitalWrite(enB, HIGH);
              digitalWrite(in1, HIGH);
              digitalWrite(in2, LOW);
              digitalWrite(in3, LOW);
@@ -121,6 +192,7 @@ void loop(void){
              digitalWrite(in6, LOW);
         }
         if(mesaj[0]==0){
+          i=150;
           karar= "dur";
             digitalWrite(enA, HIGH);
             digitalWrite(enB, HIGH);
