@@ -3,7 +3,6 @@
 #include "nRF24L01.h"
 #include "RF24.h"  
 
-
 #define EN_left   2
 #define EN_right  3
 #define M_left    24
@@ -18,13 +17,34 @@ int   message[1];
 RF24  receiver(9,53);  //CE,CSN
 const uint64_t kanal = 0xE8E8F0F0E1LL;
 
+  int no_signal = 0;
+
+  int shoot   = 0; 
+  int x_speed = 0;
+  int y_speed = 0;
+  int x_direction = 0;
+  int y_direction = 0;
+
+  int left_speed  = 0;
+  int right_speed = 0;
+  int pwm_left    = 0;
+  int pwm_right   = 0;
+
+                                     // Global parameters
+  int calibration_left   = 0;        // sol teker için güç artış(+)/azalış(-) miktarı
+  int calibration_right  = 0;        // sağ teker için güç artış(+)/azalış(-) miktarı
+  int speed_offset       = 60;
+  int speed_param        = 60;       // 3*param + offset 255'den büyük olamaz 
+  
+
+
 void setup(void){
  
- Serial.begin(9600);
+  Serial.begin(9600);
  
- alici.begin();
- alici.openReadingPipe(1,kanal);
- alici.startListening();
+  receiver.begin();
+  receiver.openReadingPipe(1,kanal);
+  receiver.startListening();
 
   pinMode(EN_left   , OUTPUT);
   pinMode(EN_right  , OUTPUT);
@@ -35,38 +55,18 @@ void setup(void){
   pinMode(M_shoot   , OUTPUT);
   pinMode(M_shoot_b , OUTPUT);
 
-int no_signal = 0;
-
-int shoot   = 0; 
-int x_speed = 0;
-int y_speed = 0;
-int x_direction = 0;
-int y_direction = 0;
-
-int left_speed  = 0;
-int right_speed = 0;
-int pwm_left    = 0;
-int pwm_right   = 0;
-
-// Global parameters
-int calibration_left   = 0;        // sol teker için güç artış(+)/azalış(-) miktarı
-int calibration_right  = 0;        // sağ teker için güç artış(+)/azalış(-) miktarı
-int speed_offset       = 60;
-int speed_param        = 60;       // 3*param + offset 255'den büyük olamaz 
-
-
- }
+}
 
 void loop(void){
  
-                           //receive the input message
+ receive:                          //receive the input message
  
  if (receiver.available()){
     bool done = false;
     done = receiver.read(message,1);
     no_signal = 0;
  }
- else if (no_signal == 10){
+ else if(no_signal > 10){
     digitalWrite(EN_left   ,LOW);
     digitalWrite(EN_right  ,LOW);
     digitalWrite(M_left    ,LOW);
@@ -83,7 +83,8 @@ void loop(void){
     delay(10);
     goto receive;
  }
- 
+ Serial.print(message[0],BIN);
+ Serial.print('\n');
                                     //decode the message 
  shoot       = (message[0]&1);
  x_speed     = (message[0]&6) /2 ;
@@ -153,5 +154,5 @@ void loop(void){
  analogWrite(EN_right, pwm_right);
 
  delay(10);
- receive:
+ 
  }
