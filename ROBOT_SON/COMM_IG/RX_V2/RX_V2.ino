@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <Servo.h> //Servo kütüphanesini ekledik.
-#include "nRF24L01.h"
-#include "RF24.h"  
+#include <nRF24L01.h>
+#include <RF24.h>
 
 #define EN_left   2
 #define EN_right  3
@@ -14,7 +14,7 @@
 
 //Modül ile ilgili kütüphaneleri ekliyoruz
 int   message[1];
-RF24  receiver(9,53);  //CE,CSN
+RF24  radio(7,8);  //CE,CSN
 const uint64_t kanal = 0xE8E8F0F0E1LL;
 
   int no_signal = 0;
@@ -41,11 +41,7 @@ const uint64_t kanal = 0xE8E8F0F0E1LL;
 void setup(void){
  
   Serial.begin(9600);
- 
-  receiver.begin();
-  receiver.openReadingPipe(1,kanal);
-  receiver.startListening();
-
+  
   pinMode(EN_left   , OUTPUT);
   pinMode(EN_right  , OUTPUT);
   pinMode(M_left    , OUTPUT);
@@ -55,16 +51,24 @@ void setup(void){
   pinMode(M_shoot   , OUTPUT);
   pinMode(M_shoot_b , OUTPUT);
 
+  radio.begin();
+  radio.openReadingPipe(0,kanal);
+  radio.setAutoAck(false);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_MIN);
+  radio.startListening();
 }
 
-void loop(void){
+void loop(void){ 
+ receive:                        //receive the input message
  
- receive:                          //receive the input message
- 
- if (receiver.available()){
+ if(radio.available( )) {
+    
     bool done = false;
-    done = receiver.read(message,1);
+    done = radio.read(message,1);
     no_signal = 0;
+    Serial.print("signal received");
+   
  }
  else if(no_signal > 10){
     digitalWrite(EN_left   ,LOW);
@@ -75,14 +79,21 @@ void loop(void){
     digitalWrite(M_right_b ,LOW);
     digitalWrite(M_shoot   ,LOW);
     digitalWrite(M_shoot_b ,LOW);
-    delay(10);
+    //delay(1000);
+    
+    //Serial.print("missing signal");
+    //Serial.print('\n');
     goto receive;
  }
  else{
     no_signal = no_signal+1;
-    delay(10);
+    //delay(1000);
+    
+    //Serial.print("no signal");
+    //Serial.print('\n');
     goto receive;
  }
+ 
  Serial.print(message[0],BIN);
  Serial.print('\n');
                                     //decode the message 
@@ -153,6 +164,8 @@ void loop(void){
  analogWrite(EN_left, pwm_left);
  analogWrite(EN_right, pwm_right);
 
+
  delay(10);
+
  
  }
