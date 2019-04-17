@@ -14,6 +14,7 @@ void setup(void)
 {
  verici.begin();       //nrf yi başlatıyoruz
  verici.openWritingPipe(kanal);  //kanal id sı tanımlanıyor
+ Serial.begin(9600);
 }
 void loop(void)
 {  
@@ -45,4 +46,5 @@ void loop(void)
                message[0]=B00000000;
               }  
  verici.write(message, 1);   //mesaj değişkeni yollanıyor 
+ Serial.println(message[0]);
  }

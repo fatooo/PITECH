@@ -14,7 +14,7 @@
 
 //Modül ile ilgili kütüphaneleri ekliyoruz
 int   message[1];
-RF24  radio(7,8);  //CE,CSN
+RF24  radio(9,53);  //CE,CSN
 const uint64_t kanal = 0xE8E8F0F0E1LL;
 
   int no_signal = 0;
@@ -52,10 +52,7 @@ void setup(void){
   pinMode(M_shoot_b , OUTPUT);
 
   radio.begin();
-  radio.openReadingPipe(0,kanal);
-  radio.setAutoAck(false);
-  radio.setDataRate(RF24_250KBPS);
-  radio.setPALevel(RF24_PA_MIN);
+  radio.openReadingPipe(1,kanal);
   radio.startListening();
 }
 
