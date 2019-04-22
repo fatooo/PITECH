@@ -2,6 +2,7 @@
 #include <Servo.h> //Servo kütüphanesini ekledik.
 #include "nRF24L01.h"
 #include "RF24.h"  
+#include <avr/wdt.h>
 
 
 #define enA 2
@@ -31,7 +32,7 @@ int i;
 
 void setup(void){
  Serial.begin(9600);
- 
+ watchdogSetup();
  alici.begin();
  alici.openReadingPipe(1,kanal);
  alici.startListening();
@@ -49,11 +50,31 @@ void setup(void){
 
  }
 
+ void watchdogSetup(void)
+{
+cli();  // disable all interrupts
+wdt_reset();// reset the WDT timer
+/*
+WDTCSR configuration:
+WDIE = 1: Interrupt Enable
+WDE = 1 :Reset Enable
+WDP3 = 0 :For 1000ms Time-out
+WDP2 = 1 :For 1000ms Time-out
+WDP1 = 1 :For 1000ms Time-out
+WDP0 = 0 :For 1000ms Time-out
+*/
+// Enter Watchdog Configuration mode:
+WDTCSR |= (1<<WDCE) | (1<<WDE);
+// Set Watchdog settings:
+WDTCSR = (1<<WDIE) | (1<<WDE) | (0<<WDP3) | (1<<WDP2) | (1<<WDP1) | (0<<WDP0);
+sei();
+}
+
 void loop(void){
  if (alici.available())
  {
    bool done = false;    
-   
+   wdt_reset();
      done = alici.read(mesaj, 1);  
 
        if (mesaj[0]==5){
