@@ -76,7 +76,7 @@ void loop(void){
     digitalWrite(M_right_b ,LOW);
     digitalWrite(M_shoot   ,LOW);
     digitalWrite(M_shoot_b ,LOW);
-    //delay(1000);
+    delay(100);
     
     //Serial.print("missing signal");
     //Serial.print('\n');
