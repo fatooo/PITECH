@@ -88,5 +88,6 @@ void loop(void)
               }  
  wdt_reset();
  verici.write(message, 1);   //mesaj değişkeni yollanıyor 
- Serial.print(message[0]);
+ Serial.println(message[0]);
+ 
  }
