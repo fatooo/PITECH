@@ -109,7 +109,7 @@ void loop(void){
                     
         }
 
-        if(mesaj[0]==64){
+        if(mesaj[0]==32){
           
           karar = "yavaş sol";
            analogWrite(enA, i);
@@ -126,7 +126,7 @@ void loop(void){
         }
 
         
-        if(mesaj[0]==32){
+        if(mesaj[0]==64){
           
           karar = "yavaş sağ";
              analogWrite(enA, i);
@@ -189,7 +189,7 @@ void loop(void){
 
          
         }
-        if(mesaj[0]==2){
+        if(mesaj[0]==1){
           karar="sag";
             
             digitalWrite(enA, HIGH);
@@ -202,7 +202,7 @@ void loop(void){
              digitalWrite(in5, LOW);
              digitalWrite(in6, LOW);
         }
-        if(mesaj[0]==1){
+        if(mesaj[0]==2){
           karar="sol";
              digitalWrite(enA, HIGH);
              digitalWrite(enB, HIGH);
